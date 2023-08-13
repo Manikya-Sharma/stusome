@@ -3,8 +3,10 @@ import Navbar from "./components/Landing/Navbar";
 
 export default function Home() {
   return (
-    <main className="">
-      <Navbar />
+    <main className="bg-[#fffffc] h-screen">
+      <div className="pb-16">
+        <Navbar />
+      </div>
       <Hero />
     </main>
   );
