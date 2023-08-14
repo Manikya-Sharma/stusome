@@ -1,5 +1,5 @@
 import Link from "next/link";
-export default function Login() {
+export default function Signup() {
   return (
     <main className="h-screen flex items-center gradient font-fancy">
       <Link
@@ -10,7 +10,7 @@ export default function Login() {
       </Link>
       <div className="w-fit mx-auto">
         <div className="max-w-[80%] gradient-sub w-fit mx-auto p-10 text-white rounded-lg">
-          <h1 className="font-merri text-center text-5xl mb-10">Login</h1>
+          <h1 className="font-merri text-center text-5xl mb-10">Signup</h1>
           <form
             action=""
             className="grid grid-rows-2 grid-cols-2 items-center gap-2"
@@ -43,12 +43,12 @@ export default function Login() {
           </button>
         </div>
         <p className="mt-10 text-center text-slate-100">
-          Don&apos;t have an account?{" "}
+          Already a user?{" "}
           <Link
-            href="/signup"
+            href="/login"
             className="text-fuchsia-200 hover:underline underline-offset-2"
           >
-            signup
+            login
           </Link>
           !
         </p>

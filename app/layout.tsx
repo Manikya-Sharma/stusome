@@ -1,8 +1,22 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Merriweather, Quicksand, Preahvihear } from "next/font/google";
 
 const inter = Inter({ subsets: ["latin"] });
+const merriweather = Merriweather({
+  subsets: ["latin"],
+  weight: "300",
+  variable: "--font-merri",
+});
+const quicksand = Quicksand({
+  subsets: ["latin"],
+  variable: "--font-quick",
+});
+const preahvihear = Preahvihear({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-fancy",
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,7 +30,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body
+        className={
+          inter.className + " selection:bg-teal-400 selection:text-white"
+        }
+      >
+        {children}
+      </body>
     </html>
   );
 }
