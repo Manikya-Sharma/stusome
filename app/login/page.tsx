@@ -1,5 +1,40 @@
+"use client";
+import { useRouter } from "next/navigation";
+import { useEffect, useRef } from "react";
 import Link from "next/link";
+import accounts from "@/public/accounts.json";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
+
+function handleSubmit(
+  emailRef: React.RefObject<HTMLInputElement>,
+  passwordRef: React.RefObject<HTMLInputElement>,
+  router: AppRouterInstance,
+  accounts: { id: number; email: string; password: string }[],
+) {
+  if (emailRef.current != null && passwordRef.current != null) {
+    const email = emailRef.current.value;
+    const password = passwordRef.current.value;
+    for (const account of accounts) {
+      if (account.email == email && account.password == password) {
+        localStorage.setItem(
+          "account",
+          JSON.stringify({ email: email, password: password }),
+        );
+        router.push(`/logged-in/${account.id}`);
+      }
+    }
+  }
+}
+
 export default function Login() {
+  const router = useRouter();
+  useEffect(() => {
+    if (localStorage.getItem("account") != null) {
+      router.push("/logged-in/1");
+    }
+  }, [router]);
+  const email = useRef<HTMLInputElement>(null);
+  const password = useRef<HTMLInputElement>(null);
   return (
     <main className="h-screen flex items-center gradient font-fancy">
       <Link
@@ -12,35 +47,42 @@ export default function Login() {
         <div className="max-w-[80%] gradient-sub w-fit mx-auto p-10 text-white rounded-lg">
           <h1 className="font-merri text-center text-5xl mb-10">Login</h1>
           <form
-            action=""
-            className="grid grid-rows-2 grid-cols-2 items-center gap-2"
+            onSubmit={(e) => {
+              e.preventDefault();
+              console.log("here");
+              handleSubmit(email, password, router, accounts);
+            }}
           >
-            <label className="text-xl" htmlFor="email">
-              Email
-            </label>
-            <input
-              type="text"
-              name="email"
-              id="email"
-              className="bg-fuchsia-200 text-fuchsia-800 font-semibold px-3 py-2 rounded-xl"
-            />
+            <div className="grid grid-rows-2 grid-cols-2 items-center gap-2">
+              <label className="text-xl" htmlFor="email">
+                Email
+              </label>
+              <input
+                type="text"
+                name="email"
+                id="email"
+                className="bg-fuchsia-200 text-fuchsia-800 font-semibold px-3 py-2 rounded-xl"
+                ref={email}
+              />
 
-            <label className="text-xl" htmlFor="password">
-              Password
-            </label>
-            <input
-              type="password"
-              name="password"
-              id="password"
-              className="bg-fuchsia-200 text-fuchsia-800 font-semibold px-3 py-2 rounded-xl"
-            />
+              <label className="text-xl" htmlFor="password">
+                Password
+              </label>
+              <input
+                type="password"
+                name="password"
+                id="password"
+                className="bg-fuchsia-200 text-fuchsia-800 font-semibold px-3 py-2 rounded-xl"
+                ref={password}
+              />
+            </div>
+            <button
+              type="submit"
+              className="block w-fit mx-auto px-4 py-2 rounded-md mt-5 bg-gradient-to-br from-fuchsia-300 to-fuchsia-500 hover:from-fuchsia-100 hover:to-rose-300 hover:text-rose-900 transition-all duration-300"
+            >
+              Continue
+            </button>
           </form>
-          <button
-            type="submit"
-            className="block w-fit mx-auto px-4 py-2 rounded-md mt-5 bg-gradient-to-br from-fuchsia-300 to-fuchsia-500 hover:from-fuchsia-100 hover:to-rose-300 hover:text-rose-900 transition-all duration-300"
-          >
-            Continue
-          </button>
         </div>
         <p className="mt-10 text-center text-slate-100">
           Don&apos;t have an account?{" "}
