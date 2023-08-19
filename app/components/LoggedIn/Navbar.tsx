@@ -2,7 +2,7 @@
 
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { useRouter } from "next/navigation";
-import UserSettings from "@/app/components/LoggedIn/UserSettings";
+import NavDropdown from "@/app/components/LoggedIn/NavDropdown";
 
 function logout(router: AppRouterInstance) {
   localStorage.clear();
@@ -23,7 +23,7 @@ type Props = {
 export default function Navbar(props: Props) {
   const router = useRouter();
   return (
-    <nav className="flex fixed w-[100vw] justify-between items-center px-2 py-1 sm:px-8 sm:py-4 backdrop-blur-sm">
+    <nav className="flex fixed w-[100vw] justify-between items-center px-4 py-1 sm:px-8 sm:py-4 backdrop-blur-sm">
       <div className="items-center sm:flex">
         <div className="mr-2 p-1 text-center bg-slate-800 text-slate-200 rounded-full">
           Logo
@@ -33,7 +33,7 @@ export default function Navbar(props: Props) {
         {/* Middle space for extra components */}
       </div>
       <div>
-        <UserSettings logout={logout} router={router} id={props.state.id} />
+        <NavDropdown logout={logout} router={router} id={props.state.id} />
       </div>
     </nav>
   );

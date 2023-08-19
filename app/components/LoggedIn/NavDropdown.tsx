@@ -8,7 +8,7 @@ type Props = {
   router: AppRouterInstance;
 };
 
-export default function UserSettings(props: Props) {
+export default function NavDropdown(props: Props) {
   const [open, setOpen] = useState(false);
   return (
     <div className="relative">
@@ -19,6 +19,16 @@ export default function UserSettings(props: Props) {
       {open ? (
         <div className="absolute right-2 p-3 bg-rose-200 hover:bg-gradient-to-tr from-rose-200 to-rose-100 hover:shadow-md">
           <ul className="flex flex-col gap-3">
+            <li>
+              <button
+                className="w-full px-2 py-1 bg-gradient-to-r from-emerald-300 to-emerald-800 hover:text-fuchsia-200 text-[#fffffc] hover:from-emerald-800 hover:to-emerald-700 transition-all duration-300 rounded-md"
+                onClick={() =>
+                  props.router.push(`/logged-in/${props.id}/dashboard`)
+                }
+              >
+                Dashboard
+              </button>
+            </li>
             <li>
               <button
                 className="w-full px-2 py-1 bg-gradient-to-r from-emerald-300 to-emerald-800 hover:text-fuchsia-200 text-[#fffffc] hover:from-emerald-800 hover:to-emerald-700 transition-all duration-300 rounded-md"
