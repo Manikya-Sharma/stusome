@@ -2,14 +2,22 @@
 
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { useRouter } from "next/navigation";
+import UserSettings from "@/app/components/LoggedIn/UserSettings";
 
 function logout(router: AppRouterInstance) {
   localStorage.clear();
   router.push("/");
 }
 
-type Props = {
+type State = {
   id: number;
+  name: string;
+  email: string;
+  password: string;
+};
+
+type Props = {
+  state: State;
 };
 
 export default function Navbar(props: Props) {
@@ -25,12 +33,7 @@ export default function Navbar(props: Props) {
         {/* Middle space for extra components */}
       </div>
       <div>
-        <button
-          className="px-4 py-2 bg-gradient-to-r from-rose-300 to-rose-800 hover:text-fuchsia-200 text-[#fffffc] hover:from-rose-800 hover:to-rose-700 transition-all duration-300 rounded-md"
-          onClick={() => logout(router)}
-        >
-          Logout
-        </button>
+        <UserSettings logout={logout} router={router} id={props.state.id} />
       </div>
     </nav>
   );

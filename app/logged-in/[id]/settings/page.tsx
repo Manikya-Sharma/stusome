@@ -3,9 +3,8 @@ import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 
 import accounts from "@/public/accounts.json";
-
-import Navbar from "@/app/components/LoggedIn/Navbar";
-import Welcome from "@/app/components/LoggedIn/Welcome";
+import Link from "next/link";
+import Image from "next/image";
 
 type State = {
   id: number;
@@ -31,11 +30,18 @@ export default function LoggedIn() {
     }
   }, [id]);
   return (
-    <main>
-      <Navbar state={state} />
-      <div className="px-8 py-32">
-        <Welcome name={state.name} />
+    <main className="px-4">
+      <div className="h-10">
+        <Link href={`/logged-in/${state.id}`}>
+          <Image
+            src="/images/misc/back.svg"
+            alt="back"
+            width={28}
+            height={28}
+          />
+        </Link>
       </div>
+      <p>User settings for {state.name}</p>
     </main>
   );
 }
