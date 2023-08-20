@@ -21,15 +21,15 @@ export default function Welcome(props: Props) {
       <div className="w-fit group mx-auto">
         <Link
           href={`/logged-in/${props.user.id}/dashboard`}
-          className="block text-lg py-2 px-3 my-2 border-2 border-dotted border-green-400 w-fit rounded-md group-hover:border-solid group-hover:bg-green-400 group-hover:text-emerald-900 transition-all duration-100"
+          className="relative block text-lg py-2 px-3 my-2 border-2 border-dotted border-green-400 w-fit rounded-md group-hover:border-solid group-hover:bg-green-400 group-hover:text-emerald-900 transition-all duration-100"
         >
-          Your dashboard{" "}
+          Your dashboard
           <Image
             src="/images/misc/back.svg"
             alt="->"
             width={20}
             height={20}
-            className="inline-block rotate-180 group-hover:translate-x-1 transition-all duration-100"
+            className="ml-1 inline-block rotate-180 group-hover:translate-x-1 transition-all duration-100"
           />
         </Link>
       </div>
