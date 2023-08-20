@@ -2,21 +2,92 @@
   {
     "id": 1,
     "title": "Coping up with college stress",
-    "author": "author A"
+    "author": "author A",
+    "content": "> Stress is a mental situation in which a person feels ***overwhelmed*** and is unable to work productively. It is one of the most common ***psychological problem*** faced by humans these days\n\n# How it happens\n\nThere can be many reasons why college students might get stressed. It might be that they are unable to finish their project. Or maybe they are not able to get good scores in exams. Some might be stressed due to competition for internships and jobs. There might also be many personal reasons which act as precursors for stress.\n\n# Coping up with stress\n\nThere are some well tested ways to cope up with stress, they are: -\n\n## Physical workout\n\nAlthough not very obvious, but few minutes of exercise can help to reduce stress levels significantly.\n\n## Keeping a hobby\n\nA hobby such as dancing, reading, debating etc. can help a person to not lose the purpose of life and it helps keep him or her motivated.\n\n# What to do if my friend/ family member is stressed?\n\nIn such a case, you should try to make them talk out their problems, many times this itself can heal the other person. You can give your own example to make them realize that such a situation is common and it will pass on. You should try to motivate them but at the same time also provide them some personal time in which they can reflect upon themselves.",
+    "discussions": [
+      {
+        "id": 1,
+        "content": "Wow it was a ***great*** post",
+        "author": "author B",
+        "replies": []
+      },
+      {
+        "id": 2,
+        "content": "Good to know about it. What about *school stress*?",
+        "author": "author C",
+        "replies": [
+          {
+            "id": 1,
+            "content": "Almost ***same points*** will follow for school also",
+            "author": "author A"
+          }
+        ]
+      }
+    ]
   },
   {
     "id": 2,
     "title": "How to expand your network",
-    "author": "author B"
+    "author": "author B",
+    "content": "# Why to expand network\n\nA large network in college life is a must. It helps in following manner\n* Making new friends\n* Getting help in difficult times\n* Getting inspiration from seniors\n* and a lot more! (give more ideas in discussions)\n\n# How to\n\nComing to the main question, expanding a network is an art. It requires good communication skills and presence of mind. Some useful steps you can follow are\n* Talk to seniors and your teachers\n* Help your friends in need\n* Become active on social media (but be careful to not get distracted! Use social media like linkedin or `this app`.\n\n# Further points\nAlways be careful that not all people are helpful and supportive. If you feel uncomfortable about someone then do not fear in breaking bond with that person even if your network gets harmed.",
+    "discussions": [
+      {
+        "id": 1,
+        "content": "We also need to expand network for internships / jobs!",
+        "author": "author C",
+        "replies": [
+          {
+            "id": 1,
+            "content": "I agree!",
+            "author": "author D"
+          },
+          {
+            "id": 2,
+            "content": "Well said!",
+            "author": "author B"
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "content": "Thank you so much, it really helped",
+        "author": "author A",
+        "replies": [
+          {
+            "id": 1,
+            "content": "Happy to help!",
+            "author": "author B"
+          }
+        ]
+      }
+    ]
   },
   {
     "id": 3,
     "title": "Approaches to learn coding",
-    "author": "author C"
+    "author": "author C",
+    "content": "",
+    "discussions": [
+      {
+        "id": 1,
+        "content": "",
+        "author": "",
+        "replies": [{ "id": 1, "content": "", "author": "" }]
+      }
+    ]
   },
   {
     "id": 4,
     "title": "How to get good CGPA",
-    "author": "author D"
+    "author": "author D",
+    "content": "",
+    "discussions": [
+      {
+        "id": 1,
+        "content": "",
+        "author": "",
+        "replies": [{ "id": 1, "content": "", "author": "" }]
+      }
+    ]
   }
 ]

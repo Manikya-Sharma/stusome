@@ -3,16 +3,17 @@
 @tailwind utilities;
 
 @layer components {
+
+  /* Gradient Background */
+
   .gradient {
     margin: auto;
     overflow: auto;
-    background: linear-gradient(
-      315deg,
-      rgb(177, 2, 165) 3%,
-      rgba(60, 132, 206, 1) 38%,
-      rgba(48, 238, 226, 1) 68%,
-      rgb(209, 82, 82) 98%
-    );
+    background: linear-gradient(315deg,
+        rgb(177, 2, 165) 3%,
+        rgba(60, 132, 206, 1) 38%,
+        rgba(48, 238, 226, 1) 68%,
+        rgb(209, 82, 82) 98%);
     animation: gradient 15s ease infinite;
     background-size: 400% 400%;
     background-attachment: fixed;
@@ -35,13 +36,11 @@
   .gradient-sub {
     margin: auto;
     overflow: auto;
-    background: linear-gradient(
-      315deg,
-      rgb(144, 2, 134) 3%,
-      rgb(49, 109, 168) 38%,
-      rgb(38, 188, 178) 68%,
-      rgb(209, 82, 82) 98%
-    );
+    background: linear-gradient(315deg,
+        rgb(144, 2, 134) 3%,
+        rgb(49, 109, 168) 38%,
+        rgb(38, 188, 178) 68%,
+        rgb(209, 82, 82) 98%);
     animation: gradient-sub 15s ease infinite;
     background-size: 400% 400%;
     background-attachment: fixed;
@@ -60,4 +59,56 @@
       background-position: 0% 0%;
     }
   }
+
+  /* Markdown */
+
+  .markdown-wrapper {
+    color: rgba(50, 50, 50);
+    letter-spacing: 0.5px;
+  }
+
+  .markdown-wrapper h2 {
+    letter-spacing: -0.5px;
+    font-size: 1.75rem;
+    margin-top: 10px;
+    margin-bottom: 5px;
+  }
+
+  .markdown-wrapper h2+* {
+    margin-left: 3px;
+  }
+
+  .markdown-wrapper h3 {
+    font-size: 1.5rem;
+    margin-left: 7px;
+  }
+
+  .markdown-wrapper h3+* {
+    margin-left: 10px;
+  }
+
+  .markdown-wrapper blockquote {
+    background-color: rgba(200, 200, 200);
+    color: rgba(40, 40, 40, 0.9);
+    font-size: 0.9rem;
+    padding: 10px;
+    border-radius: 10px;
+  }
+
+  .markdown-wrapper ul {
+    margin-left: 10px;
+    padding-left: 5px;
+    list-style-type: disc;
+  }
+
+  .markdown-wrapper code {
+    display: inline-block;
+    padding: 1.5px 3px;
+    border-radius: 10px;
+    letter-spacing: 1px;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: 700;
+    background-color: rgba(250, 250, 250);
+  }
+
 }
