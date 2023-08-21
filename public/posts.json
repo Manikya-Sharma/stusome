@@ -23,7 +23,8 @@
           }
         ]
       }
-    ]
+    ],
+    "tags": ["stress", "psychology", "improvement", "self-help", "motivation"]
   },
   {
     "id": 2,
@@ -60,7 +61,8 @@
           }
         ]
       }
-    ]
+    ],
+    "tags": ["networking", "coding", "placement"]
   },
   {
     "id": 3,
@@ -74,7 +76,8 @@
         "author": "",
         "replies": [{ "id": 1, "content": "", "author": "" }]
       }
-    ]
+    ],
+    "tags": [""]
   },
   {
     "id": 4,
@@ -88,6 +91,7 @@
         "author": "",
         "replies": [{ "id": 1, "content": "", "author": "" }]
       }
-    ]
+    ],
+    "tags": [""]
   }
 ]

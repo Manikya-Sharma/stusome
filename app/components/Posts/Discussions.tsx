@@ -16,7 +16,7 @@ export default function Discussions(props: Props) {
         return (
           <div
             key={elem.id}
-            className="border border-slate-400 p-3 rounded-md my-2 max-w-[80%] mx-auto min-w-fit"
+            className="border border-slate-400 p-3 rounded-md my-2 mx-auto w-full sm:max-w-[80%] min-w-fit"
           >
             <cite className="text-sm w-fit block mr-auto text-slate-400">
               -- {elem.author}
