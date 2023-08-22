@@ -101,15 +101,15 @@
     list-style-type: disc;
   }
 
-  /* .markdown-wrapper code {
-    display: inline-block;
-    padding: 1.5px 3px;
-    border-radius: 10px;
-    letter-spacing: 1px;
-    font-family: 'Courier New', Courier, monospace;
-    font-weight: 700;
-    background-color: rgba(250, 250, 250);
-  } */
+  .markdown-wrapper pre {
+    display: block;
+    width: fit-content;
+    min-width: 80%;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 15px;
+  }
 
   .markdown-wrapper a {
     text-decoration: underline;

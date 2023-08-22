@@ -16,7 +16,7 @@ export default function ShowMarkdown(props: Props) {
               {String(children).replace(/\n$/, "")}
             </SyntaxHighlighter>
           ) : (
-            <code {...props} className={className + " block w-fit mx-auto"}>
+            <code {...props} className={className}>
               {children}
             </code>
           );

@@ -1,4 +1,4 @@
-import { ReactMarkdown } from "react-markdown/lib/react-markdown";
+import ShowMarkdown from "../Markdown/ShowMarkdown";
 
 type Props = {
   discussion: {
@@ -21,7 +21,7 @@ export default function Discussions(props: Props) {
             <cite className="text-sm w-fit block mr-auto text-slate-400">
               -- {elem.author}
             </cite>
-            <ReactMarkdown>{elem.content}</ReactMarkdown>
+            <ShowMarkdown data={elem.content} />
             <div>
               {elem.replies.map((reply) => {
                 return (
@@ -29,7 +29,7 @@ export default function Discussions(props: Props) {
                     key={reply.id}
                     className="pl-3 border-2 border-transparent border-l-emerald-400 max-w-[80%] min-w-fit"
                   >
-                    <ReactMarkdown>{reply.content}</ReactMarkdown>
+                    <ShowMarkdown data={reply.content} />
                     <cite className="text-sm w-fit block mr-auto text-slate-400">
                       - {reply.author}
                     </cite>

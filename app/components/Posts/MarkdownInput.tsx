@@ -17,13 +17,13 @@ export default function Markdown(props: Props) {
         cols={props.cols}
         rows={props.rows}
         placeholder="Enter the content here"
-        className="border border-slate-300 px-3 py-2 rounded-md mx-auto block w-fit mb-3"
+        className="border border-slate-300 px-3 py-2 rounded-md mx-auto block w-fit mb-3 sm:w-full"
         ref={mk_ref}
         onChange={() => setText(mk_ref.current?.value)}
       ></textarea>
       <div>
         <h3 className="text-center text-2xl">Preview</h3>
-        <p className="markdown-wrapper w-[280.8px] h-[240px] max-w-full px-3 py-2 text-slate-800 mx-auto border border-slate-300">
+        <p className="markdown-wrapper w-[280.8px] h-[240px] sm:w-full max-w-full px-3 py-2 text-slate-800 mx-auto border border-slate-300">
           <ShowMarkdown data={text != undefined ? text : "preview"} />
         </p>
         <button

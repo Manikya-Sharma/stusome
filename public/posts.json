@@ -68,16 +68,22 @@
     "id": 3,
     "title": "Approaches to learn coding",
     "author": "author C",
-    "content": "",
+    "content": "# Why coding is important\n\nCoding has, in recent times, become an essential skill which everyone should know. It gives the capability to utilize the speed and accuracy of computers. It can benefit in automating mundane tasks.\n\n > For engineers, coding is a must since it is one of those technical skills which can help on a long run.\n\n# Ways to learn coding\n\nThere can be different ways to learn coding, they depend upon the final place one wants to reach.\n* For automating day to day tasks: In such a case, python is the best language to begin with. It has an easy to read syntax and many pre-built libraries. A hello world program in python is like this\n\n```py\nprint(\"Hello World\")\n```\n* For making performant/ business quality programs: In such a case, one of the best approach is to start learning with C and C++ and then move on to higher level languages. A hello world program in C would be like\n```c\n#include<stdio.h>\n\nint main() {\n\treturn 0;\n}\n```\n\n# Conclusion\n\nTherefore, we finally conclude that the perfect way to learn coding is different for different people and you should take the pathway that you like the most.",
     "discussions": [
       {
         "id": 1,
-        "content": "",
-        "author": "",
-        "replies": [{ "id": 1, "content": "", "author": "" }]
+        "content": "You can also include languages like go and rust since they are used quite a lot nowadays",
+        "author": "author A",
+        "replies": [
+          {
+            "id": 1,
+            "content": "I agree. A hello world program in rust will be like\n```rust\nfn main() {\n\tprintln!(\"Hello World\");\n}\n```\n\n Similarly, in go, hello world program is \n```go\npackage main\n\nimport \"fmt\"\n\nfunc main() {\n\tfmt.Println(\"Hello World\")\n}\n```",
+            "author": "author C"
+          }
+        ]
       }
     ],
-    "tags": [""]
+    "tags": ["coding", "learning", "studies", "placement"]
   },
   {
     "id": 4,
