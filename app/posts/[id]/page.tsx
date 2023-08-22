@@ -1,8 +1,8 @@
 "use client";
 import posts from "@/public/posts.json";
 import Discussions from "@/app/components/Posts/Discussions";
-
-import { ReactMarkdown } from "react-markdown/lib/react-markdown";
+import Markdown from "@/app/components/Posts/MarkdownInput";
+import ShowMarkdown from "@/app/components/Markdown/ShowMarkdown";
 
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
@@ -42,9 +42,7 @@ export default function Post() {
       </div>
       <p>
         <div className="markdown-wrapper">
-          <ReactMarkdown components={{ h1: "h2", h2: "h3", h3: "h4" }}>
-            {state.content}
-          </ReactMarkdown>
+          <ShowMarkdown data={state.content} />
         </div>
       </p>
 
@@ -65,6 +63,8 @@ export default function Post() {
       <h2 className="text-4xl mt-6 mb-3">Discussions:-</h2>
 
       <Discussions discussion={state.discussions} />
+
+      <Markdown rows={10} cols={30} />
     </div>
   );
 }
