@@ -8,6 +8,7 @@ import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 
 export default function Post() {
+  // fetching data
   const pathname = usePathname();
   const id = parseInt(pathname.split("/")[2]);
   const [state, setState] = useState({
@@ -34,16 +35,20 @@ export default function Post() {
     }
   }, [id]);
 
+  // finding headings from data
   useEffect(() => {
     const arr = state.content
       .replaceAll(/```(.|\n)+```/gm, "")
       .split("\n")
       .filter((line) => line.startsWith("#"))
-      .map((line) => line.replace("#", "").trim());
+      .map((line) => line.replace(/#{1,6}/, "").trim());
     if (arr != null) {
       setHeadings(Array.from(arr));
     }
   }, [state]);
+
+  // post new discussion
+  const [newDiscussion, setNewDiscussion] = useState(false);
 
   return (
     <div className="p-4 font-fancy">
@@ -53,7 +58,7 @@ export default function Post() {
           - {state.author}
         </cite>
       </div>
-      <div className="sm:flex">
+      <div className="sm:flex justify-around">
         <ul className="hidden md:flex md:flex-col md:justify-start flex-1">
           {headings.map((h) => {
             return (
@@ -88,9 +93,20 @@ export default function Post() {
       <div className="w-[90%] mx-auto h-[2px] bg-slate-600 my-5"></div>
       <h2 className="text-4xl mt-6 mb-3 sm:text-center">Discussions:-</h2>
 
-      <Discussions discussion={state.discussions} />
+      <Discussions
+        discussion={state.discussions}
+        setNewDiscussion={setNewDiscussion}
+      />
 
-      <Markdown rows={10} cols={30} />
+      {newDiscussion ? (
+        <Markdown rows={10} cols={30} uploadMarkdown={handleNewDiscussion} />
+      ) : (
+        ""
+      )}
     </div>
   );
+}
+
+function handleNewDiscussion(data: string | undefined) {
+  console.log(data);
 }
