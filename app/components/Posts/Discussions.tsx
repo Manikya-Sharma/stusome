@@ -35,13 +35,15 @@ export default function Discussions(props: Props) {
             <cite className="text-sm w-fit block mr-auto text-slate-400">
               -- {elem.author}
             </cite>
-            <ShowMarkdown data={elem.content} />
+            <div className="markdown-wrapper">
+              <ShowMarkdown data={elem.content} />
+            </div>
             <div>
               {elem.replies.map((reply) => {
                 return (
                   <div
                     key={reply.id}
-                    className="pl-3 border-2 border-transparent border-l-emerald-400 max-w-[80%] min-w-fit"
+                    className="markdown-wrapper pl-3 border-2 border-transparent border-l-emerald-400 max-w-[80%] min-w-fit"
                   >
                     <ShowMarkdown data={reply.content} />
                     <cite className="text-sm w-fit block mr-auto text-slate-400">

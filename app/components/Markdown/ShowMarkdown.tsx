@@ -1,5 +1,6 @@
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { materialOceanic } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 type Props = {
   data: string;
@@ -12,7 +13,12 @@ export default function ShowMarkdown(props: Props) {
         code({ node, inline, className, children, ...props }) {
           const match = /language-(\w+)/.exec(className || "");
           return !inline && match ? (
-            <SyntaxHighlighter {...props} language={match[1]} preTag="div">
+            <SyntaxHighlighter
+              {...props}
+              style={materialOceanic}
+              language={match[1]}
+              preTag="div"
+            >
               {String(children).replace(/\n$/, "")}
             </SyntaxHighlighter>
           ) : (
