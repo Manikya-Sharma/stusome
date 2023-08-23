@@ -1,13 +1,13 @@
-import About from "@/app/components/Landing/hero/About";
 import Link from "next/link";
+import About from "@/app/components/Landing/hero/About";
 
 export default function Hero() {
   return (
-    <section className="text-center flex flex-col gap-3 font-sans text-[rgba(25,25,25)]">
+    <section className="text-center flex flex-col gap-3 font-sans text-[rgba(225,225,225)]">
       <h1 className="text-4xl sm:text-8xl font-extrabold tracking-tighter font-merri">
         Student Social Media
       </h1>
-      <p className="text-slate-700 text-xl sm:text-2xl font-fancy">
+      <p className="text-slate-300 text-xl sm:text-2xl font-fancy">
         Your mate for all needs
       </p>
       <div className="sm:flex sm:flex-row-reverse sm:justify-around sm:my-10">
@@ -23,7 +23,7 @@ export default function Hero() {
           <p>This is your one stop solution for all academic needs.</p>
           <Link
             href="/login"
-            className="px-4 py-2 bg-gradient-to-tr from-orange-700 to-rose-400 text-slate-200 hover:from-rose-600 hover:to-orange-700 transition-all duration-300 rounded-md"
+            className="px-4 py-2 bg-gradient-to-tr from-[rgba(100,70,70,0.7)] to-[rgba(200,100,100,0.3)] text-slate-200 hover:from-rose-600 hover:to-orange-700 transition-all duration-300 rounded-md"
           >
             <button>Login</button>
           </Link>

@@ -15,22 +15,22 @@ export default function About() {
         loop={true}
       >
         <SwiperSlide>
-          <div className="bg-gradient-to-br from-emerald-400 to-teal-700 p-5 rounded-md text-[#fff] drop-shadow-md cursor-default">
+          <div className="bg-gradient-to-br from-[rgba(52,211,253,0.6)] to-[rgba(50,70,100,0.8)] p-5 rounded-md text-[#fff] drop-shadow-md cursor-default">
             Tired of unsolved doubts?
           </div>
         </SwiperSlide>
         <SwiperSlide>
-          <div className="bg-gradient-to-br from-emerald-400 to-teal-700 p-5 rounded-md text-[#fff] drop-shadow-md cursor-default">
+          <div className="bg-gradient-to-br from-[rgba(52,211,253,0.6)] to-[rgba(50,70,100,0.8)] p-5 rounded-md text-[#fff] drop-shadow-md cursor-default">
             Want to have guidance from seniors?
           </div>
         </SwiperSlide>
         <SwiperSlide>
-          <div className="bg-gradient-to-br from-emerald-400 to-teal-700 p-5 rounded-md text-[#fff] drop-shadow-md cursor-default">
+          <div className="bg-gradient-to-br from-[rgba(52,211,253,0.6)] to-[rgba(50,70,100,0.8)] p-5 rounded-md text-[#fff] drop-shadow-md cursor-default">
             Want to expand your network?
           </div>
         </SwiperSlide>
         <SwiperSlide>
-          <div className="bg-gradient-to-br from-emerald-400 to-teal-700 p-5 rounded-md text-[#fff] drop-shadow-md cursor-default">
+          <div className="bg-gradient-to-br from-[rgba(52,211,253,0.6)] to-[rgba(50,70,100,0.8)] p-5 rounded-md text-[#fff] drop-shadow-md cursor-default">
             Need a social media without distractions?
           </div>
         </SwiperSlide>
