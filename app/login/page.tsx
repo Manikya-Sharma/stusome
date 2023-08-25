@@ -1,27 +1,27 @@
 "use client";
+
 import { useRouter } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { useRef, useEffect } from "react";
 import Link from "next/link";
-import accounts from "@/public/accounts.json";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 
-function handleSubmit(
+async function handleSubmit(
   emailRef: React.RefObject<HTMLInputElement>,
   passwordRef: React.RefObject<HTMLInputElement>,
   router: AppRouterInstance,
-  accounts: { id: number; email: string; password: string }[],
 ) {
   if (emailRef.current != null && passwordRef.current != null) {
     const email = emailRef.current.value;
     const password = passwordRef.current.value;
-    for (const account of accounts) {
-      if (account.email == email && account.password == password) {
-        localStorage.setItem(
-          "account",
-          JSON.stringify({ email: email, password: password }),
-        );
-        router.push(`/logged-in/${account.id}`);
-      }
+
+    const user = await fetch(`/api/getAccountByEmail/${email}`);
+    const userData = await user.json();
+    if (userData == null || userData.password != password) {
+      console.log("Invalid username or password");
+      return;
+    } else {
+      localStorage.setItem("account", JSON.stringify(userData));
+      router.push(`/logged-in/${userData.email}`);
     }
   }
 }
@@ -29,10 +29,14 @@ function handleSubmit(
 export default function Login() {
   const router = useRouter();
   useEffect(() => {
-    if (localStorage.getItem("account") != null) {
-      router.push("/logged-in/1");
+    const userData = localStorage.getItem("account");
+    if (userData != null) {
+      const jsonUserData = JSON.parse(userData);
+      router.push(`/logged-in/${jsonUserData.email}`);
     }
-  }, [router]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const email = useRef<HTMLInputElement>(null);
   const password = useRef<HTMLInputElement>(null);
   return (
@@ -49,8 +53,7 @@ export default function Login() {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              console.log("here");
-              handleSubmit(email, password, router, accounts);
+              handleSubmit(email, password, router);
             }}
           >
             <div className="grid grid-rows-2 grid-cols-2 items-center gap-2">

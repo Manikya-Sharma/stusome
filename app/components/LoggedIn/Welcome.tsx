@@ -2,7 +2,6 @@ import Link from "next/link";
 import Image from "next/image";
 
 type User = {
-  id: number;
   name: string;
   email: string;
   password: string;
@@ -20,7 +19,7 @@ export default function Welcome(props: Props) {
       </h1>
       <div className="w-fit group mx-auto">
         <Link
-          href={`/logged-in/${props.user.id}/dashboard`}
+          href={`/logged-in/${props.user.email}/dashboard`}
           className="relative block text-lg py-2 px-3 my-2 border-2 border-dotted border-green-400 w-fit rounded-md group-hover:border-solid group-hover:bg-green-400 group-hover:text-emerald-900 transition-all duration-100"
         >
           Your dashboard

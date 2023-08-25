@@ -2,12 +2,10 @@
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 
-import accounts from "@/public/accounts.json";
 import Link from "next/link";
 import Image from "next/image";
 
 type State = {
-  id: number;
   name: string;
   email: string;
   password: string;
@@ -15,24 +13,24 @@ type State = {
 
 export default function LoggedIn() {
   const pathname = usePathname();
-  const id = parseInt(pathname.split("/")[2]);
+  const email = pathname.split("/")[2];
   const [state, setState] = useState({
-    id: id,
     name: "",
     email: "",
     password: "",
   });
   useEffect(() => {
-    for (const account of accounts) {
-      if (account.id == id) {
-        setState(account);
-      }
-    }
-  }, [id]);
+    fetch(`/api/getAccountByEmail/${email}`).then((data) => {
+      data.json().then((json) => {
+        setState(json);
+      });
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <main className="px-4">
       <div className="h-10">
-        <Link href={`/logged-in/${state.id}`}>
+        <Link href={`/logged-in/${state.email}`}>
           <Image
             src="/images/misc/back.svg"
             alt="back"

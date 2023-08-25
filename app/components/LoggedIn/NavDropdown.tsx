@@ -2,8 +2,14 @@
 import { useState } from "react";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 
+type State = {
+  email: string;
+  password: string;
+  name: string;
+};
+
 type Props = {
-  id: number;
+  state: State;
   logout: Function;
   router: AppRouterInstance;
 };
@@ -23,7 +29,7 @@ export default function NavDropdown(props: Props) {
               <button
                 className="w-full px-2 py-1 bg-gradient-to-r from-emerald-300 to-emerald-800 hover:text-fuchsia-200 text-[#fffffc] hover:from-emerald-800 hover:to-emerald-700 transition-all duration-300 rounded-md"
                 onClick={() =>
-                  props.router.push(`/logged-in/${props.id}/dashboard`)
+                  props.router.push(`/logged-in/${props.state.email}/dashboard`)
                 }
               >
                 Dashboard
@@ -33,7 +39,7 @@ export default function NavDropdown(props: Props) {
               <button
                 className="w-full px-2 py-1 bg-gradient-to-r from-emerald-300 to-emerald-800 hover:text-fuchsia-200 text-[#fffffc] hover:from-emerald-800 hover:to-emerald-700 transition-all duration-300 rounded-md"
                 onClick={() =>
-                  props.router.push(`/logged-in/${props.id}/settings`)
+                  props.router.push(`/logged-in/${props.state.email}/settings`)
                 }
               >
                 Settings

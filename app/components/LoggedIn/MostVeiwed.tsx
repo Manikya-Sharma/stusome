@@ -17,10 +17,10 @@ export default function MostViewed() {
                   href={`/posts/${post.id}`}
                   className="block px-2 py-2 border my-2 border-teal-300 rounded-md hover:bg-teal-300 hover:text-blue-800 transition-all duration-150"
                 >
-                  <p className="flex justify-between space-x-1">
+                  <div className="flex justify-between space-x-1">
                     <div>{post.title}</div>
                     <div>({post.author})</div>
-                  </p>
+                  </div>
                 </Link>
               </li>
             );

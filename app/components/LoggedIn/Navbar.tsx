@@ -10,7 +10,6 @@ function logout(router: AppRouterInstance) {
 }
 
 type State = {
-  id: number;
   name: string;
   email: string;
   password: string;
@@ -33,7 +32,7 @@ export default function Navbar(props: Props) {
         {/* Middle space for extra components */}
       </div>
       <div>
-        <NavDropdown logout={logout} router={router} id={props.state.id} />
+        <NavDropdown logout={logout} router={router} state={props.state} />
       </div>
     </nav>
   );

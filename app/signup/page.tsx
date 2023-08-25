@@ -18,21 +18,24 @@ function handleSubmit(
     const name = nameRef.current.value;
     const email = emailRef.current.value;
     const password = passwordRef.current.value;
-    localStorage.setItem(
-      "account",
-      JSON.stringify({ name: name, email: email, password: password }),
-    );
-    router.push("/logged-in/1");
+    fetch("/api/createAccount", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name: name, email: email, password: password }),
+    }).then(() => {
+      localStorage.setItem(
+        "account",
+        JSON.stringify({ name: name, email: email, password: password }),
+      );
+      router.push(`/logged-in/${email}`);
+    });
   }
 }
 
 export default function Signup() {
   const router = useRouter();
-  useEffect(() => {
-    if (localStorage.getItem("account") != null) {
-      router.push("/logged-in/1");
-    }
-  }, [router]);
   const name = useRef<HTMLInputElement>(null);
   const email = useRef<HTMLInputElement>(null);
   const password = useRef<HTMLInputElement>(null);

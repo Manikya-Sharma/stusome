@@ -6,6 +6,7 @@ import ShowMarkdown from "@/app/components/Markdown/ShowMarkdown";
 
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
+import Script from "next/script";
 
 export default function Post() {
   // fetching data
@@ -69,11 +70,11 @@ export default function Post() {
           })}
         </ul>
 
-        <p className="flex-[3]">
+        <div className="flex-[3]">
           <div className="markdown-wrapper">
             <ShowMarkdown data={state.content} />
           </div>
-        </p>
+        </div>
 
         <div className="flex-1 sm:flex-col sm:justify-start my-3 flex flex-wrap text-slate-200 items-center text-center justify-center">
           <p className="hidden sm:block text-lg text-slate-800 mb-2">Tags</p>

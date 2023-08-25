@@ -2,8 +2,6 @@
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 
-import accounts from "@/public/accounts.json";
-
 import Navbar from "@/app/components/LoggedIn/Navbar";
 import Welcome from "@/app/components/LoggedIn/Welcome";
 import MostViewed from "@/app/components/LoggedIn/MostVeiwed";
@@ -18,20 +16,23 @@ type State = {
 
 export default function LoggedIn() {
   const pathname = usePathname();
-  const id = parseInt(pathname.split("/")[2]);
+  const email = pathname.split("/")[2];
+
   const [state, setState] = useState({
-    id: id,
     name: "",
     email: "",
     password: "",
   });
   useEffect(() => {
-    for (const account of accounts) {
-      if (account.id == id) {
-        setState(account);
-      }
+    async function fetchData() {
+      const data = await fetch(`/api/getAccountByEmail/${email}`);
+      const json = await data.json();
+      console.log();
+      setState(json);
     }
-  }, [id]);
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <main>
       <Navbar state={state} />
