@@ -1,5 +1,5 @@
 "use client";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 
 import Navbar from "@/app/components/LoggedIn/Navbar";
@@ -15,24 +15,30 @@ type State = {
 };
 
 export default function LoggedIn() {
-  const pathname = usePathname();
-  const email = pathname.split("/")[2];
-
+  const router = useRouter();
+  const id = usePathname().split("/")[2];
   const [state, setState] = useState({
+    _id: "",
     name: "",
     email: "",
     password: "",
   });
   useEffect(() => {
-    async function fetchData() {
-      const data = await fetch(`/api/getAccountByEmail/${email}`);
-      const json = await data.json();
-      console.log();
-      setState(json);
+    const account = localStorage.getItem("account");
+    if (account == null) {
+      router.push("/login");
+    } else {
+      setState(() => JSON.parse(account));
     }
-    fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  useEffect(() => {
+    // different user
+    if (id != state._id && state._id != "") {
+      localStorage.removeItem("account");
+      router.push("/login");
+    }
+  }, [id, router, state._id]);
   return (
     <main>
       <Navbar state={state} />

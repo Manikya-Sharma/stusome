@@ -3,6 +3,7 @@ import { useState } from "react";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 
 type State = {
+  _id: string;
   email: string;
   password: string;
   name: string;
@@ -29,7 +30,7 @@ export default function NavDropdown(props: Props) {
               <button
                 className="w-full px-2 py-1 bg-gradient-to-r from-emerald-300 to-emerald-800 hover:text-fuchsia-200 text-[#fffffc] hover:from-emerald-800 hover:to-emerald-700 transition-all duration-300 rounded-md"
                 onClick={() =>
-                  props.router.push(`/logged-in/${props.state.email}/dashboard`)
+                  props.router.push(`/logged-in/${props.state._id}/dashboard`)
                 }
               >
                 Dashboard
@@ -39,7 +40,7 @@ export default function NavDropdown(props: Props) {
               <button
                 className="w-full px-2 py-1 bg-gradient-to-r from-emerald-300 to-emerald-800 hover:text-fuchsia-200 text-[#fffffc] hover:from-emerald-800 hover:to-emerald-700 transition-all duration-300 rounded-md"
                 onClick={() =>
-                  props.router.push(`/logged-in/${props.state.email}/settings`)
+                  props.router.push(`/logged-in/${props.state._id}/settings`)
                 }
               >
                 Settings

@@ -8,7 +8,7 @@ import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 async function handleSubmit(
   emailRef: React.RefObject<HTMLInputElement>,
   passwordRef: React.RefObject<HTMLInputElement>,
-  router: AppRouterInstance,
+  router: AppRouterInstance
 ) {
   if (emailRef.current != null && passwordRef.current != null) {
     const email = emailRef.current.value;
@@ -21,7 +21,7 @@ async function handleSubmit(
       return;
     } else {
       localStorage.setItem("account", JSON.stringify(userData));
-      router.push(`/logged-in/${userData.email}`);
+      router.push(`/logged-in/${userData._id}`);
     }
   }
 }
@@ -32,7 +32,7 @@ export default function Login() {
     const userData = localStorage.getItem("account");
     if (userData != null) {
       const jsonUserData = JSON.parse(userData);
-      router.push(`/logged-in/${jsonUserData.email}`);
+      router.push(`/logged-in/${jsonUserData._id}`);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

@@ -8,7 +8,7 @@ function handleSubmit(
   nameRef: React.RefObject<HTMLInputElement>,
   emailRef: React.RefObject<HTMLInputElement>,
   passwordRef: React.RefObject<HTMLInputElement>,
-  router: AppRouterInstance,
+  router: AppRouterInstance
 ) {
   if (
     nameRef.current != null &&
@@ -25,11 +25,12 @@ function handleSubmit(
       },
       body: JSON.stringify({ name: name, email: email, password: password }),
     }).then(() => {
-      localStorage.setItem(
-        "account",
-        JSON.stringify({ name: name, email: email, password: password }),
-      );
-      router.push(`/logged-in/${email}`);
+      fetch(`/api/getAccountByEmail/${email}`).then((acc) => {
+        acc.json().then((json) => {
+          localStorage.setItem("account", json);
+          router.push(`/logged-in/${json._id}`);
+        });
+      });
     });
   }
 }
