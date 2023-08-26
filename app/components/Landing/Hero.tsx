@@ -1,5 +1,6 @@
 import Link from "next/link";
 import About from "@/app/components/Landing/hero/About";
+import Image from "next/image";
 
 export default function Hero() {
   return (
@@ -17,8 +18,15 @@ export default function Hero() {
 
         <div className="max-w-[70%] flex flex-col gap-2 mx-auto text-xl sm:text-2xl">
           <p>
-            The wait is over! Welcome to{" "}
-            <span className="bg-slate-800 text-slate-200">ProductName</span> !
+            The wait is over! Welcome to
+            <div className="inline-block items-center sm:flex bg-[rgba(200,200,200,0.8)] rounded-lg px-2 hover:bg-white transition-all duration-200">
+              <Image
+                src="/logo-full-tx.png"
+                alt="stusome"
+                width={100}
+                height={90}
+              />
+            </div>
           </p>
           <p>This is your one stop solution for all academic needs.</p>
           <Link

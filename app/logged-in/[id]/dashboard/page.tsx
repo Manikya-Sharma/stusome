@@ -1,9 +1,13 @@
 "use client";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 
 import Link from "next/link";
 import Image from "next/image";
+
+type Params = {
+  params: { id: string };
+};
 
 type State = {
   name: string;
@@ -11,9 +15,9 @@ type State = {
   password: string;
 };
 
-export default function LoggedIn() {
+export default function LoggedIn({ params }: Params) {
   const router = useRouter();
-  const id = usePathname().split("/")[2];
+  const id = params.id;
   const [state, setState] = useState({
     _id: "",
     name: "",

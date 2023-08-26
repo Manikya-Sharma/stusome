@@ -4,14 +4,15 @@ import Discussions from "@/app/components/Posts/Discussions";
 import Markdown from "@/app/components/Posts/MarkdownInput";
 import ShowMarkdown from "@/app/components/Markdown/ShowMarkdown";
 
-import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
-import Script from "next/script";
 
-export default function Post() {
+type Params = {
+  params: { id: string };
+};
+
+export default function Post({ params }: Params) {
   // fetching data
-  const pathname = usePathname();
-  const id = parseInt(pathname.split("/")[2]);
+  const id = parseInt(params.id);
   const [state, setState] = useState({
     id: id,
     title: "",

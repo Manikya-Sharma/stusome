@@ -1,11 +1,15 @@
 "use client";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 
 import Navbar from "@/app/components/LoggedIn/Navbar";
 import Welcome from "@/app/components/LoggedIn/Welcome";
 import MostViewed from "@/app/components/LoggedIn/MostVeiwed";
 import Frequents from "@/app/components/LoggedIn/Frequents";
+
+type Params = {
+  params: { id: string };
+};
 
 type State = {
   id: number;
@@ -14,9 +18,9 @@ type State = {
   password: string;
 };
 
-export default function LoggedIn() {
+export default function LoggedIn({ params }: Params) {
   const router = useRouter();
-  const id = usePathname().split("/")[2];
+  const id = params.id;
   const [state, setState] = useState({
     _id: "",
     name: "",
