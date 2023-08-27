@@ -6,6 +6,8 @@ import ShowMarkdown from "@/app/components/Markdown/ShowMarkdown";
 
 import { useState, useEffect } from "react";
 
+import SyncLoader from "react-spinners/SyncLoader";
+
 type Params = {
   params: { id: string };
 };
@@ -28,11 +30,13 @@ export default function Post({ params }: Params) {
     ],
     tags: [""],
   });
+  const [loading, setLoading] = useState<boolean>(true);
   const [headings, setHeadings] = useState<string[]>([]);
   useEffect(() => {
     for (const post of posts) {
       if (post.id == id) {
         setState(post);
+        setLoading(false);
       }
     }
   }, [id]);
@@ -52,7 +56,16 @@ export default function Post({ params }: Params) {
   // post new discussion
   const [newDiscussion, setNewDiscussion] = useState(false);
 
-  return (
+  return loading ? (
+    <div className="absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%]">
+      <SyncLoader
+        color={"#1199ff"}
+        loading={loading}
+        size={20}
+        aria-label="loading"
+      />
+    </div>
+  ) : (
     <div className="p-4 font-fancy">
       <div className="mb-5">
         <h1 className="text-5xl text-center">{state.title}</h1>
