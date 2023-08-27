@@ -1,57 +1,50 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
-
 import Link from "next/link";
-import Image from "next/image";
+
+import Tile from "@/app/components/Settings/Tile";
 
 type Params = {
   params: { id: string };
 };
 
-type State = {
-  name: string;
-  email: string;
-  password: string;
-};
-
 export default function LoggedIn({ params }: Params) {
   const router = useRouter();
-  const id = params.id;
-  const [state, setState] = useState({
-    _id: "",
-    name: "",
-    email: "",
-    password: "",
-  });
-  useEffect(() => {
-    const account = localStorage.getItem("account");
-    if (account == null) {
-      localStorage.removeItem("account");
-      router.push("/login");
-    } else {
-      setState(() => JSON.parse(account));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  useEffect(() => {
-    if (id != state._id && state._id != "") {
-      router.push("/login");
-    }
-  }, [id, router, state._id]);
   return (
     <main className="px-4">
-      <div className="h-10">
-        <Link href={`/logged-in/${state._id}`}>
-          <Image
-            src="/images/misc/back.svg"
-            alt="back"
-            width={28}
-            height={28}
-          />
-        </Link>
+      <div className="mt-5 mb-7">
+        <h1 className="text-6xl text-center font-merri tracking-tighter">
+          Settings
+        </h1>
       </div>
-      <p>User settings for {state.name}</p>
+
+      <div className="text-lg">
+        <div className="sm:mx-auto sm:grid sm:grid-cols-2 sm:grid-rows-2 gap-x-4">
+          <div>
+            <Link href={`/logged-in/${params.id}/settings/account`}>
+              <Tile description="Account" danger={false} warning={false} />
+            </Link>
+          </div>
+          <div>
+            <Link href={`/logged-in/${params.id}/settings/app`}>
+              <Tile description="App Settings" danger={false} warning={false} />
+            </Link>
+          </div>
+          <div>
+            <Link href={`/logged-in/${params.id}/settings/privacy`}>
+              <Tile description="Privacy" danger={false} warning={false} />
+            </Link>
+          </div>
+        </div>
+        <div
+          onClick={() => {
+            localStorage.clear();
+            router.push("/");
+          }}
+        >
+          <Tile description="Logout" danger={true} warning={false} />
+        </div>
+      </div>
     </main>
   );
 }

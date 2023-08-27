@@ -17,17 +17,17 @@ export default function Hero() {
         </div>
 
         <div className="max-w-[70%] flex flex-col gap-2 mx-auto text-xl sm:text-2xl">
-          <p>
+          <div>
             The wait is over! Welcome to
-            <div className="inline-block items-center sm:flex bg-[rgba(200,200,200,0.8)] rounded-lg px-2 hover:bg-white transition-all duration-200">
+            <p className="inline-block items-center sm:flex bg-[rgba(200,200,200,0.8)] rounded-lg px-2 hover:bg-white transition-all duration-200">
               <Image
                 src="/logo-full-tx.png"
                 alt="stusome"
                 width={100}
                 height={90}
               />
-            </div>
-          </p>
+            </p>
+          </div>
           <p>This is your one stop solution for all academic needs.</p>
           <Link
             href="/login"
