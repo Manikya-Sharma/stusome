@@ -5,11 +5,11 @@ import Footer from "./components/Landing/Footer";
 export default function Home() {
   return (
     <div>
-      <main className="bg-[url('/images/Home/bg.png')] min-h-[70vh]">
+      <main className="bg-[url('/images/Home/bg-low-quality.jpg')]">
         <div>
           <Navbar />
         </div>
-        <div className="pt-16 sm:pt-20 h-[70vh] bg-gradient-to-b from-[rgba(30,30,80,0.5)] to-[rgba(90,25,25,0.85)] text-white">
+        <div className="pt-16 sm:pt-20 bg-gradient-to-b from-[rgba(30,30,80,0.5)] to-[rgba(90,25,25,0.85)] text-white">
           <Hero />
         </div>
       </main>
