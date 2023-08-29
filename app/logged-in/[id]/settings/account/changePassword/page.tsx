@@ -17,7 +17,7 @@ async function handleSubmit(
   passwordRef: React.RefObject<HTMLInputElement>,
   state: State,
   router: AppRouterInstance,
-  loader: Function,
+  loader: Function
 ) {
   if (passwordRef.current != null) {
     const password = passwordRef.current.value;
@@ -82,13 +82,13 @@ export default function Login({ params }: { params: { id: string } }) {
 
   return (
     <div className="h-screen">
-      <div className="overflow-hidden">
+      <div className="absolute top-0">
         <BarLoader
           loading={loading}
           color={"#36d7b7"}
           speedMultiplier={1.5}
           width={width}
-          cssOverride={{ backgroundColor: "cadetblue" }}
+          cssOverride={{ backgroundColor: "rgba(0,0,255,0.3)" }}
         />
       </div>
       <main className="h-full flex items-center gradient font-fancy">

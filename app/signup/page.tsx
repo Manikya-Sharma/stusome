@@ -9,7 +9,7 @@ function handleSubmit(
   nameRef: React.RefObject<HTMLInputElement>,
   emailRef: React.RefObject<HTMLInputElement>,
   passwordRef: React.RefObject<HTMLInputElement>,
-  router: AppRouterInstance,
+  router: AppRouterInstance
 ) {
   if (
     nameRef.current != null &&
@@ -50,13 +50,13 @@ export default function Signup() {
 
   return (
     <div className="h-screen">
-      <div className="overflow-hidden">
+      <div className="absolute top-0">
         <BarLoader
           loading={loading}
           color={"#36d7b7"}
           speedMultiplier={1.5}
           width={width}
-          cssOverride={{ backgroundColor: "cadetblue" }}
+          cssOverride={{ backgroundColor: "rgba(0,0,255,0.3)" }}
         />
       </div>
       <main className="h-full flex items-center gradient font-fancy">

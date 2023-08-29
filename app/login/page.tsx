@@ -10,7 +10,7 @@ async function handleSubmit(
   emailRef: React.RefObject<HTMLInputElement>,
   passwordRef: React.RefObject<HTMLInputElement>,
   router: AppRouterInstance,
-  loader: Function,
+  loader: Function
 ) {
   if (emailRef.current != null && passwordRef.current != null) {
     const email = emailRef.current.value;
@@ -50,13 +50,13 @@ export default function Login() {
   const password = useRef<HTMLInputElement>(null);
   return (
     <div className="h-screen">
-      <div className="overflow-hidden">
+      <div className="absolute top-0">
         <BarLoader
           loading={loading}
           color={"#36d7b7"}
           speedMultiplier={1.5}
           width={width}
-          cssOverride={{ backgroundColor: "cadetblue" }}
+          cssOverride={{ backgroundColor: "rgba(0,0,255,0.3)" }}
         />
       </div>
       <main className="h-full flex items-center gradient font-fancy">
