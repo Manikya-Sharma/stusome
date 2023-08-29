@@ -4,7 +4,7 @@ import Footer from "./components/Landing/Footer";
 
 export default function Home() {
   return (
-    <div>
+    <div className="min-h-screen bg-black">
       <main className="bg-[url('/images/Home/bg-low-quality.jpg')]">
         <div>
           <Navbar />
