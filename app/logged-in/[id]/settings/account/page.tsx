@@ -1,6 +1,8 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
+import Link from "next/link";
+import Tile from "@/app/components/Settings/Tile";
 
 type Params = {
   params: { id: string };
@@ -36,5 +38,14 @@ export default function LoggedIn({ params }: Params) {
       router.push("/login");
     }
   }, [id, router, state._id]);
-  return <main className="px-4">Hi {state.name}</main>;
+  return (
+    <main className="p-4">
+      <Link href={`/logged-in/${state._id}/settings/account/changeUsername`}>
+        <Tile description="Change Username" type="normal" />
+      </Link>
+      <Link href={`/logged-in/${state._id}/settings/account/changePassword`}>
+        <Tile description="Change Password" type="normal" />
+      </Link>
+    </main>
+  );
 }

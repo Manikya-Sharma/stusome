@@ -10,7 +10,7 @@ async function handleSubmit(
   emailRef: React.RefObject<HTMLInputElement>,
   passwordRef: React.RefObject<HTMLInputElement>,
   router: AppRouterInstance,
-  loader: Function
+  loader: Function,
 ) {
   if (emailRef.current != null && passwordRef.current != null) {
     const email = emailRef.current.value;

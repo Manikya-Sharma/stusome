@@ -9,7 +9,7 @@ function handleSubmit(
   nameRef: React.RefObject<HTMLInputElement>,
   emailRef: React.RefObject<HTMLInputElement>,
   passwordRef: React.RefObject<HTMLInputElement>,
-  router: AppRouterInstance
+  router: AppRouterInstance,
 ) {
   if (
     nameRef.current != null &&

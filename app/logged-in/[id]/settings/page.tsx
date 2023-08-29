@@ -22,17 +22,17 @@ export default function LoggedIn({ params }: Params) {
         <div className="sm:mx-auto sm:grid sm:grid-cols-2 sm:grid-rows-2 gap-x-4">
           <div>
             <Link href={`/logged-in/${params.id}/settings/account`}>
-              <Tile description="Account" danger={false} warning={false} />
+              <Tile description="Account" type="normal" />
             </Link>
           </div>
           <div>
             <Link href={`/logged-in/${params.id}/settings/app`}>
-              <Tile description="App Settings" danger={false} warning={false} />
+              <Tile description="App Settings" type="normal" />
             </Link>
           </div>
           <div>
             <Link href={`/logged-in/${params.id}/settings/privacy`}>
-              <Tile description="Privacy" danger={false} warning={false} />
+              <Tile description="Privacy" type="normal" />
             </Link>
           </div>
         </div>
@@ -42,7 +42,7 @@ export default function LoggedIn({ params }: Params) {
             router.push("/");
           }}
         >
-          <Tile description="Logout" danger={true} warning={false} />
+          <Tile description="Logout" type="danger" />
         </div>
       </div>
     </main>
