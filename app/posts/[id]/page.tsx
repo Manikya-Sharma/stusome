@@ -114,7 +114,12 @@ export default function Post({ params }: Params) {
       />
 
       {newDiscussion ? (
-        <Markdown rows={10} cols={30} uploadMarkdown={handleNewDiscussion} />
+        <Markdown
+          rows={10}
+          cols={50}
+          uploadMarkdown={handleNewDiscussion}
+          discussionHandler={setNewDiscussion}
+        />
       ) : (
         ""
       )}

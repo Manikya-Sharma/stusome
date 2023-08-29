@@ -1,6 +1,4 @@
 import ShowMarkdown from "../Markdown/ShowMarkdown";
-import Markdown from "./MarkdownInput";
-import { useState, useEffect } from "react";
 
 type Props = {
   discussion: {
@@ -13,7 +11,6 @@ type Props = {
 };
 
 export default function Discussions(props: Props) {
-  const [hideButton, setHideButton] = useState(false);
   // const [showReply, setShowReply] = useState<boolean[]>([]);
   // useEffect(() => {
   //   const num_discussions = props.discussion.length;
@@ -73,19 +70,15 @@ export default function Discussions(props: Props) {
           </div>
         );
       })}
-      {hideButton ? (
-        ""
-      ) : (
-        <button
-          className="block w-fit mx-auto px-3 py-2 my-5 rounded-md bg-gradient-to-tr from-rose-200 to-pink-300 hover:from-purple-200 hover:to-rose-300 text-pink-800 hover:text-rose-950 transition-all duration-200"
-          onClick={() => {
-            props.setNewDiscussion(true);
-            setHideButton(true);
-          }}
-        >
-          New discussion
-        </button>
-      )}
+
+      <button
+        className="block w-fit mx-auto px-3 py-2 my-5 rounded-md bg-gradient-to-tr from-rose-200 to-pink-300 hover:from-purple-200 hover:to-rose-300 text-pink-800 hover:text-rose-950 transition-all duration-200"
+        onClick={() => {
+          props.setNewDiscussion(true);
+        }}
+      >
+        New discussion
+      </button>
     </div>
   );
 }
