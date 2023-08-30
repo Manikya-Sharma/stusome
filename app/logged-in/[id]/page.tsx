@@ -16,6 +16,7 @@ type State = {
   name: string;
   email: string;
   password: string;
+  picture: string;
 };
 
 export default function LoggedIn({ params }: Params) {
@@ -26,6 +27,7 @@ export default function LoggedIn({ params }: Params) {
     name: "",
     email: "",
     password: "",
+    picture: "",
   });
   useEffect(() => {
     const account = localStorage.getItem("account");
@@ -43,6 +45,7 @@ export default function LoggedIn({ params }: Params) {
       router.push("/login");
     }
   }, [id, router, state._id]);
+
   return (
     <main>
       <Navbar state={state} />
