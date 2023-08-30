@@ -1,12 +1,14 @@
 "use client";
 import { useState } from "react";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
+import Image from "next/image";
 
 type State = {
   _id: string;
   email: string;
   password: string;
   name: string;
+  picture: string;
 };
 
 type Props = {
@@ -19,10 +21,17 @@ export default function NavDropdown(props: Props) {
   const [open, setOpen] = useState(false);
   return (
     <div className="relative">
-      <button
-        className="w-10 h-10 rounded-full bg-slate-400"
+      <div
+        className="flex flex-col items-center align-middle justify-center cursor-pointer w-12 h-12 rounded-full bg-slate-400 overflow-hidden"
         onClick={() => setOpen(!open)}
-      ></button>
+      >
+        <Image
+          src={`data:image/png;base64,${props.state.picture}`}
+          alt=""
+          width={70}
+          height={70}
+        />
+      </div>
       {open ? (
         <div className="absolute right-2 p-3 bg-rose-200 hover:bg-gradient-to-tr from-rose-200 to-rose-100 hover:shadow-md">
           <ul className="flex flex-col gap-3">
