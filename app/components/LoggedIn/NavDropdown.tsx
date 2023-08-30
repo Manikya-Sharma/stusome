@@ -9,6 +9,7 @@ type State = {
   password: string;
   name: string;
   picture: string;
+  hasPic: boolean;
 };
 
 type Props = {
@@ -25,12 +26,14 @@ export default function NavDropdown(props: Props) {
         className="flex flex-col items-center align-middle justify-center cursor-pointer w-12 h-12 rounded-full bg-slate-400 overflow-hidden"
         onClick={() => setOpen(!open)}
       >
-        <Image
-          src={`data:image/png;base64,${props.state.picture}`}
-          alt=""
-          width={70}
-          height={70}
-        />
+        {props.state.hasPic && (
+          <Image
+            src={`data:image/png;base64,${props.state.picture}`}
+            alt=""
+            width={70}
+            height={70}
+          />
+        )}
       </div>
       {open ? (
         <div className="absolute right-2 p-3 bg-rose-200 hover:bg-gradient-to-tr from-rose-200 to-rose-100 hover:shadow-md">

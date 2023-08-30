@@ -16,6 +16,7 @@ type State = {
   email: string;
   password: string;
   picture: string;
+  hasPic: boolean;
 };
 
 type Props = {

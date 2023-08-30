@@ -17,6 +17,7 @@ type State = {
   email: string;
   password: string;
   picture: string;
+  hasPic: boolean;
 };
 
 export default function LoggedIn({ params }: Params) {
@@ -28,6 +29,7 @@ export default function LoggedIn({ params }: Params) {
     email: "",
     password: "",
     picture: "",
+    hasPic: false,
   });
   useEffect(() => {
     const account = localStorage.getItem("account");

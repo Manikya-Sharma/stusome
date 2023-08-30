@@ -13,6 +13,7 @@ type State = {
   name: string;
   password: string;
   picture: string;
+  hasPic: boolean;
 };
 
 async function handleSubmit(
@@ -33,13 +34,14 @@ async function handleSubmit(
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ picture: base64 }),
+          body: JSON.stringify({ picture: base64, hasPic: true }),
         }).then(() => {
           const existing = localStorage.getItem("account");
           if (existing != null && pic != null) {
             const new_account = {
               ...JSON.parse(existing),
               picture: base64,
+              hasPic: true,
             };
             localStorage.setItem("account", JSON.stringify(new_account));
             loader(false);
@@ -52,6 +54,32 @@ async function handleSubmit(
   }
 }
 
+async function removeProfile(
+  state: State,
+  router: AppRouterInstance,
+  loader: Function
+) {
+  fetch(`/api/updateAccountByEmail/${state.email}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ picture: "", hasPic: false }),
+  }).then(() => {
+    const existing = localStorage.getItem("account");
+    if (existing != null) {
+      const new_account = {
+        ...JSON.parse(existing),
+        picture: "",
+        hasPic: false,
+      };
+      localStorage.setItem("account", JSON.stringify(new_account));
+      loader(false);
+      router.push(`/logged-in/${state._id}`);
+    }
+  });
+}
+
 export default function Login({ params }: { params: { id: string } }) {
   const router = useRouter();
   const id = params.id;
@@ -61,6 +89,7 @@ export default function Login({ params }: { params: { id: string } }) {
     email: "",
     password: "",
     picture: "",
+    hasPic: false,
   });
   useEffect(() => {
     const account = localStorage.getItem("account");
@@ -114,12 +143,14 @@ export default function Login({ params }: { params: { id: string } }) {
             <div className="flex flex-col items-center">
               <label className="text-xl" htmlFor="pic">
                 <div className="flex flex-col items-center align-middle justify-center cursor-pointer w-52 h-52 max-w-full max-h-full rounded-full bg-slate-400 overflow-hidden hover:grayscale">
-                  <Image
-                    src={`data:image/png;base64,${state.picture}`}
-                    alt=""
-                    width={260}
-                    height={260}
-                  />
+                  {state.hasPic && (
+                    <Image
+                      src={`data:image/png;base64,${state.picture}`}
+                      alt=""
+                      width={260}
+                      height={260}
+                    />
+                  )}
                 </div>
               </label>
               <input
@@ -134,6 +165,17 @@ export default function Login({ params }: { params: { id: string } }) {
                   handleSubmit(new_pic, state, router, setLoading);
                 }}
               />
+            </div>
+            <div>
+              <button
+                onClick={() => {
+                  setLoading(true);
+                  removeProfile(state, router, setLoading);
+                }}
+                className="px-3 py-2 block w-fit mx-auto bg-red-600 hover:bg-red-100 hover:text-slate-800 mt-5 transition-all duration-200 rounded-md"
+              >
+                Remove
+              </button>
             </div>
           </div>
         </div>
