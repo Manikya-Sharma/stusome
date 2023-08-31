@@ -4,20 +4,12 @@ import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { useRouter } from "next/navigation";
 import NavDropdown from "@/app/components/LoggedIn/NavDropdown";
 import Image from "next/image";
+import { State } from "@/app/types/user";
 
 function logout(router: AppRouterInstance) {
   localStorage.clear();
   router.push("/");
 }
-
-type State = {
-  _id: string;
-  name: string;
-  email: string;
-  password: string;
-  picture: string;
-  hasPic: boolean;
-};
 
 type Props = {
   state: State;

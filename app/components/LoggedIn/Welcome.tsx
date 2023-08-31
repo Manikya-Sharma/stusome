@@ -1,15 +1,10 @@
 import Link from "next/link";
 import Image from "next/image";
 
-type User = {
-  _id: string;
-  name: string;
-  email: string;
-  password: string;
-};
+import { State } from "@/app/types/user";
 
 type Props = {
-  user: User;
+  user: State;
 };
 
 export default function Welcome(props: Props) {

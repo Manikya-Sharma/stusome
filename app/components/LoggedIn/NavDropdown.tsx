@@ -2,15 +2,7 @@
 import { useState } from "react";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import Image from "next/image";
-
-type State = {
-  _id: string;
-  email: string;
-  password: string;
-  name: string;
-  picture: string;
-  hasPic: boolean;
-};
+import { State } from "@/app/types/user";
 
 type Props = {
   state: State;

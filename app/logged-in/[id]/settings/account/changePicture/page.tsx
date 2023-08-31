@@ -6,15 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import BarLoader from "react-spinners/BarLoader";
-
-type State = {
-  _id: string;
-  email: string;
-  name: string;
-  password: string;
-  picture: string;
-  hasPic: boolean;
-};
+import { State } from "@/app/types/user";
 
 async function handleSubmit(
   picRef: React.RefObject<HTMLInputElement>,
