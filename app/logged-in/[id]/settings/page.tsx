@@ -34,11 +34,11 @@ export default function LoggedIn({ params }: Params) {
     }
   }, [id, router, state._id]);
   return (
-    <main className="px-4">
+    <main className="p-4 min-h-screen dark:bg-slate-800 dark:text-slate-200">
       <div className="mb-5">
         <Link
           href={`/logged-in/${state._id}/`}
-          className="absolute top-1 left-1 text-slate-800 text-lg hover:underline underline-offset-2"
+          className="text-slate-800 dark:text-slate-200 text-lg hover:underline underline-offset-2"
         >
           Back
         </Link>

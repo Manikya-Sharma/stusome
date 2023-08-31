@@ -18,7 +18,7 @@ type Props = {
 export default function Navbar(props: Props) {
   const router = useRouter();
   return (
-    <nav className="flex z-[100] fixed w-[100vw] justify-between items-center px-4 py-1 sm:px-8 sm:py-4 backdrop-blur-sm">
+    <nav className="flex z-[100] fixed w-[100vw] justify-between items-center px-4 py-1 sm:px-8 sm:py-4 backdrop-blur-sm dark:bg-gradient-to-br from-[rgba(200,200,200,0.7)] to-slate-800">
       <div>
         <Image src="/logo-full-tx.png" alt="stusome" width={100} height={90} />
       </div>

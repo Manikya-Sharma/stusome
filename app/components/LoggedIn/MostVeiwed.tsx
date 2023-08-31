@@ -15,7 +15,7 @@ export default function MostViewed() {
               <li key={post.id}>
                 <Link
                   href={`/posts/${post.id}`}
-                  className="block px-2 py-2 border my-2 border-teal-300 rounded-md hover:bg-teal-300 hover:text-blue-800 transition-all duration-150"
+                  className="block px-2 py-2 border my-2 border-teal-300 rounded-md hover:bg-teal-300 hover:text-blue-800 transition-all duration-150 dark:bg-gradient-to-tr dark:from-teal-800 dark:to-teal-950 dark:border-teal-950 dark:hover:from-teal-200 dark:hover:to-teal-400"
                 >
                   <div className="flex justify-between space-x-1">
                     <div>{post.title}</div>
