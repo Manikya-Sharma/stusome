@@ -15,7 +15,7 @@ export default function NavDropdown(props: Props) {
   return (
     <div className="relative">
       <div
-        className="flex flex-col items-center align-middle justify-center cursor-pointer w-12 h-12 rounded-full overflow-hidden"
+        className="flex flex-col items-center align-middle justify-center cursor-pointer w-12 h-12 rounded-full bg-slate-300 overflow-hidden"
         onClick={() => setOpen(!open)}
       >
         {props.state.hasPic && (
