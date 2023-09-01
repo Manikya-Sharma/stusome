@@ -8,7 +8,7 @@ import reviews from "@/public/reviews.json";
 
 export default function Reviews() {
   return (
-    <div>
+    <div className="max-w-full overflow-hidden">
       <section className="relative text-gray-600 body-font mx-auto">
         <div className="-z-50 absolute -top-28 left-0 bg-gradient-to-b from-amber-300 to-white w-[100vw] h-56"></div>
         <h2 className="text-center text-3xl md:text-5xl text-slate-700 font-merri tracking-tight my-5">
