@@ -1,3 +1,4 @@
+import { url } from "inspector";
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter, Merriweather, Quicksand, Preahvihear } from "next/font/google";
@@ -21,6 +22,19 @@ const preahvihear = Preahvihear({
 export const metadata: Metadata = {
   title: "stusome",
   description: "Student Social Media: The social media website you need",
+  openGraph: {
+    title: "stusome",
+    description: "Haven for students - open the app",
+    type: "website",
+    url: "https://stusome.vercel.app",
+    siteName: "stusome",
+    images: [
+      {
+        url: "https://stusome.vercel.app/logo-full.png",
+      },
+    ],
+    locale: "en_US",
+  },
 };
 
 export default function RootLayout({
