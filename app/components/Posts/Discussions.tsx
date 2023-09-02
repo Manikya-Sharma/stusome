@@ -1,6 +1,8 @@
 import ShowMarkdown from "../Markdown/ShowMarkdown";
 import Markdown from "./MarkdownInput";
 import { useState, useEffect } from "react";
+import { LuReply } from "react-icons/lu";
+import { LiaPlusCircleSolid } from "react-icons/lia";
 
 type Props = {
   discussion: {
@@ -55,13 +57,14 @@ export default function Discussions(props: Props) {
             </div>
             <div className="text-md text-slate-800 font-semibold">
               <button
-                className="w-fit px-2 py-1 my-2 rounded-lg bg-gradient-to-t from-teal-100 to-teal-300 hover:from-teal-300 hover:to-teal-100"
+                className=" flex gap-2 items-center justify-start w-fit px-2 py-1 my-2 rounded-lg bg-gradient-to-t from-teal-100 to-teal-300 hover:from-teal-300 hover:to-teal-100"
                 // onClick={() => {
                 //   const arr = showReply;
                 //   arr[elem.id - 1] = true;
                 //   setShowReply(arr);
                 // }}
               >
+                <LuReply />
                 Reply
                 {/* {showReply[elem.id - 1] == true ? (
                   <Markdown rows={10} cols={10} uploadMarkdown={() => {}} />
@@ -77,13 +80,14 @@ export default function Discussions(props: Props) {
         ""
       ) : (
         <button
-          className="block w-fit mx-auto px-3 py-2 my-5 rounded-md bg-gradient-to-tr from-rose-200 to-pink-300 hover:from-purple-200 hover:to-rose-300 text-pink-800 hover:text-rose-950 transition-all duration-200"
+          className="flex items-center justify-start gap-3 w-fit mx-auto px-3 py-2 my-5 rounded-md bg-gradient-to-tr from-rose-200 to-pink-300 hover:from-purple-200 hover:to-rose-300 text-pink-800 hover:text-rose-950 transition-all duration-200"
           onClick={() => {
             props.setNewDiscussion(true);
             setHideButton(true);
           }}
         >
-          New discussion
+          <LiaPlusCircleSolid />
+          <p>New discussion</p>
         </button>
       )}
     </div>

@@ -1,6 +1,21 @@
+import { LuUser, LuSettings2, LuLock, LuLogOut } from "react-icons/lu";
+import {
+  MdAddAPhoto,
+  MdDriveFileRenameOutline,
+  MdPassword,
+} from "react-icons/md";
+
 type Props = {
   description: string;
   type: "normal" | "danger" | "warning";
+  logo?:
+    | "user"
+    | "settings"
+    | "lock"
+    | "logout"
+    | "addPhoto"
+    | "rename"
+    | "password";
 };
 
 export default function Tile(props: Props) {
@@ -16,7 +31,44 @@ export default function Tile(props: Props) {
           " bg-slate-200 border-red-500 text-red-700 hover:bg-red-700 hover:text-white dark:bg-red-900 dark:text-red-200 dark:hover:bg-red-600 dark:hover:text-red-200 ")
       }
     >
-      <div>{props.description}</div>
+      <div className="flex items-center justify-start gap-3">
+        {props.logo == "user" && (
+          <div className="">
+            <LuUser />
+          </div>
+        )}
+        {props.logo == "settings" && (
+          <div className="">
+            <LuSettings2 />
+          </div>
+        )}
+        {props.logo == "lock" && (
+          <div className="">
+            <LuLock />
+          </div>
+        )}
+        {props.logo == "logout" && (
+          <div className="">
+            <LuLogOut />
+          </div>
+        )}
+        {props.logo == "addPhoto" && (
+          <div className="">
+            <MdAddAPhoto />
+          </div>
+        )}
+        {props.logo == "rename" && (
+          <div className="">
+            <MdDriveFileRenameOutline />
+          </div>
+        )}
+        {props.logo == "password" && (
+          <div className="">
+            <MdPassword />
+          </div>
+        )}
+        <p>{props.description}</p>
+      </div>
       <div>&gt;</div>
     </section>
   );

@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Tile from "@/app/components/Settings/Tile";
+import { LuArrowLeft } from "react-icons/lu";
 
 type Params = {
   params: { id: string };
@@ -39,17 +40,21 @@ export default function LoggedIn({ params }: Params) {
           href={`/logged-in/${state._id}/settings/`}
           className="text-slate-800 text-lg hover:underline underline-offset-2 dark:text-slate-200"
         >
-          Back
+          <LuArrowLeft />
         </Link>
       </div>
       <Link href={`/logged-in/${state._id}/settings/account/changePicture`}>
-        <Tile description="Change Profile Picture" type="normal" />
+        <Tile
+          description="Change Profile Picture"
+          type="normal"
+          logo="addPhoto"
+        />
       </Link>
       <Link href={`/logged-in/${state._id}/settings/account/changeUsername`}>
-        <Tile description="Change Username" type="normal" />
+        <Tile description="Change Username" type="normal" logo="rename" />
       </Link>
       <Link href={`/logged-in/${state._id}/settings/account/changePassword`}>
-        <Tile description="Change Password" type="normal" />
+        <Tile description="Change Password" type="normal" logo="password" />
       </Link>
     </main>
   );

@@ -3,6 +3,7 @@ import { useState } from "react";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import Image from "next/image";
 import { State } from "@/app/types/user";
+import { LuLayoutDashboard, LuSettings, LuLogOut } from "react-icons/lu";
 
 type Props = {
   state: State;
@@ -37,7 +38,10 @@ export default function NavDropdown(props: Props) {
                   props.router.push(`/logged-in/${props.state._id}/dashboard`)
                 }
               >
-                Dashboard
+                <div className="flex items-center justify-start gap-2">
+                  <LuLayoutDashboard />
+                  <p>Dashboard</p>
+                </div>
               </button>
             </li>
             <li>
@@ -47,7 +51,10 @@ export default function NavDropdown(props: Props) {
                   props.router.push(`/logged-in/${props.state._id}/settings`)
                 }
               >
-                Settings
+                <div className="flex items-center justify-start gap-2">
+                  <LuSettings />
+                  <p>Settings</p>
+                </div>
               </button>
             </li>
             <li>
@@ -55,7 +62,10 @@ export default function NavDropdown(props: Props) {
                 className="w-full px-2 py-1 bg-gradient-to-r from-rose-300 to-rose-800 dark:from-rose-800 dark:to-rose-950 hover:text-fuchsia-200 text-[#fffffc] hover:from-rose-800 hover:to-rose-700 dark:hover:from-rose-300 dark:hover:to-rose-400 dark:hover:text-slate-800 transition-all duration-300 rounded-md"
                 onClick={() => props.logout(props.router)}
               >
-                Logout
+                <div className="flex items-center justify-start gap-2">
+                  <LuLogOut />
+                  <p>Logout</p>
+                </div>
               </button>
             </li>
           </ul>

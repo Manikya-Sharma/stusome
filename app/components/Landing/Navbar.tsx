@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { LuLogIn } from "react-icons/lu";
 
 export default function Navbar() {
   return (
@@ -11,9 +12,13 @@ export default function Navbar() {
         {/* Middle space for extra components */}
       </div>
       <div>
-        <button className="px-4 py-2 bg-[rgba(100,20,20,0.7)] hover:text-slate-700 text-red-100 hover:bg-rose-300 border-2 border-red-400 transition-all duration-300 rounded-2xl">
-          <Link href="/login">Login</Link>
-        </button>
+        <Link
+          className="flex gap-2 items-center px-4 py-2 bg-[rgba(100,20,20,0.7)] hover:text-slate-700 text-red-100 hover:bg-rose-300 border-2 border-red-400 transition-all duration-300 rounded-2xl"
+          href="login"
+        >
+          Login
+          <LuLogIn />
+        </Link>
       </div>
     </nav>
   );

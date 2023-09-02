@@ -2,6 +2,7 @@
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { LuArrowLeft } from "react-icons/lu";
 
 import Tile from "@/app/components/Settings/Tile";
 
@@ -40,7 +41,7 @@ export default function LoggedIn({ params }: Params) {
           href={`/logged-in/${state._id}/`}
           className="text-slate-800 dark:text-slate-200 text-lg hover:underline underline-offset-2"
         >
-          Back
+          <LuArrowLeft />
         </Link>
       </div>
       <div className="mt-5 mb-7">
@@ -53,17 +54,17 @@ export default function LoggedIn({ params }: Params) {
         <div className="">
           <div>
             <Link href={`/logged-in/${params.id}/settings/account`}>
-              <Tile description="Account" type="normal" />
+              <Tile description="Account" type="normal" logo={"user"} />
             </Link>
           </div>
           <div>
             <Link href={`/logged-in/${params.id}/settings/app`}>
-              <Tile description="App Settings" type="normal" />
+              <Tile description="App Settings" type="normal" logo="settings" />
             </Link>
           </div>
           <div>
             <Link href={`/logged-in/${params.id}/settings/privacy`}>
-              <Tile description="Privacy" type="normal" />
+              <Tile description="Privacy" type="normal" logo="lock" />
             </Link>
           </div>
         </div>
@@ -73,7 +74,7 @@ export default function LoggedIn({ params }: Params) {
             router.push("/");
           }}
         >
-          <Tile description="Logout" type="danger" />
+          <Tile description="Logout" type="danger" logo="logout" />
         </div>
       </div>
     </main>

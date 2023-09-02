@@ -7,6 +7,7 @@ import Image from "next/image";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import BarLoader from "react-spinners/BarLoader";
 import { State } from "@/app/types/user";
+import { LuTrash2 } from "react-icons/lu";
 
 async function handleSubmit(
   picRef: React.RefObject<HTMLInputElement>,
@@ -164,8 +165,9 @@ export default function Login({ params }: { params: { id: string } }) {
                   setLoading(true);
                   removeProfile(state, router, setLoading);
                 }}
-                className="px-3 py-2 block w-fit mx-auto bg-red-600 hover:bg-red-100 hover:text-slate-800 mt-5 transition-all duration-200 rounded-md"
+                className="px-3 py-2 flex justify-between gap-2 items-center w-fit mx-auto bg-red-600 hover:bg-red-100 hover:text-slate-800 mt-5 transition-all duration-200 rounded-md"
               >
+                <LuTrash2 />
                 Remove
               </button>
             </div>
