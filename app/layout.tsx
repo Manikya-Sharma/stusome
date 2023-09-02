@@ -24,13 +24,13 @@ export const metadata: Metadata = {
   description: "Student Social Media: The social media website you need",
   openGraph: {
     title: "stusome",
-    description: "Haven for students - open the app",
+    description: "Social media by students, for students",
     type: "website",
     url: "https://stusome.vercel.app",
     siteName: "stusome",
     images: [
       {
-        url: "https://stusome.vercel.app/logo-full.png",
+        url: "https://stusome.vercel.app/logo.png",
       },
     ],
     locale: "en_US",
