@@ -11,7 +11,7 @@ type Props = {
     author: string;
     replies: { id: number; content: string; author: string }[];
   }[];
-  setNewDiscussion: Function;
+  discussionHandler: Function;
 };
 
 export default function Discussions(props: Props) {
@@ -57,6 +57,7 @@ export default function Discussions(props: Props) {
             <div className="text-md text-slate-800 font-semibold">
               <button
                 className=" flex gap-2 items-center justify-start w-fit px-2 py-1 my-2 rounded-lg bg-gradient-to-t from-teal-100 to-teal-300 hover:from-teal-300 hover:to-teal-100"
+                onClick={() => props.discussionHandler("reply", elem.id)}
                 // onClick={() => {
                 //   const arr = showReply;
                 //   arr[elem.id - 1] = true;
@@ -79,7 +80,7 @@ export default function Discussions(props: Props) {
       <button
         className="flex items-center justify-around gap-2 w-fit mx-auto px-3 py-2 my-5 rounded-md bg-gradient-to-tr from-rose-200 to-pink-300 hover:from-purple-200 hover:to-rose-300 text-pink-800 hover:text-rose-950 transition-all duration-200"
         onClick={() => {
-          props.setNewDiscussion(true);
+          props.discussionHandler("discussion");
         }}
       >
         <LiaPlusCircleSolid />

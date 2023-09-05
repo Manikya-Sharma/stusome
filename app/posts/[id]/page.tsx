@@ -55,13 +55,41 @@ export default function Post({ params }: Params) {
   }, [state]);
 
   // post new discussion
-  const [newDiscussion, setNewDiscussion] = useState(false);
+  const [takeNewMarkdownInput, setTakeNewMarkdownInput] = useState(false);
+  const [inputValueStatus, setInputValueStatus] = useState<
+    number | { discussion: number; reply: number }
+  >(0);
 
   let currentId = 0;
   const getId = () => {
     currentId += 1;
     return currentId;
   };
+
+  function handleInput(type: "discussion" | "reply", replyId?: number) {
+    if (type == "discussion") {
+      setTakeNewMarkdownInput(true);
+      setInputValueStatus(id);
+    } else if (type == "reply" && replyId != null) {
+      setTakeNewMarkdownInput(true);
+      setInputValueStatus({ discussion: id, reply: replyId });
+    }
+  }
+
+  function submitData(inputValue: string) {
+    // new discussion
+    if (typeof inputValueStatus == "number") {
+      console.log(inputValue, inputValueStatus);
+    }
+    // new reply
+    else {
+      console.log(
+        inputValue,
+        inputValueStatus.discussion,
+        inputValueStatus.reply
+      );
+    }
+  }
 
   return loading ? (
     <div className="h-screen w-full dark:bg-slate-900">
@@ -124,23 +152,19 @@ export default function Post({ params }: Params) {
 
       <Discussions
         discussion={state.discussions}
-        setNewDiscussion={setNewDiscussion}
+        discussionHandler={handleInput}
       />
 
-      {newDiscussion ? (
+      {takeNewMarkdownInput ? (
         <Markdown
           rows={10}
           cols={50}
-          uploadMarkdown={handleNewDiscussion}
-          discussionHandler={setNewDiscussion}
+          uploadMarkdown={submitData}
+          discussionHandler={setTakeNewMarkdownInput}
         />
       ) : (
         ""
       )}
     </div>
   );
-}
-
-function handleNewDiscussion(data: string | undefined) {
-  console.log(data);
 }
