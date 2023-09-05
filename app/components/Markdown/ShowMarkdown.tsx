@@ -7,6 +7,11 @@ type Props = {
 };
 
 export default function ShowMarkdown(props: Props) {
+  let currentId = 0;
+  const generateId = () => {
+    currentId += 1;
+    return currentId;
+  };
   return (
     <ReactMarkdown
       components={{
@@ -27,7 +32,15 @@ export default function ShowMarkdown(props: Props) {
             </code>
           );
         },
-        h1: "h2",
+        h1({ node, ...props }) {
+          return (
+            <h2
+              className="hover:underline underline-offset-1 cursor-pointer hover:after:content-['\00A7'] after:ml-2 after:text-slate-300"
+              id={generateId().toString()}
+              {...props}
+            ></h2>
+          );
+        },
         h2: "h3",
         h3: "h4",
       }}

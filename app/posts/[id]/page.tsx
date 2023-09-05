@@ -5,6 +5,7 @@ import Markdown from "@/app/components/Posts/MarkdownInput";
 import ShowMarkdown from "@/app/components/Markdown/ShowMarkdown";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 
 import SyncLoader from "react-spinners/SyncLoader";
 
@@ -46,8 +47,8 @@ export default function Post({ params }: Params) {
     const arr = state.content
       .replaceAll(/```(.|\n)+```/gm, "")
       .split("\n")
-      .filter((line) => line.startsWith("#"))
-      .map((line) => line.replace(/#{1,6}/, "").trim());
+      .filter((line) => line.startsWith("# "))
+      .map((line) => line.replace(/#{1}/, "").trim());
     if (arr != null) {
       setHeadings(Array.from(arr));
     }
@@ -55,6 +56,12 @@ export default function Post({ params }: Params) {
 
   // post new discussion
   const [newDiscussion, setNewDiscussion] = useState(false);
+
+  let currentId = 0;
+  const getId = () => {
+    currentId += 1;
+    return currentId;
+  };
 
   return loading ? (
     <div className="h-screen w-full dark:bg-slate-900">
@@ -68,7 +75,7 @@ export default function Post({ params }: Params) {
       </div>
     </div>
   ) : (
-    <div className="p-4 font-fancy dark:bg-slate-900 dark:text-slate-100">
+    <div className="p-4 font-fancy dark:bg-slate-900 dark:text-slate-100 scroll-smooth">
       <div className="mb-5">
         <h1 className="text-5xl text-center">{state.title}</h1>
         <cite className="block text-lg text-slate-400 text-center mt-3">
@@ -81,9 +88,9 @@ export default function Post({ params }: Params) {
             return (
               <li
                 key={h}
-                className="text-sm text-slate-400 dark:text-slate-300 my-2"
+                className="text-sm text-slate-400 dark:text-slate-300 my-2 hover:underline underline-offset-2"
               >
-                {h}
+                <Link href={`#${getId()}`}>{h}</Link>
               </li>
             );
           })}
