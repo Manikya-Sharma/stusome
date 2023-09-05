@@ -5,6 +5,7 @@ import Markdown from "@/app/components/Posts/MarkdownInput";
 import ShowMarkdown from "@/app/components/Markdown/ShowMarkdown";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 
 import SyncLoader from "react-spinners/SyncLoader";
 
@@ -46,15 +47,49 @@ export default function Post({ params }: Params) {
     const arr = state.content
       .replaceAll(/```(.|\n)+```/gm, "")
       .split("\n")
-      .filter((line) => line.startsWith("#"))
-      .map((line) => line.replace(/#{1,6}/, "").trim());
+      .filter((line) => line.startsWith("# "))
+      .map((line) => line.replace(/#{1}/, "").trim());
     if (arr != null) {
       setHeadings(Array.from(arr));
     }
   }, [state]);
 
   // post new discussion
-  const [newDiscussion, setNewDiscussion] = useState(false);
+  const [takeNewMarkdownInput, setTakeNewMarkdownInput] = useState(false);
+  const [inputValueStatus, setInputValueStatus] = useState<
+    number | { discussion: number; reply: number }
+  >(0);
+
+  let currentId = 0;
+  const getId = () => {
+    currentId += 1;
+    return currentId;
+  };
+
+  function handleInput(type: "discussion" | "reply", replyId?: number) {
+    if (type == "discussion") {
+      setTakeNewMarkdownInput(true);
+      setInputValueStatus(id);
+    } else if (type == "reply" && replyId != null) {
+      setTakeNewMarkdownInput(true);
+      setInputValueStatus({ discussion: id, reply: replyId });
+    }
+  }
+
+  function submitData(inputValue: string) {
+    // new discussion
+    if (typeof inputValueStatus == "number") {
+      console.log(inputValue, inputValueStatus);
+    }
+    // new reply
+    else {
+      console.log(
+        inputValue,
+        inputValueStatus.discussion,
+        inputValueStatus.reply
+      );
+    }
+  }
 
   return loading ? (
     <div className="h-screen w-full dark:bg-slate-900">
@@ -68,7 +103,7 @@ export default function Post({ params }: Params) {
       </div>
     </div>
   ) : (
-    <div className="p-4 font-fancy dark:bg-slate-900 dark:text-slate-100">
+    <div className="p-4 font-fancy dark:bg-slate-900 dark:text-slate-100 scroll-smooth">
       <div className="mb-5">
         <h1 className="text-5xl text-center">{state.title}</h1>
         <cite className="block text-lg text-slate-400 text-center mt-3">
@@ -81,9 +116,9 @@ export default function Post({ params }: Params) {
             return (
               <li
                 key={h}
-                className="text-sm text-slate-400 dark:text-slate-300 my-2"
+                className="text-sm text-slate-400 dark:text-slate-300 my-2 hover:underline underline-offset-2"
               >
-                {h}
+                <Link href={`#${getId()}`}>{h}</Link>
               </li>
             );
           })}
@@ -117,18 +152,19 @@ export default function Post({ params }: Params) {
 
       <Discussions
         discussion={state.discussions}
-        setNewDiscussion={setNewDiscussion}
+        discussionHandler={handleInput}
       />
 
-      {newDiscussion ? (
-        <Markdown rows={10} cols={30} uploadMarkdown={handleNewDiscussion} />
+      {takeNewMarkdownInput ? (
+        <Markdown
+          rows={10}
+          cols={50}
+          uploadMarkdown={submitData}
+          discussionHandler={setTakeNewMarkdownInput}
+        />
       ) : (
         ""
       )}
     </div>
   );
-}
-
-function handleNewDiscussion(data: string | undefined) {
-  console.log(data);
 }
