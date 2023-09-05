@@ -19,13 +19,13 @@ export default function Markdown(props: Props) {
         cols={props.cols}
         rows={props.rows}
         placeholder="Enter the content here"
-        className="border border-slate-300 bg-[rgba(250,250,250,0.8)] px-3 py-2 rounded-md mx-auto block w-fit mb-3 sm:w-[70%]"
+        className="border border-slate-300 bg-[rgba(250,250,250,0.8)] dark:bg-slate-700 dark:border-slate-600 px-3 py-2 rounded-md mx-auto block w-fit mb-3 sm:w-[70%]"
         ref={mk_ref}
         onChange={() => setText(mk_ref.current?.value)}
       ></textarea>
       <div>
         <h3 className="text-center text-2xl text-slate-200 mb-5">Preview</h3>
-        <p className="markdown-wrapper min-h-[30vh] px-3 py-2 text-slate-800 mx-5 border border-slate-300 bg-slate-300 rounded-lg">
+        <p className="markdown-wrapper min-h-[30vh] px-3 py-2 mx-5 border border-slate-300 bg-slate-300 dark:bg-slate-800 rounded-lg">
           <ShowMarkdown data={text != undefined ? text : "preview"} />
         </p>
         <div className="flex">

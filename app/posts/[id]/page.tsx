@@ -57,27 +57,32 @@ export default function Post({ params }: Params) {
   const [newDiscussion, setNewDiscussion] = useState(false);
 
   return loading ? (
-    <div className="absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%]">
-      <SyncLoader
-        color={"#1199ff"}
-        loading={loading}
-        size={20}
-        aria-label="loading"
-      />
+    <div className="h-screen w-full dark:bg-slate-900">
+      <div className="absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%]">
+        <SyncLoader
+          color={"#1199ff"}
+          loading={loading}
+          size={20}
+          aria-label="loading"
+        />
+      </div>
     </div>
   ) : (
-    <div className="p-4 font-fancy">
+    <div className="p-4 font-fancy dark:bg-slate-900 dark:text-slate-100">
       <div className="mb-5">
         <h1 className="text-5xl text-center">{state.title}</h1>
         <cite className="block text-lg text-slate-400 text-center mt-3">
           - {state.author}
         </cite>
       </div>
-      <div className="sm:flex justify-around">
+      <div className="sm:flex justify-around sm:gap-5">
         <ul className="hidden md:flex md:flex-col md:justify-start flex-1">
           {headings.map((h) => {
             return (
-              <li key={h} className="text-sm text-slate-400 my-2">
+              <li
+                key={h}
+                className="text-sm text-slate-400 dark:text-slate-300 my-2"
+              >
                 {h}
               </li>
             );
@@ -91,12 +96,14 @@ export default function Post({ params }: Params) {
         </div>
 
         <div className="flex-1 sm:flex-col sm:justify-start my-3 flex flex-wrap text-slate-200 items-center text-center justify-center">
-          <p className="hidden sm:block text-lg text-slate-800 mb-2">Tags</p>
+          <p className="hidden sm:block text-lg text-slate-800 dark:text-slate-200 mb-2">
+            Tags
+          </p>
           {state.tags.map((tag) => {
             return (
               <div
                 key={tag}
-                className="bg-slate-600 px-[4px] py-[2px] rounded-xl mx-[2px] my-[2px] sm:w-[80%]"
+                className="bg-slate-600 px-[4px] py-[2px] rounded-xl mx-[2px] my-[2px] sm:w-[80%] dark:text-slate-300"
               >
                 {tag}
               </div>

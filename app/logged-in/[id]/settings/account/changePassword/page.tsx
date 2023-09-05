@@ -5,13 +5,7 @@ import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import BarLoader from "react-spinners/BarLoader";
-
-type State = {
-  _id: string;
-  email: string;
-  name: string;
-  password: string;
-};
+import { State } from "@/app/types/user";
 
 async function handleSubmit(
   passwordRef: React.RefObject<HTMLInputElement>,
@@ -50,6 +44,8 @@ export default function Login({ params }: { params: { id: string } }) {
     name: "",
     email: "",
     password: "",
+    picture: "",
+    hasPic: false,
   });
   useEffect(() => {
     const account = localStorage.getItem("account");

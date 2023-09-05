@@ -1,19 +1,23 @@
 import Hero from "./components/Landing/Hero";
 import Navbar from "./components/Landing/Navbar";
 import Footer from "./components/Landing/Footer";
+import HeroSub from "./components/Landing/HeroSub";
+import Reviews from "./components/Landing/Reviews";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-black">
-      <main className="bg-[url('/images/Home/bg-low-quality.jpg')]">
+    <main className="min-h-screen">
+      <div className="bg-[url('/images/Home/bg-new-sm.jpg')] md:bg-[url('/images/Home/bg-new.jpg')] bg-no-repeat bg-cover">
         <div>
           <Navbar />
         </div>
-        <div className="pt-16 sm:pt-20 bg-gradient-to-b from-[rgba(30,30,80,0.5)] to-[rgba(90,25,25,0.85)] text-white">
+        <div className="pt-20 sm:pt-24 ">
           <Hero />
         </div>
-      </main>
+      </div>
+      <HeroSub />
+      <Reviews />
       <Footer />
-    </div>
+    </main>
   );
 }

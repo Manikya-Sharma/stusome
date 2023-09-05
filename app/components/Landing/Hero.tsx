@@ -4,14 +4,20 @@ import Image from "next/image";
 
 export default function Hero() {
   return (
-    <section className="text-center flex flex-col gap-3 font-sans text-[rgba(225,225,225)] pb-5">
-      <h1 className="text-4xl sm:text-8xl font-extrabold tracking-tighter font-merri">
-        Student Social Media
-      </h1>
-      <p className="text-slate-300 text-xl sm:text-2xl font-fancy">
-        Your mate for all needs
-      </p>
-      <div className="sm:flex sm:flex-row-reverse sm:justify-around sm:my-10">
+    <div>
+      <div className="text-slate-100 text-sm sm:text-md md:text-lg text-right pr-3 text-md tracking-wider">
+        Deep . Dive . Create
+      </div>
+      <section className="relative px-3 flex flex-col gap-3 font-sans text-white pb-8 drop-shadow-md">
+        <div>
+          <h1 className="text-4xl sm:text-8xl font-extrabold tracking-tight font-merri mb-2">
+            Our Services
+          </h1>
+          <p className="text-slate-100 text-xl sm:text-2xl font-fancy">
+            WHAT WE OFFER
+          </p>
+        </div>
+        {/* <div className="sm:flex sm:flex-row-reverse sm:justify-around sm:my-10">
         <div className="sm:max-w-[50%]">
           <About />
         </div>
@@ -36,7 +42,8 @@ export default function Hero() {
             <button>Login</button>
           </Link>
         </div>
-      </div>
-    </section>
+      </div> */}
+      </section>
+    </div>
   );
 }

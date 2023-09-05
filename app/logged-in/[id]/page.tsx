@@ -11,13 +11,6 @@ type Params = {
   params: { id: string };
 };
 
-type State = {
-  id: number;
-  name: string;
-  email: string;
-  password: string;
-};
-
 export default function LoggedIn({ params }: Params) {
   const router = useRouter();
   const id = params.id;
@@ -26,6 +19,8 @@ export default function LoggedIn({ params }: Params) {
     name: "",
     email: "",
     password: "",
+    picture: "",
+    hasPic: false,
   });
   useEffect(() => {
     const account = localStorage.getItem("account");
@@ -43,13 +38,33 @@ export default function LoggedIn({ params }: Params) {
       router.push("/login");
     }
   }, [id, router, state._id]);
+
+  // dark mode
+  useEffect(() => {
+    const theme = localStorage.getItem("theme");
+    if (theme == null) {
+      if (
+        window.matchMedia &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches
+      ) {
+        localStorage.setItem("theme", "dark");
+        document.documentElement.classList.add("dark");
+      } else {
+        localStorage.setItem("theme", "light");
+        document.documentElement.classList.add("light");
+      }
+    } else {
+      document.documentElement.classList.add(theme);
+    }
+  }, []);
+
   return (
-    <main>
+    <main className="min-h-screen dark:bg-gradient-to-b dark:from-slate-700 dark:to-slate-950 dark:text-zinc-200 font-fancy">
       <Navbar state={state} />
-      <div className="px-8 py-16 sm:py-20">
+      <div className="px-8 py-20 sm:py-32">
         <Welcome user={state} />
 
-        <div className="sm:flex justify-around">
+        <div className="sm:flex items-center justify-around gap-5">
           <MostViewed />
           <Frequents />
         </div>

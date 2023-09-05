@@ -9,12 +9,6 @@ type Params = {
   params: { id: string };
 };
 
-type State = {
-  name: string;
-  email: string;
-  password: string;
-};
-
 export default function LoggedIn({ params }: Params) {
   const router = useRouter();
   const id = params.id;
