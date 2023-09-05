@@ -17,7 +17,7 @@ export default function Welcome(props: Props) {
       <div className="w-fit group mx-auto">
         <Link
           href={`/logged-in/${props.user._id}/dashboard`}
-          className="relative flex gap-2 items-center text-lg py-2 px-3 my-2 border-2 border-dotted border-green-400 w-fit rounded-md group-hover:border-solid group-hover:bg-green-400 group-hover:text-emerald-900 transition-all duration-100 dark:bg-gradient-to-tr dark:from-emerald-900 dark:to-emerald-950 dark:border-green-800 dark:hover:bg-gradient-to-tr dark:hover:from-emerald-300 dark:hover:to-emerald-500"
+          className="relative flex gap-2 items-center text-lg py-2 px-3 my-2 border-2 border-dotted border-green-400 w-fit rounded-md group-hover:border-solid group-hover:bg-green-400 group-hover:text-emerald-900 transition-all duration-200 dark:bg-slate-500 dark:border-transparent dark:hover:bg-emerald-300 dark:hover:text-green-950"
         >
           <LuLayoutDashboard />
           <p>Your dashboard</p>

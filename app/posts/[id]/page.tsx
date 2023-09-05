@@ -57,13 +57,15 @@ export default function Post({ params }: Params) {
   const [newDiscussion, setNewDiscussion] = useState(false);
 
   return loading ? (
-    <div className="absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%]">
-      <SyncLoader
-        color={"#1199ff"}
-        loading={loading}
-        size={20}
-        aria-label="loading"
-      />
+    <div className="h-screen w-full dark:bg-slate-900">
+      <div className="absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%]">
+        <SyncLoader
+          color={"#1199ff"}
+          loading={loading}
+          size={20}
+          aria-label="loading"
+        />
+      </div>
     </div>
   ) : (
     <div className="p-4 font-fancy dark:bg-slate-900 dark:text-slate-100">

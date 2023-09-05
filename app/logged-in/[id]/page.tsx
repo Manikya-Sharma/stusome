@@ -59,7 +59,7 @@ export default function LoggedIn({ params }: Params) {
   }, []);
 
   return (
-    <main className="min-h-screen dark:bg-gradient-to-b dark:from-slate-700 dark:to-slate-950 dark:text-slate-200">
+    <main className="min-h-screen dark:bg-gradient-to-b dark:from-slate-700 dark:to-slate-950 dark:text-zinc-200 font-fancy">
       <Navbar state={state} />
       <div className="px-8 py-20 sm:py-32">
         <Welcome user={state} />
