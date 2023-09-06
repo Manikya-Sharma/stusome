@@ -6,37 +6,9 @@ import Link from "next/link";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import BarLoader from "react-spinners/BarLoader";
 import { State } from "@/app/types/user";
+import toast, { Toaster } from "react-hot-toast";
 
-async function handleSubmit(
-  usernameRef: React.RefObject<HTMLInputElement>,
-  state: State,
-  router: AppRouterInstance,
-  loader: Function
-) {
-  if (usernameRef.current != null) {
-    const username = usernameRef.current.value;
-    fetch(`/api/updateAccountByEmail/${state.email}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ name: username }),
-    }).then(() => {
-      const existing = localStorage.getItem("account");
-      if (existing != null && username != null) {
-        const new_account = {
-          ...JSON.parse(existing),
-          name: username,
-        };
-        localStorage.setItem("account", JSON.stringify(new_account));
-        loader(false);
-        router.push(`/logged-in/${state._id}`);
-      }
-    });
-  }
-}
-
-export default function Login({ params }: { params: { id: string } }) {
+export default function ChangeUsername({ params }: { params: { id: string } }) {
   const router = useRouter();
   const id = params.id;
   const [state, setState] = useState<State>({
@@ -68,16 +40,52 @@ export default function Login({ params }: { params: { id: string } }) {
     setWidth(window.innerWidth);
   }, []);
 
-  const new_username = useRef<HTMLInputElement>(null);
+  const usernameRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (new_username.current != null) {
-      new_username.current.value = state.name;
+    if (usernameRef.current != null) {
+      usernameRef.current.value = state.name;
     }
   }, [state.name]);
 
+  async function handleSubmit() {
+    if (usernameRef.current != null) {
+      const username = usernameRef.current.value;
+      if (!username.match(/^[a-zA-Z0-9 ]*$/) || username.trim() === "") {
+        toast.error("Invalid name");
+        setLoading(false);
+        return;
+      }
+      try {
+        fetch(`/api/updateAccountByEmail/${state.email}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ name: username }),
+        }).then(() => {
+          const existing = localStorage.getItem("account");
+          if (existing != null && username != null) {
+            const new_account = {
+              ...JSON.parse(existing),
+              name: username,
+            };
+            localStorage.setItem("account", JSON.stringify(new_account));
+            setLoading(false);
+            router.push(`/logged-in/${state._id}`);
+          }
+        });
+      } catch (e) {
+        toast.error("An error occurred, please try again later");
+        console.log(e);
+        setLoading(false);
+      }
+    }
+  }
+
   return (
     <div className="h-screen">
+      <Toaster />
       <div className="absolute top-0">
         <BarLoader
           loading={loading}
@@ -103,7 +111,7 @@ export default function Login({ params }: { params: { id: string } }) {
               onSubmit={(e) => {
                 e.preventDefault();
                 setLoading(true);
-                handleSubmit(new_username, state, router, setLoading);
+                handleSubmit();
               }}
             >
               <div className="grid grid-rows-1 grid-cols-2 items-center gap-2">
@@ -115,7 +123,7 @@ export default function Login({ params }: { params: { id: string } }) {
                   name="username"
                   id="username"
                   className="bg-fuchsia-200 text-fuchsia-800 font-semibold px-3 py-2 rounded-xl"
-                  ref={new_username}
+                  ref={usernameRef}
                 />
               </div>
               <button
