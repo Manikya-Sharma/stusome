@@ -3,40 +3,11 @@
 import { useRouter } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import BarLoader from "react-spinners/BarLoader";
 import { State } from "@/app/types/user";
+import toast, { Toaster } from "react-hot-toast";
 
-async function handleSubmit(
-  passwordRef: React.RefObject<HTMLInputElement>,
-  state: State,
-  router: AppRouterInstance,
-  loader: Function
-) {
-  if (passwordRef.current != null) {
-    const password = passwordRef.current.value;
-    fetch(`/api/updateAccountByEmail/${state.email}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ password: password }),
-    }).then(() => {
-      const existing = localStorage.getItem("account");
-      if (existing != null && password != null) {
-        const new_account = {
-          ...JSON.parse(existing),
-          password: password,
-        };
-        localStorage.setItem("account", JSON.stringify(new_account));
-        loader(false);
-        router.push(`/logged-in/${state._id}`);
-      }
-    });
-  }
-}
-
-export default function Login({ params }: { params: { id: string } }) {
+export default function ChangePassword({ params }: { params: { id: string } }) {
   const router = useRouter();
   const id = params.id;
   const [state, setState] = useState<State>({
@@ -68,16 +39,69 @@ export default function Login({ params }: { params: { id: string } }) {
     setWidth(window.innerWidth);
   }, []);
 
-  const new_password = useRef<HTMLInputElement>(null);
+  const newPasswordRef = useRef<HTMLInputElement>(null);
+  const oldPasswordRef = useRef<HTMLInputElement>(null);
+  const reNewPasswordRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    if (new_password.current != null) {
-      new_password.current.value = state.password;
+  async function handleSubmit() {
+    if (
+      newPasswordRef.current != null &&
+      oldPasswordRef.current != null &&
+      reNewPasswordRef.current != null
+    ) {
+      const newPassword = newPasswordRef.current.value;
+      const reNewPassword = reNewPasswordRef.current.value;
+      const oldPassword = oldPasswordRef.current.value;
+      if (
+        !newPassword.match(
+          /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/
+        )
+      ) {
+        toast.error("Invalid password");
+        setLoading(false);
+        return;
+      }
+      if (reNewPassword !== newPassword) {
+        toast.error("Passwords don't match");
+        setLoading(false);
+        return;
+      }
+      try {
+        fetch(`/api/updateAccountByEmail/${state.email}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ password: newPassword }),
+        }).then(() => {
+          const existing = localStorage.getItem("account");
+          if (existing != null && newPassword != null) {
+            const pwd = JSON.parse(existing).password;
+            if (pwd != oldPassword) {
+              toast.error("Incorrect password");
+              setLoading(false);
+              return;
+            }
+            const new_account = {
+              ...JSON.parse(existing),
+              password: newPassword,
+            };
+            localStorage.setItem("account", JSON.stringify(new_account));
+            setLoading(false);
+            router.push(`/logged-in/${state._id}`);
+          }
+        });
+      } catch (e) {
+        toast("An error occured, please try again later");
+        console.log(e);
+        setLoading(false);
+      }
     }
-  }, [state.password]);
+  }
 
   return (
     <div className="h-screen">
+      <Toaster />
       <div className="absolute top-0">
         <BarLoader
           loading={loading}
@@ -95,7 +119,7 @@ export default function Login({ params }: { params: { id: string } }) {
           Back
         </Link>
         <div className="w-fit mx-auto">
-          <div className="max-w-[80%] gradient-sub w-fit mx-auto p-10 text-white rounded-lg">
+          <div className="max-w-[90%] gradient-sub w-fit mx-auto p-10 text-white rounded-lg">
             <h1 className="font-merri text-center text-5xl mb-10">
               Change Password
             </h1>
@@ -103,19 +127,39 @@ export default function Login({ params }: { params: { id: string } }) {
               onSubmit={(e) => {
                 e.preventDefault();
                 setLoading(true);
-                handleSubmit(new_password, state, router, setLoading);
+                handleSubmit();
               }}
             >
-              <div className="grid grid-rows-1 grid-cols-2 items-center gap-2">
-                <label className="text-xl" htmlFor="password">
-                  New Password
+              <div className="grid grid-rows-2 grid-cols-2 items-center gap-2">
+                <label className="text-lg" htmlFor="password">
+                  Enter old password
                 </label>
                 <input
-                  type="text"
+                  type="password"
                   name="password"
-                  id="password"
+                  id="old_password"
                   className="bg-fuchsia-200 text-fuchsia-800 font-semibold px-3 py-2 rounded-xl"
-                  ref={new_password}
+                  ref={oldPasswordRef}
+                />
+                <label className="text-lg" htmlFor="password">
+                  Enter new password
+                </label>
+                <input
+                  type="password"
+                  name="password"
+                  id="new_password"
+                  className="bg-fuchsia-200 text-fuchsia-800 font-semibold px-3 py-2 rounded-xl"
+                  ref={newPasswordRef}
+                />
+                <label className="text-lg" htmlFor="password">
+                  Re-enter new password
+                </label>
+                <input
+                  type="password"
+                  name="password"
+                  id="new_password"
+                  className="bg-fuchsia-200 text-fuchsia-800 font-semibold px-3 py-2 rounded-xl"
+                  ref={reNewPasswordRef}
                 />
               </div>
               <button
@@ -126,6 +170,10 @@ export default function Login({ params }: { params: { id: string } }) {
               </button>
             </form>
           </div>
+          <p className="absolute bottom-2 text-slate-100 drop-shadow-lg text-sm max-w-[50%] left-[50%] -translate-x-[50%] text-center">
+            Note: Password must contain at-least 8 characters with minimum one
+            letter, one number and one special character
+          </p>
         </div>
       </main>
     </div>

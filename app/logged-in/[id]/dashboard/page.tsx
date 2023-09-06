@@ -9,7 +9,7 @@ type Params = {
   params: { id: string };
 };
 
-export default function LoggedIn({ params }: Params) {
+export default function Dashboard({ params }: Params) {
   const router = useRouter();
   const id = params.id;
   const [state, setState] = useState({

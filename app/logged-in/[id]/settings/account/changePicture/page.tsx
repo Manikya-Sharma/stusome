@@ -4,76 +4,12 @@ import { useRouter } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import BarLoader from "react-spinners/BarLoader";
 import { State } from "@/app/types/user";
 import { LuTrash2 } from "react-icons/lu";
+import toast, { Toaster } from "react-hot-toast";
 
-async function handleSubmit(
-  picRef: React.RefObject<HTMLInputElement>,
-  state: State,
-  router: AppRouterInstance,
-  loader: Function
-) {
-  if (picRef.current != null && picRef.current.files != null) {
-    const pic = picRef.current.files[0];
-    const reader = new FileReader();
-    reader.onloadend = function () {
-      const data = reader.result;
-      if (typeof data == "string") {
-        const base64 = data.replace("data:", "").replace(/^.+,/, "");
-        fetch(`/api/updateAccountByEmail/${state.email}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ picture: base64, hasPic: true }),
-        }).then(() => {
-          const existing = localStorage.getItem("account");
-          if (existing != null && pic != null) {
-            const new_account = {
-              ...JSON.parse(existing),
-              picture: base64,
-              hasPic: true,
-            };
-            localStorage.setItem("account", JSON.stringify(new_account));
-            loader(false);
-            router.push(`/logged-in/${state._id}`);
-          }
-        });
-      }
-    };
-    reader.readAsDataURL(pic);
-  }
-}
-
-async function removeProfile(
-  state: State,
-  router: AppRouterInstance,
-  loader: Function
-) {
-  fetch(`/api/updateAccountByEmail/${state.email}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ picture: "", hasPic: false }),
-  }).then(() => {
-    const existing = localStorage.getItem("account");
-    if (existing != null) {
-      const new_account = {
-        ...JSON.parse(existing),
-        picture: "",
-        hasPic: false,
-      };
-      localStorage.setItem("account", JSON.stringify(new_account));
-      loader(false);
-      router.push(`/logged-in/${state._id}`);
-    }
-  });
-}
-
-export default function Login({ params }: { params: { id: string } }) {
+export default function ChangePicture({ params }: { params: { id: string } }) {
   const router = useRouter();
   const id = params.id;
   const [state, setState] = useState<State>({
@@ -105,10 +41,78 @@ export default function Login({ params }: { params: { id: string } }) {
     setWidth(window.innerWidth);
   }, []);
 
-  const new_pic = useRef<HTMLInputElement>(null);
+  const picRef = useRef<HTMLInputElement>(null);
+
+  async function handleSubmit() {
+    if (picRef.current != null && picRef.current.files != null) {
+      try {
+        const pic = picRef.current.files[0];
+        const reader = new FileReader();
+        reader.onloadend = function () {
+          const data = reader.result;
+          if (typeof data == "string") {
+            const base64 = data.replace("data:", "").replace(/^.+,/, "");
+            fetch(`/api/updateAccountByEmail/${state.email}`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ picture: base64, hasPic: true }),
+            }).then(() => {
+              const existing = localStorage.getItem("account");
+              if (existing != null && pic != null) {
+                const new_account = {
+                  ...JSON.parse(existing),
+                  picture: base64,
+                  hasPic: true,
+                };
+                localStorage.setItem("account", JSON.stringify(new_account));
+                setLoading(false);
+                router.push(`/logged-in/${state._id}`);
+              }
+            });
+          }
+        };
+        reader.readAsDataURL(pic);
+      } catch (e) {
+        toast.error("An error occurred, please try again later");
+        console.log(e);
+        setLoading(false);
+      }
+    }
+  }
+
+  async function removeProfile() {
+    try {
+      fetch(`/api/updateAccountByEmail/${state.email}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ picture: "", hasPic: false }),
+      }).then(() => {
+        const existing = localStorage.getItem("account");
+        if (existing != null) {
+          const new_account = {
+            ...JSON.parse(existing),
+            picture: "",
+            hasPic: false,
+          };
+          localStorage.setItem("account", JSON.stringify(new_account));
+          setLoading(false);
+          router.push(`/logged-in/${state._id}`);
+        }
+      });
+    } catch (e) {
+      toast.error("An error occurred, please try again later");
+      console.log(e);
+      setLoading(false);
+    }
+  }
 
   return (
     <div className="h-screen">
+      <Toaster />
       <div className="absolute top-0">
         <BarLoader
           loading={loading}
@@ -117,6 +121,7 @@ export default function Login({ params }: { params: { id: string } }) {
           width={width}
           cssOverride={{ backgroundColor: "rgba(0,0,255,0.3)" }}
         />
+        T
       </div>
       <main className="h-full flex items-center gradient font-fancy">
         <Link
@@ -152,10 +157,10 @@ export default function Login({ params }: { params: { id: string } }) {
                 name="pic"
                 id="pic"
                 className="hidden"
-                ref={new_pic}
+                ref={picRef}
                 onChange={() => {
                   setLoading(true);
-                  handleSubmit(new_pic, state, router, setLoading);
+                  handleSubmit();
                 }}
               />
             </div>
@@ -163,7 +168,7 @@ export default function Login({ params }: { params: { id: string } }) {
               <button
                 onClick={() => {
                   setLoading(true);
-                  removeProfile(state, router, setLoading);
+                  removeProfile();
                 }}
                 className="px-3 py-2 flex justify-between gap-2 items-center w-fit mx-auto bg-red-600 hover:bg-red-100 hover:text-slate-800 mt-5 transition-all duration-200 rounded-md"
               >

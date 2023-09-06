@@ -1,6 +1,4 @@
 import ShowMarkdown from "../Markdown/ShowMarkdown";
-import Markdown from "./MarkdownInput";
-import { useState, useEffect } from "react";
 import { LuReply } from "react-icons/lu";
 import { LiaPlusCircleSolid } from "react-icons/lia";
 
