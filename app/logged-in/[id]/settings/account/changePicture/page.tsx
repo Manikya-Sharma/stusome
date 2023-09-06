@@ -121,7 +121,6 @@ export default function ChangePicture({ params }: { params: { id: string } }) {
           width={width}
           cssOverride={{ backgroundColor: "rgba(0,0,255,0.3)" }}
         />
-        T
       </div>
       <main className="h-full flex items-center gradient font-fancy">
         <Link
