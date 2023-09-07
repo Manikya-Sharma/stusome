@@ -129,7 +129,7 @@ export default function Post({ params }: Params) {
       <div className="relative">
         <ul
           className={
-            "md:sticky md:top-10 md:left-2 md:inline-flex md:flex-col md:justify-start md:w-[15vw] w-[30vw] md:p-0 fixed z-[100] px-3 py-2 rounded-md left-0 top-10 transition-transform duration-200 bg-slate-800 text-slate-200 md:bg-transparent md:text-inherit h-[100vh] md:h-fit md:pr-2" +
+            "md:sticky md:top-10 md:left-2 md:inline-flex md:flex-col md:justify-start md:w-[15vw] w-[50vw] md:p-0 fixed z-[100] px-3 py-2 rounded-md left-0 top-10 transition-transform duration-200 bg-slate-800 text-slate-200 md:bg-transparent md:text-inherit h-[100vh] md:h-fit md:pr-2" +
             (openMenu
               ? " translate-x-0"
               : " -translate-x-[30vw] md:translate-x-0")
