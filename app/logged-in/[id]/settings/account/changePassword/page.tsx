@@ -57,6 +57,10 @@ export default function ChangePassword({ params }: { params: { id: string } }) {
           /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/
         )
       ) {
+        toast(
+          "Password must contain at-least 8 characters with minimum one letter, one number and one special character",
+          { duration: 6000 }
+        );
         toast.error("Invalid password");
         setLoading(false);
         return;
@@ -92,7 +96,7 @@ export default function ChangePassword({ params }: { params: { id: string } }) {
           }
         });
       } catch (e) {
-        toast("An error occured, please try again later");
+        toast("An error occurred, please try again later");
         console.log(e);
         setLoading(false);
       }
@@ -112,12 +116,6 @@ export default function ChangePassword({ params }: { params: { id: string } }) {
         />
       </div>
       <main className="h-full flex items-center gradient font-fancy">
-        <Link
-          href={`/logged-in/${state._id}/settings/account`}
-          className="absolute top-1 left-1 text-slate-200 text-lg hover:underline underline-offset-2"
-        >
-          Back
-        </Link>
         <div className="w-fit mx-auto">
           <div className="max-w-[90%] gradient-sub w-fit mx-auto p-10 text-white rounded-lg">
             <h1 className="font-merri text-center text-5xl mb-10">
@@ -170,10 +168,6 @@ export default function ChangePassword({ params }: { params: { id: string } }) {
               </button>
             </form>
           </div>
-          <p className="absolute bottom-2 text-slate-100 drop-shadow-lg text-sm max-w-[50%] left-[50%] -translate-x-[50%] text-center">
-            Note: Password must contain at-least 8 characters with minimum one
-            letter, one number and one special character
-          </p>
         </div>
       </main>
     </div>

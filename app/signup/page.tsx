@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { BarLoader } from "react-spinners";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import { LuHome } from "react-icons/lu";
 
 export default function Signup() {
@@ -43,6 +43,10 @@ export default function Signup() {
           /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/
         )
       ) {
+        toast(
+          "Password must contain at-least 8 characters with minimum one letter, one number and one special character",
+          { duration: 6000 }
+        );
         toast.error("Invalid password");
         setLoading(false);
         return;
@@ -77,6 +81,7 @@ export default function Signup() {
 
   return (
     <div className="h-screen">
+      <Toaster />
       <div className="absolute top-0">
         <BarLoader
           loading={loading}
@@ -158,10 +163,6 @@ export default function Signup() {
               login
             </Link>
             !
-          </p>
-          <p className="absolute bottom-2 text-slate-100 drop-shadow-lg text-sm max-w-[50%] left-[50%] -translate-x-[50%] text-center">
-            Note: Password must contain at-least 8 characters with minimum one
-            letter, one number and one special character
           </p>
         </div>
       </main>
