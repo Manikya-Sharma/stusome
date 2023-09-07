@@ -34,15 +34,7 @@ export default function AccountSettings({ params }: Params) {
     }
   }, [id, router, state._id]);
   return (
-    <main className="p-4 min-h-screen dark:bg-slate-800">
-      <div className="mb-10">
-        <Link
-          href={`/logged-in/${state._id}/settings/`}
-          className="text-slate-800 text-lg hover:underline underline-offset-2 dark:text-slate-200"
-        >
-          <LuArrowLeft />
-        </Link>
-      </div>
+    <div className="pt-10">
       <Link href={`/logged-in/${state._id}/settings/account/changePicture`}>
         <Tile
           description="Change Profile Picture"
@@ -56,6 +48,6 @@ export default function AccountSettings({ params }: Params) {
       <Link href={`/logged-in/${state._id}/settings/account/changePassword`}>
         <Tile description="Change Password" type="normal" logo="password" />
       </Link>
-    </main>
+    </div>
   );
 }

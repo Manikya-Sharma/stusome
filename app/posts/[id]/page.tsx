@@ -4,10 +4,12 @@ import Discussions from "@/app/components/Posts/Discussions";
 import Markdown from "@/app/components/Posts/MarkdownInput";
 import ShowMarkdown from "@/app/components/Markdown/ShowMarkdown";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 
 import SyncLoader from "react-spinners/SyncLoader";
+
+import { LuCross, LuMenu, LuPanelLeftClose } from "react-icons/lu";
 
 type Params = {
   params: { id: string };
@@ -91,6 +93,9 @@ export default function Post({ params }: Params) {
     }
   }
 
+  // menu for small screens
+  const [openMenu, setOpenMenu] = useState<boolean>(false);
+
   return loading ? (
     <div className="h-screen w-full dark:bg-slate-900">
       <div className="absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%]">
@@ -104,19 +109,37 @@ export default function Post({ params }: Params) {
     </div>
   ) : (
     <div className="p-4 font-fancy dark:bg-slate-900 dark:text-slate-100 scroll-smooth">
-      <div className="mb-5">
+      <nav className="md:hidden pt-1 pb-3 fixed z-[100] top-0 left-0 w-[100vw] overflow-hidden bg-[rgba(50,50,50,0.1)] backdrop-blur-md flex items-center justify-start h-fit">
+        {openMenu ? (
+          <button onClick={() => setOpenMenu(false)} className="pl-3 py-1">
+            <LuPanelLeftClose />
+          </button>
+        ) : (
+          <button onClick={() => setOpenMenu(true)} className="pl-3 py-1">
+            <LuMenu />
+          </button>
+        )}
+      </nav>
+      <div className="mb-5 mt-7 md:mt-0">
         <h1 className="text-5xl text-center">{state.title}</h1>
         <cite className="block text-lg text-slate-400 text-center mt-3">
           - {state.author}
         </cite>
       </div>
-      <div className="sm:flex justify-around sm:gap-5">
-        <ul className="hidden md:flex md:flex-col md:justify-start flex-1">
+      <div className="relative">
+        <ul
+          className={
+            "md:sticky md:top-10 md:left-2 md:inline-flex md:flex-col md:justify-start md:w-[15vw] w-[30vw] md:p-0 fixed z-[100] px-3 py-2 rounded-md left-0 top-10 transition-transform duration-200 bg-slate-800 text-slate-200 md:bg-transparent md:text-inherit h-[100vh] md:h-fit md:pr-2" +
+            (openMenu
+              ? " translate-x-0"
+              : " -translate-x-[30vw] md:translate-x-0")
+          }
+        >
           {headings.map((h) => {
             return (
               <li
                 key={h}
-                className="text-sm text-slate-400 dark:text-slate-300 my-2 hover:underline underline-offset-2"
+                className="w-fit md:text-sm text-slate-400 dark:text-slate-300 md:my-2 hover:underline underline-offset-2 text-lg my-4"
               >
                 <Link href={`#${getId()}`}>{h}</Link>
               </li>
@@ -124,26 +147,28 @@ export default function Post({ params }: Params) {
           })}
         </ul>
 
-        <div className="flex-[3]">
-          <div className="markdown-wrapper">
-            <ShowMarkdown data={state.content} />
+        <div className="sm:inline-flex md:max-w-[75vw]">
+          <div className="flex-[3]">
+            <div className="markdown-wrapper">
+              <ShowMarkdown data={state.content} />
+            </div>
           </div>
-        </div>
 
-        <div className="flex-1 sm:flex-col sm:justify-start my-3 flex flex-wrap text-slate-200 items-center text-center justify-center">
-          <p className="hidden sm:block text-lg text-slate-800 dark:text-slate-200 mb-2">
-            Tags
-          </p>
-          {state.tags.map((tag) => {
-            return (
-              <div
-                key={tag}
-                className="bg-slate-600 px-[4px] py-[2px] rounded-xl mx-[2px] my-[2px] sm:w-[80%] dark:text-slate-300"
-              >
-                {tag}
-              </div>
-            );
-          })}
+          <div className="flex-[1] sm:flex-col sm:justify-start my-3 flex flex-wrap text-slate-200 items-center text-center justify-center">
+            <p className="hidden sm:block text-lg text-slate-800 dark:text-slate-200 mb-2">
+              Tags
+            </p>
+            {state.tags.map((tag) => {
+              return (
+                <div
+                  key={tag}
+                  className="bg-slate-600 px-[4px] py-[2px] rounded-xl mx-[2px] my-[2px] sm:w-[80%] dark:text-slate-300"
+                >
+                  {tag}
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
 

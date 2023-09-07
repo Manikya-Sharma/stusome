@@ -123,12 +123,7 @@ export default function ChangePicture({ params }: { params: { id: string } }) {
         />
       </div>
       <main className="h-full flex items-center gradient font-fancy">
-        <Link
-          href={`/logged-in/${state._id}/settings/account`}
-          className="absolute top-1 left-1 text-slate-200 text-lg hover:underline underline-offset-2"
-        >
-          Back
-        </Link>
+        {" "}
         <div className="w-fit mx-auto">
           <div className="max-w-[80%] gradient-sub w-fit mx-auto p-10 text-white rounded-lg">
             <h1 className="font-merri text-center text-5xl mb-3">
