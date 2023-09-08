@@ -9,8 +9,8 @@ export default function RootLayout({
 }) {
   const router = useRouter();
   return (
-    <main className="min-h-screen dark:bg-slate-800 dark:text-slate-200">
-      <div className="absolute top-2 left-2">
+    <main className="relative min-h-screen dark:bg-slate-800 dark:text-slate-200">
+      <div className="absolute top-2 left-2 z-[100]">
         <button
           onClick={() => router.back()}
           className="text-slate-800 dark:text-slate-200 text-lg hover:underline underline-offset-2"

@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { LuArrowLeft, LuFlashlight, LuFlashlightOff } from "react-icons/lu";
+import { DarkModeSwitch } from "react-toggle-dark-mode";
 
 type Params = {
   params: { id: string };
@@ -54,30 +55,34 @@ export default function AppSettings({ params }: Params) {
   return (
     <>
       <div className="pt-10 px-3">
-        <div className="text-lg w-full px-3 py-6 flex items-center justify-between bg-slate-300 dark:bg-slate-500 dark:text-slate-200 rounded-md">
+        <div className="text-lg w-full px-3 sm:px-8 py-6 flex items-center justify-between bg-slate-300 dark:bg-slate-500 dark:text-slate-200 rounded-md">
           <div className="inline-flex items-center justify-center mr-3">
             {theme == "dark" ? <LuFlashlightOff /> : <LuFlashlight />}
           </div>
           <p className="flex-grow">Change theme</p>
-          <div className="flex gap-3 min-w-[30%] justify-center">
-            <button
+          <div
+            className="w-[80px] dark:bg-slate-400 bg-slate-100 py-2 px-3 rounded-3xl cursor-pointer"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleTheme(theme == "dark" ? "light" : "dark");
+            }}
+          >
+            <div
               className={
-                "border-[3px] block px-4 py-2 rounded-lg bg-slate-700 text-slate-200 hover:bg-slate-200 hover:text-slate-800 transition-all duration-200 " +
-                (theme == "dark" ? " border-slate-400" : " border-transparent")
+                "transition-transform duration-200 " +
+                (theme == "dark" ? "translate-x-[30px]" : "translate-x-0")
               }
-              onClick={() => handleTheme("dark")}
             >
-              Dark
-            </button>
-            <button
-              className={
-                "border-[3px] block px-4 py-2 rounded-lg bg-slate-700 text-slate-200 hover:bg-slate-200 hover:text-slate-800 transition-all duration-200" +
-                (theme == "light" ? " border-slate-400" : " border-transparent")
+              {
+                <DarkModeSwitch
+                  checked={theme == "dark"}
+                  onChange={() =>
+                    handleTheme(theme == "dark" ? "light" : "dark")
+                  }
+                  size={25}
+                />
               }
-              onClick={() => handleTheme("light")}
-            >
-              Light
-            </button>
+            </div>
           </div>
         </div>
       </div>
