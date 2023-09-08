@@ -25,17 +25,16 @@ export default function LoggedIn({ params }: Params) {
   useEffect(() => {
     const account = localStorage.getItem("account");
     if (account == null) {
-      router.push("/login");
+      router.replace("/login");
     } else {
       setState(() => JSON.parse(account));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [router]);
   useEffect(() => {
     // different user
     if (id != state._id && state._id != "") {
       localStorage.removeItem("account");
-      router.push("/login");
+      router.replace("/login");
     }
   }, [id, router, state._id]);
 

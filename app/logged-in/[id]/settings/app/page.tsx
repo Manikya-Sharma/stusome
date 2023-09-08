@@ -23,12 +23,11 @@ export default function AppSettings({ params }: Params) {
     const account = localStorage.getItem("account");
     if (account == null) {
       localStorage.removeItem("account");
-      router.push("/login");
+      router.replace("/login");
     } else {
       setState(() => JSON.parse(account));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [router]);
   useEffect(() => {
     if (id != state._id && state._id != "") {
       router.push("/login");
