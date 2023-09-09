@@ -1,16 +1,31 @@
 "use client";
-import { Message } from "@/app/types/user";
+import { Message, State } from "@/app/types/user";
 import { getChatId } from "@/lib/utils";
 import { FC, useEffect, useRef, useState } from "react";
+import { MdSend } from "react-icons/md";
+import TextArea from "react-textarea-autosize";
 
 interface ChatAppProps {
   userId: string;
-  friendId: string;
+  friendEmail: string;
 }
 
-const ChatApp: FC<ChatAppProps> = ({ userId, friendId }) => {
+const ChatApp: FC<ChatAppProps> = ({ userId, friendEmail }) => {
   const messageRef = useRef<HTMLTextAreaElement | null>(null);
+  const chatsRef = useRef<HTMLDivElement | null>(null);
+  const [friendData, setFriendData] = useState<State | null>(null);
+  useEffect(() => {
+    async function fetchData() {
+      const rawData = await fetch(`/api/getAccountByEmail/${friendEmail}`);
+      const data = (await rawData.json()) as State;
+      setFriendData(data);
+    }
+    fetchData();
+  }, [friendEmail]);
   async function handleSubmit() {
+    if (friendData == null) {
+      return;
+    }
     await fetch("/api/newMessage", {
       method: "POST",
       headers: {
@@ -18,62 +33,89 @@ const ChatApp: FC<ChatAppProps> = ({ userId, friendId }) => {
       },
       body: JSON.stringify({
         senderId: userId,
-        receiverId: friendId,
+        receiverId: friendData._id,
         message: messageRef.current?.value,
         timeStamp: Date.now(),
       }),
     });
+    if (messageRef.current != null) {
+      messageRef.current.value = "";
+      messageRef.current.focus();
+    }
   }
 
   const [chats, setChats] = useState<Message[] | null>(null);
 
   useEffect(() => {
+    if (friendData == null) {
+      return;
+    }
     const fetchData = async () => {
       const rawChats = await fetch("/api/getChatsWithId", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(getChatId(userId, friendId)),
+        body: JSON.stringify(getChatId(userId, friendData._id)),
       });
       const chats = (await rawChats.json()) as Message[];
       setChats(chats);
     };
     fetchData();
-  }, [friendId, userId]);
+  }, [friendData, userId]);
+
+  useEffect(() => {
+    if (chatsRef.current != null) {
+      chatsRef.current.scrollTop = chatsRef.current.scrollHeight;
+    }
+  }, [chats]);
 
   return (
-    <div>
+    <div className="bg-slate-800 text-slate-200 min-h-screen">
+      <div className="py-2 mb-3 bg-slate-700 fixed top-0 w-[100vw]">
+        <h1 className="text-center text-6xl">{friendData?.name}</h1>
+        <p className="text-center text-slate-300">{friendData?.email}</p>
+      </div>
       <div>
-        {chats &&
-          chats.map((chat) => {
-            return (
-              <div key={chat.timeStamp}>
-                <div className="flex flex-col-reverse space-y-3">
-                  <div
-                    className={chat.senderId == userId ? "ml-auto" : "mr-auto"}
-                  >
-                    {chat.message}
+        <div className="max-h-[90vh] pt-32 overflow-y-auto" ref={chatsRef}>
+          {chats &&
+            chats.map((chat) => {
+              return (
+                <div key={chat.timeStamp}>
+                  <div className="flex flex-col-reverse space-y-2 px-5">
+                    <div
+                      className={
+                        "px-3 py-2 rounded-3xl my-1" +
+                        (chat.senderId == userId
+                          ? " bg-slate-700 ml-auto rounded-br-none"
+                          : " bg-slate-900 mr-auto rounded-bl-none")
+                      }
+                    >
+                      {chat.message}
+                    </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+        </div>
       </div>
-      <div className="absolute w-[70vw] flex justify-between items-center bottom-2 ">
-        <textarea
-          name="chat"
-          id="chat"
-          cols={30}
-          rows={10}
+      <div className="flex items-center justify-between gap-2 px-2 fixed bottom-2 w-[100vw]">
+        <TextArea
+          minRows={1}
           ref={messageRef}
-          className="border border-black"
-        ></textarea>
+          className="block w-full border border-black text-slate-700 font-semibold py-4 px-2 rounded-lg leading-relaxed resize-none"
+          onKeyDown={(e) => {
+            if (e.key == "Enter") {
+              e.preventDefault();
+              handleSubmit();
+            }
+          }}
+        ></TextArea>
         <button
           onClick={handleSubmit}
-          className="block w-fit mx-auto bg-slate-200 hover:bg-slate-800 hover:text-white px-3 py-2 rounded-md"
+          className="block border w-fit mx-auto text-slate-900 bg-slate-200 hover:bg-slate-800 hover:text-white px-7 py-5 rounded-md hover:border-slate-200 transition-colors duration-200"
         >
-          Send
+          <MdSend />
         </button>
       </div>
     </div>
