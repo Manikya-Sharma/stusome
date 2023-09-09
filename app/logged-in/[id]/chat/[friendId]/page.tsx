@@ -8,11 +8,8 @@ export default function Chat({
   params: { id: string; friendId: string };
 }) {
   return (
-    <main className="flex">
-      <div className="flex-[1]">
-        <Sidebar />
-      </div>
-      <div className="flex-[3]">
+    <main className="">
+      <div className="">
         <ChatApp userId={params.id} friendId={params.friendId} />
       </div>
     </main>
