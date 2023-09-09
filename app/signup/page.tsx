@@ -67,7 +67,7 @@ export default function Signup() {
           fetch(`/api/getAccountByEmail/${email}`).then((acc) => {
             acc.json().then((json) => {
               localStorage.setItem("account", JSON.stringify(json));
-              router.push(`/logged-in/${json._id}`);
+              router.replace(`/logged-in/${json._id}`);
             });
           });
         });
