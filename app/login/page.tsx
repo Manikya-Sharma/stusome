@@ -21,10 +21,9 @@ export default function Login() {
     setLoading(false);
     if (userData != null) {
       const jsonUserData = JSON.parse(userData);
-      router.push(`/logged-in/${jsonUserData._id}`);
+      router.replace(`/logged-in/${jsonUserData._id}`);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [router]);
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   async function handleSubmit() {
@@ -59,7 +58,7 @@ export default function Login() {
           return;
         } else {
           localStorage.setItem("account", JSON.stringify(userData));
-          router.push(`/logged-in/${userData._id}`);
+          router.replace(`/logged-in/${userData._id}`);
         }
       } catch (e) {
         toast.error(`Some error occurred, please try again later`);
