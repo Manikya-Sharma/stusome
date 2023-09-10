@@ -6,3 +6,10 @@ export type State = {
   picture: string;
   hasPic: boolean;
 };
+
+export type Message = {
+  senderId: string;
+  receiverId: string;
+  message: string;
+  timeStamp: number;
+};
