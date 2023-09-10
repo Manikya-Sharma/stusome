@@ -71,35 +71,35 @@ const ChatApp: FC<ChatAppProps> = ({ userId, friendEmail }) => {
   }, [chats]);
 
   return (
-    <div className="bg-slate-800 text-slate-200 min-h-screen">
-      <div className="py-2 mb-3 bg-slate-700 fixed top-0 w-[100vw]">
+    <div className="bg-slate-800 text-slate-200 h-screen overflow-hidden">
+      <div className="py-2 bg-slate-700 h-[15vh] truncate flex flex-col items-center justify-center">
         <h1 className="text-center text-6xl">{friendData?.name}</h1>
         <p className="text-center text-slate-300">{friendData?.email}</p>
       </div>
-      <div>
-        <div className="max-h-[90vh] pt-32 overflow-y-auto" ref={chatsRef}>
-          {chats &&
-            chats.map((chat) => {
-              return (
-                <div key={chat.timeStamp}>
-                  <div className="flex flex-col-reverse space-y-2 px-5">
-                    <div
-                      className={
-                        "px-3 py-2 rounded-3xl my-1" +
-                        (chat.senderId == userId
-                          ? " bg-slate-700 ml-auto rounded-br-none"
-                          : " bg-slate-900 mr-auto rounded-bl-none")
-                      }
-                    >
-                      {chat.message}
-                    </div>
+
+      <div className="h-[65vh] py-3 overflow-y-auto" ref={chatsRef}>
+        {chats &&
+          chats.map((chat) => {
+            return (
+              <div key={chat.timeStamp}>
+                <div className="flex flex-col-reverse space-y-2 px-5">
+                  <div
+                    className={
+                      "px-3 py-2 rounded-3xl my-1 max-w-[80%]" +
+                      (chat.senderId == userId
+                        ? " bg-slate-700 ml-auto rounded-br-none"
+                        : " bg-slate-900 mr-auto rounded-bl-none")
+                    }
+                  >
+                    {chat.message}
                   </div>
                 </div>
-              );
-            })}
-        </div>
+              </div>
+            );
+          })}
       </div>
-      <div className="flex items-center justify-between gap-2 px-2 fixed bottom-2 w-[100vw]">
+
+      <div className="h-[20vh] flex items-end pb-2 justify-between gap-2 px-2">
         <TextArea
           minRows={1}
           ref={messageRef}

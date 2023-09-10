@@ -1,10 +1,11 @@
-import { db } from "@/lib/db";
+import { db, fetchRedis } from "@/lib/db";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   const reqId = await req.json();
 
   const chatsKeys = await db.keys(`*${reqId}*`);
+
   const chats = (await db.zrange(chatsKeys[0], 0, -1, {
     withScores: true,
   })) as [string, number];
