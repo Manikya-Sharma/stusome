@@ -1,6 +1,7 @@
 import { Message } from "@/app/types/user";
 import { db } from "@/lib/db";
-import { getChatId } from "@/lib/utils";
+import { pusherServer } from "@/lib/pusher";
+import { getChatId, toPusherKey } from "@/lib/utils";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
@@ -10,5 +11,16 @@ export async function POST(req: Request) {
     score: request.timeStamp,
     member: `${request.senderId}--${request.receiverId}--${request.message}`,
   });
+
+  pusherServer.trigger(
+    toPusherKey(`chat-${getChatId(request.senderId, request.receiverId)}`),
+    "chat",
+    {
+      senderId: request.senderId,
+      receiverId: request.receiverId,
+      message: request.message,
+      timeStamp: request.timeStamp,
+    }
+  );
   return NextResponse.json("ok");
 }

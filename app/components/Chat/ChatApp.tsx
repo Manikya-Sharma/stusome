@@ -1,6 +1,7 @@
 "use client";
 import { Message, State } from "@/app/types/user";
-import { getChatId } from "@/lib/utils";
+import { pusherClient } from "@/lib/pusher";
+import { getChatId, toPusherKey } from "@/lib/utils";
 import { FC, useEffect, useRef, useState } from "react";
 import { MdSend } from "react-icons/md";
 import TextArea from "react-textarea-autosize";
@@ -69,6 +70,37 @@ const ChatApp: FC<ChatAppProps> = ({ userId, friendEmail }) => {
       chatsRef.current.scrollTop = chatsRef.current.scrollHeight;
     }
   }, [chats]);
+
+  useEffect(() => {
+    if (friendData == null) {
+      return;
+    }
+    const chatHandler = ({
+      senderId,
+      receiverId,
+      message,
+      timeStamp,
+    }: Message) => {
+      setChats((prev) => {
+        if (prev != null) {
+          return [...prev, { senderId, receiverId, message, timeStamp }];
+        } else {
+          return [{ senderId, receiverId, message, timeStamp }];
+        }
+      });
+    };
+    pusherClient.subscribe(
+      toPusherKey(`chat-${getChatId(userId, friendData._id)}`)
+    );
+    pusherClient.bind("chat", chatHandler);
+
+    return () => {
+      pusherClient.unsubscribe(
+        toPusherKey(`chat-${getChatId(userId, friendData._id)}`)
+      );
+      pusherClient.unbind("chat", chatHandler);
+    };
+  }, [friendData, userId]);
 
   return (
     <div className="bg-slate-800 text-slate-200 h-screen overflow-hidden">
