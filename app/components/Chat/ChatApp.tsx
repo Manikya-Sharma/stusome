@@ -81,6 +81,12 @@ const ChatApp: FC<ChatAppProps> = ({ userId, friendEmail }) => {
       message,
       timeStamp,
     }: Message) => {
+      console.log("message recieved by pusher", {
+        senderId,
+        receiverId,
+        message,
+        timeStamp,
+      });
       setChats((prev) => {
         if (prev != null) {
           return [...prev, { senderId, receiverId, message, timeStamp }];
@@ -89,15 +95,15 @@ const ChatApp: FC<ChatAppProps> = ({ userId, friendEmail }) => {
         }
       });
     };
-    pusherClient.subscribe(
-      toPusherKey(`chat-${getChatId(userId, friendData._id)}`)
-    );
+    console.log("subscribed");
+    pusherClient.subscribe(`chat-${getChatId(userId, friendData._id)}`);
+    console.log("bound");
     pusherClient.bind("chat", chatHandler);
 
     return () => {
-      pusherClient.unsubscribe(
-        toPusherKey(`chat-${getChatId(userId, friendData._id)}`)
-      );
+      console.log("unsubscribe");
+      pusherClient.unsubscribe(`chat-${getChatId(userId, friendData._id)}`);
+      console.log("unbound");
       pusherClient.unbind("chat", chatHandler);
     };
   }, [friendData, userId]);
