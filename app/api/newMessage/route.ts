@@ -12,8 +12,8 @@ export async function POST(req: Request) {
     member: `${request.senderId}--${request.receiverId}--${request.message}`,
   });
 
-  pusherServer.trigger(
-    toPusherKey(`chat-${getChatId(request.senderId, request.receiverId)}`),
+  await pusherServer.trigger(
+    `chat-${getChatId(request.senderId, request.receiverId)}`,
     "chat",
     {
       senderId: request.senderId,
