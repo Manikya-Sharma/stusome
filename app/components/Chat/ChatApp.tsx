@@ -68,7 +68,8 @@ const ChatApp: FC<ChatAppProps> = ({ userId, friendEmail }) => {
 
   useEffect(() => {
     if (chatsRef.current != null) {
-      chatsRef.current.scrollTop = chatsRef.current.scrollHeight;
+      chatsRef.current.scrollTop =
+        chatsRef.current.scrollHeight + chatsRef.current.clientHeight;
     }
   }, [chats]);
 
@@ -100,13 +101,20 @@ const ChatApp: FC<ChatAppProps> = ({ userId, friendEmail }) => {
   }, [friendData, userId]);
 
   return (
-    <div className="bg-slate-800 text-slate-200 h-screen overflow-hidden">
-      <div className="py-2 bg-slate-700 h-[15vh] truncate flex flex-col items-center justify-center">
-        <h1 className="text-center text-6xl">{friendData?.name}</h1>
-        <p className="text-center text-slate-300">{friendData?.email}</p>
+    <div className="bg-slate-800 text-slate-200 min-h-screen overflow-hidden">
+      <div className="py-1 sm:py-2 bg-slate-700 fixed w-[100vw] h-[10vh] sm:h-[15vh] truncate flex flex-col items-center justify-center">
+        <h1 className="text-center text-3xl sm:text-5xl truncate max-w-full px-2">
+          {friendData?.name}
+        </h1>
+        <p className="text-center text-slate-300 truncate max-w-full px-2">
+          {friendData?.email}
+        </p>
       </div>
 
-      <div className="h-[65vh] py-3 overflow-y-auto" ref={chatsRef}>
+      <div
+        className="mt-20 h-[72vh] max-h-full mb-20 overflow-y-auto sm:mt-32"
+        ref={chatsRef}
+      >
         {chats &&
           chats.map((chat) => {
             return (
@@ -136,7 +144,7 @@ const ChatApp: FC<ChatAppProps> = ({ userId, friendEmail }) => {
           })}
       </div>
 
-      <div className="h-[20vh] flex items-end pb-2 justify-between gap-2 px-2">
+      <div className="fixed bottom-0 h-[20vh] w-[100vw] flex items-end pb-2 justify-between gap-2 px-2">
         <TextArea
           minRows={1}
           ref={messageRef}
