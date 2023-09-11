@@ -5,6 +5,7 @@ import { getChatId, toPusherKey } from "@/lib/utils";
 import { FC, useEffect, useRef, useState } from "react";
 import { MdSend } from "react-icons/md";
 import TextArea from "react-textarea-autosize";
+import { format } from "date-fns";
 
 interface ChatAppProps {
   userId: string;
@@ -119,7 +120,15 @@ const ChatApp: FC<ChatAppProps> = ({ userId, friendEmail }) => {
                         : " bg-slate-900 mr-auto rounded-bl-none")
                     }
                   >
-                    {chat.message}
+                    <p>{chat.message}</p>
+                    <p
+                      className={
+                        "text-xs text-slate-400" +
+                        (chat.senderId == userId ? " text-right" : " text-left")
+                      }
+                    >
+                      {format(chat.timeStamp, "HH:mm")}
+                    </p>
                   </div>
                 </div>
               </div>
