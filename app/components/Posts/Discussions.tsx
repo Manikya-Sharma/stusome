@@ -1,6 +1,7 @@
 import ShowMarkdown from "../Markdown/ShowMarkdown";
 import { LuReply } from "react-icons/lu";
 import { LiaPlusCircleSolid } from "react-icons/lia";
+import { IconContext } from "react-icons";
 
 type Props = {
   discussion: {
@@ -75,15 +76,17 @@ export default function Discussions(props: Props) {
         );
       })}
 
-      <button
-        className="flex items-center justify-around gap-2 w-fit mx-auto px-3 py-2 my-5 rounded-md bg-gradient-to-tr from-rose-200 to-pink-300 hover:from-purple-200 hover:to-rose-300 text-pink-800 hover:text-rose-950 transition-all duration-200"
-        onClick={() => {
-          props.discussionHandler("discussion");
-        }}
-      >
-        <LiaPlusCircleSolid />
-        New discussion
-      </button>
+      <IconContext.Provider value={{ className: "shared-class", size: "20" }}>
+        <button
+          className="flex items-center justify-around gap-2 w-fit mx-auto px-3 py-2 my-5 rounded-md bg-gradient-to-tr from-rose-200 to-pink-300 hover:from-purple-200 hover:to-rose-300 text-pink-800 hover:text-rose-950 transition-all duration-200"
+          onClick={() => {
+            props.discussionHandler("discussion");
+          }}
+        >
+          <LiaPlusCircleSolid />
+          New discussion
+        </button>
+      </IconContext.Provider>
     </div>
   );
 }

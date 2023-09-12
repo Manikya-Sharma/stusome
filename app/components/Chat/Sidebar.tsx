@@ -6,6 +6,7 @@ import { FC, useRef } from "react";
 import { usePathname } from "next/navigation";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import Image from "next/image";
 
 interface SidebarProps {
   userEmail: string;
@@ -78,7 +79,7 @@ const Sidebar: FC<SidebarProps> = ({ userEmail }) => {
         <h1 className="text-center text-7xl py-5">Your Chats</h1>
 
         {loadingData ? (
-          <div>
+          <div className="flex flex-col gap-2">
             <div className="w-[80%] mx-auto">
               <Skeleton height={50} />
             </div>
@@ -96,12 +97,24 @@ const Sidebar: FC<SidebarProps> = ({ userEmail }) => {
                 <Link
                   href={pathName + `/${elem.email}`}
                   key={elem._id}
-                  className="w-full group tracking-wide flex gap-2 items-center justify-center max-w-[80%] min-w-fit mx-auto dark:bg-slate-700 bg-slate-300 py-4 px-3 rounded-lg text-xl font-fancy dark:hover:bg-slate-600 dark:hover:text-white hover:bg-slate-700 hover:text-slate-200 transition-colors duration-300"
+                  className="w-full group tracking-wide flex gap-4 items-center justify-start max-w-[80%] min-w-fit mx-auto dark:bg-slate-700 bg-slate-300 py-4 px-3 rounded-lg text-xl font-fancy dark:hover:bg-slate-600 dark:hover:text-white hover:bg-slate-700 hover:text-slate-200 transition-colors duration-300"
                 >
-                  <p>{elem.name}</p>
-                  <p className="dark:text-slate-500 text-slate-600 group-hover:text-slate-300 text-sm">
-                    ({elem.email})
-                  </p>
+                  <div className="flex flex-col items-center align-middle justify-center cursor-pointer w-12 h-12 rounded-full bg-slate-300 overflow-hidden dark:border-slate-400 dark:border-2">
+                    {elem.hasPic && (
+                      <Image
+                        src={`data:image/png;base64,${elem.picture}`}
+                        alt=""
+                        width={70}
+                        height={70}
+                      />
+                    )}
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <p>{elem.name}</p>
+                    <p className="dark:text-slate-500 text-slate-600 group-hover:text-slate-300 text-sm">
+                      ({elem.email})
+                    </p>
+                  </div>
                 </Link>
               );
             })}

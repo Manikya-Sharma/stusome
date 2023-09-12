@@ -4,7 +4,8 @@ import { State } from "@/app/types/user";
 import { DarkModeSwitch } from "react-toggle-dark-mode";
 import Image from "next/image";
 import React from "react";
-import { LuMenu, LuPanelLeftClose } from "react-icons/lu";
+import { LuMenu, LuPanelRightClose } from "react-icons/lu";
+import { IconContext } from "react-icons";
 
 type Props = {
   state: State;
@@ -38,13 +39,15 @@ export default function UserInfoContainer({
   const [showMenu, setShowMenu] = useState<boolean>(false);
 
   return (
-    <div className="sm:flex sm:justify-between pr-5 pt-7 sm:pt-0">
-      <div
-        className="absolute right-3 top-2 sm:hidden"
-        onClick={() => setShowMenu(!showMenu)}
-      >
-        {showMenu ? <LuPanelLeftClose /> : <LuMenu />}
-      </div>
+    <div className="sm:flex sm:justify-between sm:pr-5 pt-10 sm:pt-0">
+      <IconContext.Provider value={{ className: "shared-class", size: "23" }}>
+        <div
+          className="absolute right-3 top-2 sm:hidden"
+          onClick={() => setShowMenu(!showMenu)}
+        >
+          {showMenu ? <LuPanelRightClose /> : <LuMenu />}
+        </div>
+      </IconContext.Provider>
       <div
         className={
           "fixed border-l border-t border-zinc-300 sm:border-none sm:static sm:block bg-[rgba(226,232,240,0.7)] backdrop-blur-sm px-5 max-w-fit sm:max-w-full lg:max-w-[30vw] dark:bg-[rgba(51,65,85,0.7)] h-[100vh] overflow-y-hidden rounded-tl-3xl sm:rounded-tr-3xl sm:mr-3 sm:grow transition-all duration-200" +

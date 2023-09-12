@@ -53,8 +53,8 @@ export default function AppSettings({ params }: Params) {
 
   return (
     <>
-      <div className="pt-10 px-3">
-        <div className="text-lg w-full px-3 sm:px-8 py-6 flex items-center justify-between bg-slate-300 dark:bg-slate-500 dark:text-slate-200 rounded-md">
+      <div className="pt-12 px-3">
+        <div className="text-lg w-full px-3 sm:px-8 py-6 flex items-center justify-between bg-slate-300 dark:bg-slate-500 dark:text-slate-200 rounded-md transition-all duration-300">
           <div className="inline-flex items-center justify-center mr-3">
             {theme == "dark" ? <LuFlashlightOff /> : <LuFlashlight />}
           </div>
