@@ -5,6 +5,7 @@ import Link from "next/link";
 import { BarLoader } from "react-spinners";
 import toast, { Toaster } from "react-hot-toast";
 import { LuHome } from "react-icons/lu";
+import { IconContext } from "react-icons";
 
 export default function Signup() {
   const router = useRouter();
@@ -96,10 +97,13 @@ export default function Signup() {
           href="/"
           className="absolute top-1 left-1 text-slate-200 text-lg hover:underline underline-offset-2"
         >
-          <div className="flex items-center justify-start gap-2 ">
-            <LuHome />
-            Home
-          </div>
+          <IconContext.Provider
+            value={{ className: "shared-class", size: "30" }}
+          >
+            <div className="flex items-center justify-start gap-2 ">
+              <LuHome />
+            </div>
+          </IconContext.Provider>
         </Link>
         <div className="w-fit mx-auto">
           <div className="max-w-[80%] gradient-sub w-fit mx-auto p-10 text-white rounded-lg">

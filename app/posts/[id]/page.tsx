@@ -9,7 +9,8 @@ import Link from "next/link";
 
 import SyncLoader from "react-spinners/SyncLoader";
 
-import { LuCross, LuMenu, LuPanelLeftClose } from "react-icons/lu";
+import { LuMenu, LuPanelLeftClose } from "react-icons/lu";
+import { IconContext } from "react-icons";
 
 type Params = {
   params: { id: string };
@@ -109,17 +110,19 @@ export default function Post({ params }: Params) {
     </div>
   ) : (
     <div className="p-4 font-fancy dark:bg-slate-900 dark:text-slate-100 scroll-smooth">
-      <nav className="md:hidden pt-1 pb-3 fixed z-[100] top-0 left-0 w-[100vw] overflow-hidden bg-[rgba(50,50,50,0.1)] backdrop-blur-md flex items-center justify-start h-fit">
-        {openMenu ? (
-          <button onClick={() => setOpenMenu(false)} className="pl-3 py-1">
-            <LuPanelLeftClose />
-          </button>
-        ) : (
-          <button onClick={() => setOpenMenu(true)} className="pl-3 py-1">
-            <LuMenu />
-          </button>
-        )}
-      </nav>
+      <IconContext.Provider value={{ className: "shared-class", size: "23" }}>
+        <nav className="md:hidden pt-1 pb-3 fixed z-[100] top-0 left-0 w-[100vw] overflow-hidden bg-[rgba(50,50,50,0.1)] backdrop-blur-md flex items-center justify-start h-fit">
+          {openMenu ? (
+            <button onClick={() => setOpenMenu(false)} className="pl-3 py-1">
+              <LuPanelLeftClose />
+            </button>
+          ) : (
+            <button onClick={() => setOpenMenu(true)} className="pl-3 py-1">
+              <LuMenu />
+            </button>
+          )}
+        </nav>
+      </IconContext.Provider>
       <div className="mb-5 mt-7 md:mt-0">
         <h1 className="text-5xl text-center">{state.title}</h1>
         <cite className="block text-lg text-slate-400 text-center mt-3">

@@ -8,6 +8,7 @@ import BarLoader from "react-spinners/BarLoader";
 import { State } from "@/app/types/user";
 import { LuTrash2 } from "react-icons/lu";
 import toast, { Toaster } from "react-hot-toast";
+import { IconContext } from "react-icons";
 
 export default function ChangePicture({ params }: { params: { id: string } }) {
   const router = useRouter();
@@ -158,16 +159,20 @@ export default function ChangePicture({ params }: { params: { id: string } }) {
               />
             </div>
             <div>
-              <button
-                onClick={() => {
-                  setLoading(true);
-                  removeProfile();
-                }}
-                className="px-3 py-2 flex justify-between gap-2 items-center w-fit mx-auto bg-red-600 hover:bg-red-100 hover:text-slate-800 mt-5 transition-all duration-200 rounded-md"
+              <IconContext.Provider
+                value={{ className: "shared-class", size: "18" }}
               >
-                <LuTrash2 />
-                Remove
-              </button>
+                <button
+                  onClick={() => {
+                    setLoading(true);
+                    removeProfile();
+                  }}
+                  className="px-3 py-2 flex justify-between gap-2 items-center w-fit mx-auto bg-red-600 hover:bg-red-100 hover:text-slate-800 mt-5 transition-all duration-200 rounded-md"
+                >
+                  <LuTrash2 />
+                  Remove
+                </button>
+              </IconContext.Provider>
             </div>
           </div>
         </div>

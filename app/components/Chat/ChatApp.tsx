@@ -10,6 +10,7 @@ import Image from "next/image";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { LuLoader } from "react-icons/lu";
+import { IconContext } from "react-icons";
 
 interface ChatAppProps {
   userId: string;
@@ -202,21 +203,25 @@ const ChatApp: FC<ChatAppProps> = ({ userId, friendEmail }) => {
                 }
               }}
             ></TextArea>
-            <button
-              onClick={handleSubmit}
-              className="block border w-fit mx-auto text-slate-900 bg-slate-200 hover:bg-slate-800 hover:text-white px-7 py-5 rounded-md hover:border-slate-200 transition-colors duration-200"
-              disabled={loadingSend}
+            <IconContext.Provider
+              value={{ className: "shared-class", size: "23" }}
             >
-              {loadingSend ? (
-                <div className="animate-spin">
-                  <LuLoader />
-                </div>
-              ) : (
-                <div>
-                  <MdSend />
-                </div>
-              )}
-            </button>
+              <button
+                onClick={handleSubmit}
+                className="block border w-fit mx-auto text-slate-900 bg-slate-200 hover:bg-slate-800 hover:text-white px-7 py-[1.1rem] rounded-md hover:border-slate-200 transition-colors duration-200"
+                disabled={loadingSend}
+              >
+                {loadingSend ? (
+                  <div className="animate-spin">
+                    <LuLoader />
+                  </div>
+                ) : (
+                  <div>
+                    <MdSend />
+                  </div>
+                )}
+              </button>
+            </IconContext.Provider>
           </div>
         )}
       </div>

@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 import { Toaster } from "react-hot-toast";
 import { LuHome } from "react-icons/lu";
 import { LiaKeySolid } from "react-icons/lia";
+import { IconContext } from "react-icons";
 
 export default function Login() {
   const [loading, setLoading] = useState(true);
@@ -85,10 +86,13 @@ export default function Login() {
           href="/"
           className="absolute top-1 left-1 text-slate-200 text-lg hover:underline underline-offset-2"
         >
-          <div className="flex items-center justify-start gap-2 ">
-            <LuHome />
-            Home
-          </div>
+          <IconContext.Provider
+            value={{ className: "shared-class", size: "30" }}
+          >
+            <div className="flex items-center justify-start gap-2 ">
+              <LuHome />
+            </div>
+          </IconContext.Provider>
         </Link>
         <div className="w-fit mx-auto">
           <div className="max-w-[80%] gradient-sub w-fit mx-auto p-10 text-white rounded-lg">
@@ -123,13 +127,17 @@ export default function Login() {
                   ref={passwordRef}
                 />
               </div>
-              <button
-                type="submit"
-                className="flex items-center justify-between gap-2 w-fit mx-auto px-4 py-2 rounded-md mt-5 bg-gradient-to-br from-fuchsia-300 to-fuchsia-500 hover:from-fuchsia-100 hover:to-rose-300 hover:text-rose-900 transition-all duration-300"
+              <IconContext.Provider
+                value={{ className: "shared-class", size: "25" }}
               >
-                <LiaKeySolid />
-                Continue
-              </button>
+                <button
+                  type="submit"
+                  className="flex items-center justify-between gap-2 w-fit mx-auto px-4 py-2 rounded-md mt-5 bg-gradient-to-br from-fuchsia-300 to-fuchsia-500 hover:from-fuchsia-100 hover:to-rose-300 hover:text-rose-900 transition-all duration-300"
+                >
+                  <LiaKeySolid />
+                  Continue
+                </button>
+              </IconContext.Provider>
             </form>
           </div>
           <p className="mt-10 text-center text-slate-100">
