@@ -73,8 +73,21 @@ const Sidebar: FC<SidebarProps> = ({ userEmail }) => {
       inputRef.current.value = "";
     }
   }
+
+  const [theme, setTheme] = useState<"dark" | "light">("light");
+  // theme
+  useEffect(() => {
+    if (document.documentElement.classList.contains("dark")) {
+      setTheme("dark");
+    }
+  }, []);
+
   return (
-    <SkeletonTheme baseColor="#333344" highlightColor="#aaa" duration={0.7}>
+    <SkeletonTheme
+      baseColor={theme == "dark" ? "#333344" : "#aeaeae"}
+      highlightColor={theme == "dark" ? "#aaa" : "#999"}
+      duration={0.7}
+    >
       <div className="min-h-screen dark:bg-slate-900 dark:text-slate-200">
         <h1 className="text-center text-7xl py-5">Your Chats</h1>
 
