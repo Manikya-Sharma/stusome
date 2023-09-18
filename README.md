@@ -27,7 +27,7 @@ Students can ask common doubts and also reply to others doubts. AI model will en
 
 ### Chats
 
-They allow one to one interaction so that not all discussions are public. AI will be used to prevent spam and 
+They allow one to one interaction so that not all discussions are public. AI will be used to prevent spam and
 strict authorization will ensure that only realible people chat.
 
 ## How to start local server for the app
