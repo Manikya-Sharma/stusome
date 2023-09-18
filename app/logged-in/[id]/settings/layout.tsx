@@ -12,10 +12,10 @@ export default function RootLayout({
   return (
     <main className="relative min-h-screen dark:bg-slate-800 dark:text-slate-200">
       <IconContext.Provider value={{ className: "shared-class", size: "23" }}>
-        <div className="absolute top-2 left-2 z-[100]">
+        <div className="absolute left-2 top-2 z-[100]">
           <button
             onClick={() => router.back()}
-            className="text-slate-800 dark:text-slate-200 text-lg hover:underline underline-offset-2"
+            className="text-lg text-slate-800 underline-offset-2 hover:underline dark:text-slate-200"
           >
             <LuArrowLeft />
           </button>

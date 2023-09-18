@@ -4,8 +4,8 @@ import { LuLogIn } from "react-icons/lu";
 
 export default function Navbar() {
   return (
-    <nav className="flex z-[100] fixed w-[100vw] justify-between items-center px-2 py-1 sm:px-8 sm:py-4 backdrop-blur-sm bg-[rgba(50,50,50,0.1)]">
-      <div className="items-center sm:flex bg-[rgba(200,200,200,0.7)] rounded-lg px-2 hover:bg-white transition-all duration-200">
+    <nav className="fixed z-[100] flex w-[100vw] items-center justify-between bg-[rgba(50,50,50,0.1)] px-2 py-1 backdrop-blur-sm sm:px-8 sm:py-4">
+      <div className="items-center rounded-lg bg-[rgba(200,200,200,0.7)] px-2 transition-all duration-200 hover:bg-white sm:flex">
         <Image src="/logo-full-tx.png" alt="stusome" width={100} height={90} />
       </div>
       <div className="hidden sm:block sm:flex-grow">
@@ -13,7 +13,7 @@ export default function Navbar() {
       </div>
       <div>
         <Link
-          className="flex gap-2 items-center px-4 py-2 bg-[rgba(100,20,20,0.7)] hover:text-slate-700 text-red-100 hover:bg-rose-300 border-2 border-red-400 transition-all duration-300 rounded-2xl"
+          className="flex items-center gap-2 rounded-2xl border-2 border-red-400 bg-[rgba(100,20,20,0.7)] px-4 py-2 text-red-100 transition-all duration-300 hover:bg-rose-300 hover:text-slate-700"
           href="login"
         >
           Login

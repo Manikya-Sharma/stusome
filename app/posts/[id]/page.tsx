@@ -98,7 +98,7 @@ export default function Post({ params }: Params) {
       console.log(
         inputValue,
         inputValueStatus.discussion,
-        inputValueStatus.reply
+        inputValueStatus.reply,
       );
     }
   }
@@ -112,15 +112,15 @@ export default function Post({ params }: Params) {
       highlightColor={theme == "dark" ? "#aaa" : "#999"}
       duration={0.7}
     >
-      <div className="p-4 font-fancy dark:bg-slate-900 dark:text-slate-100 scroll-smooth">
+      <div className="scroll-smooth p-4 font-fancy dark:bg-slate-900 dark:text-slate-100">
         <IconContext.Provider value={{ className: "shared-class", size: "23" }}>
-          <nav className="md:hidden pt-1 pb-3 fixed z-[100] top-0 left-0 w-[100vw] overflow-hidden bg-[rgba(50,50,50,0.1)] backdrop-blur-md flex items-center justify-start h-fit">
+          <nav className="fixed left-0 top-0 z-[100] flex h-fit w-[100vw] items-center justify-start overflow-hidden bg-[rgba(50,50,50,0.1)] pb-3 pt-1 backdrop-blur-md md:hidden">
             {openMenu ? (
-              <button onClick={() => setOpenMenu(false)} className="pl-3 py-1">
+              <button onClick={() => setOpenMenu(false)} className="py-1 pl-3">
                 <LuPanelLeftClose />
               </button>
             ) : (
-              <button onClick={() => setOpenMenu(true)} className="pl-3 py-1">
+              <button onClick={() => setOpenMenu(true)} className="py-1 pl-3">
                 <LuMenu />
               </button>
             )}
@@ -130,23 +130,23 @@ export default function Post({ params }: Params) {
           {loading ? (
             <Skeleton height={80} />
           ) : (
-            <h1 className="text-5xl text-center">{state.title}</h1>
+            <h1 className="text-center text-5xl">{state.title}</h1>
           )}
           {!loading && (
-            <cite className="block text-lg text-slate-400 text-center mt-3">
+            <cite className="mt-3 block text-center text-lg text-slate-400">
               - {state.author}
             </cite>
           )}
         </div>
         <div className="relative">
           {loading ? (
-            <div className="w-[10vw] mr-2 hidden sm:inline-block">
+            <div className="mr-2 hidden w-[10vw] sm:inline-block">
               <Skeleton height={300} />
             </div>
           ) : (
             <ul
               className={
-                "md:sticky md:top-10 md:mr-2 md:left-2 md:inline-flex md:flex-col md:justify-start md:w-[15vw] w-[50vw] md:p-0 fixed z-[100] px-3 py-2 rounded-md left-0 top-10 transition-transform duration-200 bg-slate-800 text-slate-200 md:bg-transparent md:text-inherit h-[100vh] md:h-fit md:pr-2 md:max-h-[70vh] overflow-y-auto" +
+                "fixed left-0 top-10 z-[100] h-[100vh] w-[50vw] overflow-y-auto rounded-md bg-slate-800 px-3 py-2 text-slate-200 transition-transform duration-200 md:sticky md:left-2 md:top-10 md:mr-2 md:inline-flex md:h-fit md:max-h-[70vh] md:w-[15vw] md:flex-col md:justify-start md:bg-transparent md:p-0 md:pr-2 md:text-inherit" +
                 (openMenu
                   ? " translate-x-0"
                   : " -translate-x-[80vw] md:translate-x-0")
@@ -156,7 +156,7 @@ export default function Post({ params }: Params) {
                 return (
                   <li
                     key={h}
-                    className="w-fit md:text-sm text-slate-400 dark:text-slate-300 md:my-2 hover:underline underline-offset-2 text-lg my-4"
+                    className="my-4 w-fit text-lg text-slate-400 underline-offset-2 hover:underline dark:text-slate-300 md:my-2 md:text-sm"
                   >
                     <Link href={`#${getId()}`}>{h}</Link>
                   </li>
@@ -178,21 +178,21 @@ export default function Post({ params }: Params) {
               )}
             </div>
 
-            <div className="flex-[1] sm:flex-col sm:justify-start my-3 flex flex-wrap text-slate-200 items-center text-center justify-center">
+            <div className="my-3 flex flex-[1] flex-wrap items-center justify-center text-center text-slate-200 sm:flex-col sm:justify-start">
               {loading ? (
-                <div className="hidden sm:block ml-[10vw]">
+                <div className="ml-[10vw] hidden sm:block">
                   <Skeleton height={150} width={100} />
                 </div>
               ) : (
                 <>
-                  <p className="hidden sm:block text-lg text-slate-800 dark:text-slate-200 mb-2">
+                  <p className="mb-2 hidden text-lg text-slate-800 dark:text-slate-200 sm:block">
                     Tags
                   </p>
                   {state.tags.map((tag) => {
                     return (
                       <div
                         key={tag}
-                        className="bg-slate-600 px-[4px] py-[2px] rounded-xl mx-[2px] my-[2px] sm:w-[80%] dark:text-slate-300"
+                        className="mx-[2px] my-[2px] rounded-xl bg-slate-600 px-[4px] py-[2px] dark:text-slate-300 sm:w-[80%]"
                       >
                         {tag}
                       </div>
@@ -208,8 +208,8 @@ export default function Post({ params }: Params) {
           <Skeleton height={200} />
         ) : (
           <>
-            <div className="w-[90%] mx-auto h-[2px] bg-slate-600 my-5"></div>
-            <h2 className="text-4xl mt-6 mb-3 sm:text-center">Discussions:-</h2>
+            <div className="mx-auto my-5 h-[2px] w-[90%] bg-slate-600"></div>
+            <h2 className="mb-3 mt-6 text-4xl sm:text-center">Discussions:-</h2>
 
             <Discussions
               discussion={state.discussions}

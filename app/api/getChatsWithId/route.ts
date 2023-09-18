@@ -46,6 +46,6 @@ export async function POST(req: Request) {
   }
 
   return NextResponse.json(
-    messages.filter((elem) => elem.receiverId.trim() != "")
+    messages.filter((elem) => elem.receiverId.trim() != ""),
   );
 }

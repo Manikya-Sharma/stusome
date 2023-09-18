@@ -4,8 +4,8 @@ import mostViewedPosts from "@/public/most-viewed.json";
 
 export default function MostViewed() {
   return (
-    <section className="w-fit sm:min-w-[30%] mx-auto text-center">
-      <h2 className="text-3xl mt-7 mb-3 sm:text-5xl font-merri">
+    <section className="mx-auto w-fit text-center sm:min-w-[30%]">
+      <h2 className="mb-3 mt-7 font-merri text-3xl sm:text-5xl">
         Most Viewed Posts
       </h2>
       <div>
@@ -15,7 +15,7 @@ export default function MostViewed() {
               <li key={post.id}>
                 <Link
                   href={`/posts/${post.id}`}
-                  className="block px-2 py-2 border my-2 border-teal-300 rounded-md hover:bg-teal-300 hover:text-blue-800 transition-all duration-150 dark:bg-zinc-700 dark:hover:bg-teal-300 dark:text-teal-100 dark:hover:text-teal-950"
+                  className="my-2 block rounded-md border border-teal-300 px-2 py-2 transition-all duration-150 hover:bg-teal-300 hover:text-blue-800 dark:bg-zinc-700 dark:text-teal-100 dark:hover:bg-teal-300 dark:hover:text-teal-950"
                 >
                   <div className="flex justify-between space-x-1">
                     <div>{post.title}</div>

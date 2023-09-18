@@ -113,14 +113,14 @@ const ChatApp: FC<ChatAppProps> = ({ userId, friendEmail }) => {
 
   return (
     <SkeletonTheme baseColor="#333344" highlightColor="#aaa" duration={0.7}>
-      <div className="bg-slate-800 text-slate-200 min-h-screen overflow-hidden">
+      <div className="min-h-screen overflow-hidden bg-slate-800 text-slate-200">
         {loadingData ? (
-          <div className="-mb-16 -mt-1 mx-auto">
+          <div className="mx-auto -mb-16 -mt-1">
             <Skeleton height={80} />
           </div>
         ) : (
-          <div className="flex py-1 sm:py-2 bg-slate-700 items-center justify-center px-2 gap-2 fixed w-[100vw] h-[10vh] sm:h-[15vh] ">
-            <div className="flex flex-col items-center align-middle justify-center w-12 h-12 rounded-full bg-slate-300 overflow-hidden dark:border-slate-400 dark:border-2">
+          <div className="fixed flex h-[10vh] w-[100vw] items-center justify-center gap-2 bg-slate-700 px-2 py-1 sm:h-[15vh] sm:py-2 ">
+            <div className="flex h-12 w-12 flex-col items-center justify-center overflow-hidden rounded-full bg-slate-300 align-middle dark:border-2 dark:border-slate-400">
               {friendData?.hasPic && (
                 <Image
                   src={`data:image/png;base64,${friendData?.picture}`}
@@ -130,11 +130,11 @@ const ChatApp: FC<ChatAppProps> = ({ userId, friendEmail }) => {
                 />
               )}
             </div>
-            <div className="truncate flex flex-col items-center justify-center">
-              <h1 className="text-center text-3xl sm:text-5xl truncate max-w-full px-2">
+            <div className="flex flex-col items-center justify-center truncate">
+              <h1 className="max-w-full truncate px-2 text-center text-3xl sm:text-5xl">
                 {friendData?.name}
               </h1>
-              <p className="text-center text-slate-300 truncate max-w-full px-2">
+              <p className="max-w-full truncate px-2 text-center text-slate-300">
                 {friendData?.email}
               </p>
             </div>
@@ -142,18 +142,18 @@ const ChatApp: FC<ChatAppProps> = ({ userId, friendEmail }) => {
         )}
 
         <div
-          className="mt-20 h-[72vh] max-h-full mb-20 overflow-y-auto sm:mt-32"
+          className="mb-20 mt-20 h-[72vh] max-h-full overflow-y-auto sm:mt-32"
           ref={chatsRef}
         >
           {loadingChats ? (
             <div className="flex flex-col gap-5">
               <Skeleton height={70} width={350} />
               <Skeleton height={70} width={250} />
-              <div className="w-fit ml-auto">
+              <div className="ml-auto w-fit">
                 <Skeleton height={70} width={300} />
               </div>
               <Skeleton height={70} width={375} />
-              <div className="w-fit ml-auto">
+              <div className="ml-auto w-fit">
                 <Skeleton height={70} width={250} />
               </div>
             </div>
@@ -165,10 +165,10 @@ const ChatApp: FC<ChatAppProps> = ({ userId, friendEmail }) => {
                   <div className="flex flex-col-reverse space-y-2 px-5">
                     <div
                       className={
-                        "px-3 py-2 rounded-3xl my-1 max-w-[80%]" +
+                        "my-1 max-w-[80%] rounded-3xl px-3 py-2" +
                         (chat.senderId == userId
-                          ? " bg-slate-700 ml-auto rounded-br-none"
-                          : " bg-slate-900 mr-auto rounded-bl-none")
+                          ? " ml-auto rounded-br-none bg-slate-700"
+                          : " mr-auto rounded-bl-none bg-slate-900")
                       }
                     >
                       <p>{chat.message}</p>
@@ -191,11 +191,11 @@ const ChatApp: FC<ChatAppProps> = ({ userId, friendEmail }) => {
         </div>
 
         {!loadingChats && !loadingData && (
-          <div className="fixed bottom-0 h-[20vh] w-[100vw] flex items-end pb-2 justify-between gap-2 px-2">
+          <div className="fixed bottom-0 flex h-[20vh] w-[100vw] items-end justify-between gap-2 px-2 pb-2">
             <TextArea
               minRows={1}
               ref={messageRef}
-              className="block w-full border border-black text-slate-700 font-semibold py-4 px-2 rounded-lg leading-relaxed resize-none"
+              className="block w-full resize-none rounded-lg border border-black px-2 py-4 font-semibold leading-relaxed text-slate-700"
               onKeyDown={(e) => {
                 if (e.key == "Enter") {
                   e.preventDefault();
@@ -208,7 +208,7 @@ const ChatApp: FC<ChatAppProps> = ({ userId, friendEmail }) => {
             >
               <button
                 onClick={handleSubmit}
-                className="block border w-fit mx-auto text-slate-900 bg-slate-200 hover:bg-slate-800 hover:text-white px-7 py-[1.1rem] rounded-md hover:border-slate-200 transition-colors duration-200"
+                className="mx-auto block w-fit rounded-md border bg-slate-200 px-7 py-[1.1rem] text-slate-900 transition-colors duration-200 hover:border-slate-200 hover:bg-slate-800 hover:text-white"
                 disabled={loadingSend}
               >
                 {loadingSend ? (

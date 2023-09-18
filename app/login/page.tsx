@@ -40,7 +40,7 @@ export default function Login() {
       // 8 characters, 1 letter, 1 number, 1 special character
       if (
         !password.match(
-          /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/
+          /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
         )
       ) {
         toast.error("Invalid password");
@@ -50,7 +50,7 @@ export default function Login() {
 
       try {
         const user = await fetch(
-          `/api/getAccountByEmail/${email == "" ? "a" : email}`
+          `/api/getAccountByEmail/${email == "" ? "a" : email}`,
         );
         const userData = await user.json();
         if (userData == null || userData.password != password) {
@@ -81,10 +81,10 @@ export default function Login() {
           cssOverride={{ backgroundColor: "rgba(0,0,255,0.3)" }}
         />
       </div>
-      <main className="h-full flex items-center gradient font-fancy">
+      <main className="gradient flex h-full items-center font-fancy">
         <Link
           href="/"
-          className="absolute top-1 left-1 text-slate-200 text-lg hover:underline underline-offset-2"
+          className="absolute left-1 top-1 text-lg text-slate-200 underline-offset-2 hover:underline"
         >
           <IconContext.Provider
             value={{ className: "shared-class", size: "30" }}
@@ -94,9 +94,9 @@ export default function Login() {
             </div>
           </IconContext.Provider>
         </Link>
-        <div className="w-fit mx-auto">
-          <div className="max-w-[80%] gradient-sub w-fit mx-auto p-10 text-white rounded-lg">
-            <h1 className="font-merri text-center text-5xl mb-10">Login</h1>
+        <div className="mx-auto w-fit">
+          <div className="gradient-sub mx-auto w-fit max-w-[80%] rounded-lg p-10 text-white">
+            <h1 className="mb-10 text-center font-merri text-5xl">Login</h1>
             <form
               onSubmit={(e) => {
                 e.preventDefault();
@@ -104,7 +104,7 @@ export default function Login() {
                 handleSubmit();
               }}
             >
-              <div className="grid grid-rows-2 grid-cols-2 items-center gap-2">
+              <div className="grid grid-cols-2 grid-rows-2 items-center gap-2">
                 <label className="text-xl" htmlFor="email">
                   Email
                 </label>
@@ -112,7 +112,7 @@ export default function Login() {
                   type="text"
                   name="email"
                   id="email"
-                  className="bg-fuchsia-200 text-fuchsia-800 font-semibold px-3 py-2 rounded-xl"
+                  className="rounded-xl bg-fuchsia-200 px-3 py-2 font-semibold text-fuchsia-800"
                   ref={emailRef}
                 />
 
@@ -123,7 +123,7 @@ export default function Login() {
                   type="password"
                   name="password"
                   id="password"
-                  className="bg-fuchsia-200 text-fuchsia-800 font-semibold px-3 py-2 rounded-xl"
+                  className="rounded-xl bg-fuchsia-200 px-3 py-2 font-semibold text-fuchsia-800"
                   ref={passwordRef}
                 />
               </div>
@@ -132,7 +132,7 @@ export default function Login() {
               >
                 <button
                   type="submit"
-                  className="flex items-center justify-between gap-2 w-fit mx-auto px-4 py-2 rounded-md mt-5 bg-gradient-to-br from-fuchsia-300 to-fuchsia-500 hover:from-fuchsia-100 hover:to-rose-300 hover:text-rose-900 transition-all duration-300"
+                  className="mx-auto mt-5 flex w-fit items-center justify-between gap-2 rounded-md bg-gradient-to-br from-fuchsia-300 to-fuchsia-500 px-4 py-2 transition-all duration-300 hover:from-fuchsia-100 hover:to-rose-300 hover:text-rose-900"
                 >
                   <LiaKeySolid />
                   Continue
@@ -144,7 +144,7 @@ export default function Login() {
             Don&apos;t have an account?{" "}
             <Link
               href="/signup"
-              className="text-fuchsia-200 hover:underline underline-offset-2"
+              className="text-fuchsia-200 underline-offset-2 hover:underline"
             >
               signup
             </Link>

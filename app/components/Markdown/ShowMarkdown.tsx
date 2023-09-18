@@ -40,7 +40,7 @@ export default function ShowMarkdown(props: Props) {
         h1({ node, ...props }) {
           return (
             <h2
-              className="hover:underline underline-offset-1 cursor-pointer hover:after:content-['\00A7'] after:ml-2 after:text-slate-300"
+              className="cursor-pointer underline-offset-1 after:ml-2 after:text-slate-300 hover:underline hover:after:content-['\00A7']"
               id={generateId().toString()}
               {...props}
             ></h2>
