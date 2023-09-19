@@ -58,12 +58,12 @@ export default function LoggedIn({ params }: Params) {
   }, []);
 
   return (
-    <main className="min-h-screen dark:bg-gradient-to-b dark:from-slate-700 dark:to-slate-950 dark:text-zinc-200 font-fancy">
+    <main className="min-h-screen font-fancy dark:bg-gradient-to-b dark:from-slate-700 dark:to-slate-950 dark:text-zinc-200">
       <Navbar state={state} />
       <div className="px-8 py-20 sm:py-32">
         <Welcome user={state} />
 
-        <div className="sm:flex items-center justify-around gap-5">
+        <div className="items-center justify-around gap-5 sm:flex">
           <MostViewed />
           <Frequents />
         </div>

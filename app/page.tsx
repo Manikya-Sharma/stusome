@@ -7,7 +7,7 @@ import Reviews from "./components/Landing/Reviews";
 export default function Home() {
   return (
     <main className="min-h-screen">
-      <div className="bg-[url('/images/Home/bg-new-sm.jpg')] md:bg-[url('/images/Home/bg-new.jpg')] bg-no-repeat bg-cover">
+      <div className="bg-[url('/images/Home/bg-new-sm.jpg')] bg-cover bg-no-repeat md:bg-[url('/images/Home/bg-new.jpg')]">
         <div>
           <Navbar />
         </div>

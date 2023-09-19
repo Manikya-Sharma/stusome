@@ -53,12 +53,12 @@ export default function ChangePassword({ params }: { params: { id: string } }) {
       const oldPassword = oldPasswordRef.current.value;
       if (
         !newPassword.match(
-          /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/
+          /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
         )
       ) {
         toast(
           "Password must contain at-least 8 characters with minimum one letter, one number and one special character",
-          { duration: 6000 }
+          { duration: 6000 },
         );
         toast.error("Invalid password");
         setLoading(false);
@@ -114,10 +114,10 @@ export default function ChangePassword({ params }: { params: { id: string } }) {
           cssOverride={{ backgroundColor: "rgba(0,0,255,0.3)" }}
         />
       </div>
-      <main className="h-full flex items-center gradient font-fancy">
-        <div className="w-fit mx-auto">
-          <div className="max-w-[90%] gradient-sub w-fit mx-auto p-10 text-white rounded-lg">
-            <h1 className="font-merri text-center text-5xl mb-10">
+      <main className="gradient flex h-full items-center font-fancy">
+        <div className="mx-auto w-fit">
+          <div className="gradient-sub mx-auto w-fit max-w-[90%] rounded-lg p-10 text-white">
+            <h1 className="mb-10 text-center font-merri text-5xl">
               Change Password
             </h1>
             <form
@@ -127,7 +127,7 @@ export default function ChangePassword({ params }: { params: { id: string } }) {
                 handleSubmit();
               }}
             >
-              <div className="grid grid-rows-2 grid-cols-2 items-center gap-2">
+              <div className="grid grid-cols-2 grid-rows-2 items-center gap-2">
                 <label className="text-lg" htmlFor="password">
                   Enter old password
                 </label>
@@ -135,7 +135,7 @@ export default function ChangePassword({ params }: { params: { id: string } }) {
                   type="password"
                   name="password"
                   id="old_password"
-                  className="bg-fuchsia-200 text-fuchsia-800 font-semibold px-3 py-2 rounded-xl"
+                  className="rounded-xl bg-fuchsia-200 px-3 py-2 font-semibold text-fuchsia-800"
                   ref={oldPasswordRef}
                 />
                 <label className="text-lg" htmlFor="password">
@@ -145,7 +145,7 @@ export default function ChangePassword({ params }: { params: { id: string } }) {
                   type="password"
                   name="password"
                   id="new_password"
-                  className="bg-fuchsia-200 text-fuchsia-800 font-semibold px-3 py-2 rounded-xl"
+                  className="rounded-xl bg-fuchsia-200 px-3 py-2 font-semibold text-fuchsia-800"
                   ref={newPasswordRef}
                 />
                 <label className="text-lg" htmlFor="password">
@@ -155,13 +155,13 @@ export default function ChangePassword({ params }: { params: { id: string } }) {
                   type="password"
                   name="password"
                   id="new_password"
-                  className="bg-fuchsia-200 text-fuchsia-800 font-semibold px-3 py-2 rounded-xl"
+                  className="rounded-xl bg-fuchsia-200 px-3 py-2 font-semibold text-fuchsia-800"
                   ref={reNewPasswordRef}
                 />
               </div>
               <button
                 type="submit"
-                className="block w-fit mx-auto px-4 py-2 rounded-md mt-5 bg-gradient-to-br from-fuchsia-300 to-fuchsia-500 hover:from-fuchsia-100 hover:to-rose-300 hover:text-rose-900 transition-all duration-300"
+                className="mx-auto mt-5 block w-fit rounded-md bg-gradient-to-br from-fuchsia-300 to-fuchsia-500 px-4 py-2 transition-all duration-300 hover:from-fuchsia-100 hover:to-rose-300 hover:text-rose-900"
               >
                 Change
               </button>

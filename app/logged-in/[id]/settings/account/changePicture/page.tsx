@@ -122,19 +122,19 @@ export default function ChangePicture({ params }: { params: { id: string } }) {
           cssOverride={{ backgroundColor: "rgba(0,0,255,0.3)" }}
         />
       </div>
-      <main className="h-full flex items-center gradient font-fancy">
+      <main className="gradient flex h-full items-center font-fancy">
         {" "}
-        <div className="w-fit mx-auto">
-          <div className="max-w-[80%] gradient-sub w-fit mx-auto p-10 text-white rounded-lg">
-            <h1 className="font-merri text-center text-5xl mb-3">
+        <div className="mx-auto w-fit">
+          <div className="gradient-sub mx-auto w-fit max-w-[80%] rounded-lg p-10 text-white">
+            <h1 className="mb-3 text-center font-merri text-5xl">
               Change Profile Picture
             </h1>
-            <p className="text-center mb-10 text-sm">
+            <p className="mb-10 text-center text-sm">
               Only png images supported as of now
             </p>
             <div className="flex flex-col items-center">
               <label className="text-xl" htmlFor="pic">
-                <div className="flex flex-col items-center align-middle justify-center cursor-pointer w-52 h-52 max-w-full max-h-full rounded-full bg-slate-400 overflow-hidden hover:grayscale">
+                <div className="flex h-52 max-h-full w-52 max-w-full cursor-pointer flex-col items-center justify-center overflow-hidden rounded-full bg-slate-400 align-middle hover:grayscale">
                   {state.hasPic && (
                     <Image
                       src={`data:image/png;base64,${state.picture}`}
@@ -167,7 +167,7 @@ export default function ChangePicture({ params }: { params: { id: string } }) {
                     setLoading(true);
                     removeProfile();
                   }}
-                  className="px-3 py-2 flex justify-between gap-2 items-center w-fit mx-auto bg-red-600 hover:bg-red-100 hover:text-slate-800 mt-5 transition-all duration-200 rounded-md"
+                  className="mx-auto mt-5 flex w-fit items-center justify-between gap-2 rounded-md bg-red-600 px-3 py-2 transition-all duration-200 hover:bg-red-100 hover:text-slate-800"
                 >
                   <LuTrash2 />
                   Remove

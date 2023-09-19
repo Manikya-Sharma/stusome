@@ -6,7 +6,7 @@ import "swiper/css";
 
 export default function About() {
   return (
-    <div className="text-center w-[50%] mx-auto text-lg sm:text-2xl my-5 font-fancy">
+    <div className="mx-auto my-5 w-[50%] text-center font-fancy text-lg sm:text-2xl">
       <Swiper
         spaceBetween={10}
         centeredSlides={true}
@@ -15,22 +15,22 @@ export default function About() {
         loop={true}
       >
         <SwiperSlide>
-          <div className="bg-gradient-to-br from-[rgba(52,211,253,0.6)] to-[rgba(50,70,100,0.8)] p-5 rounded-md text-[#fff] drop-shadow-md cursor-default">
+          <div className="cursor-default rounded-md bg-gradient-to-br from-[rgba(52,211,253,0.6)] to-[rgba(50,70,100,0.8)] p-5 text-[#fff] drop-shadow-md">
             Tired of unsolved doubts?
           </div>
         </SwiperSlide>
         <SwiperSlide>
-          <div className="bg-gradient-to-br from-[rgba(52,211,253,0.6)] to-[rgba(50,70,100,0.8)] p-5 rounded-md text-[#fff] drop-shadow-md cursor-default">
+          <div className="cursor-default rounded-md bg-gradient-to-br from-[rgba(52,211,253,0.6)] to-[rgba(50,70,100,0.8)] p-5 text-[#fff] drop-shadow-md">
             Want to have guidance from seniors?
           </div>
         </SwiperSlide>
         <SwiperSlide>
-          <div className="bg-gradient-to-br from-[rgba(52,211,253,0.6)] to-[rgba(50,70,100,0.8)] p-5 rounded-md text-[#fff] drop-shadow-md cursor-default">
+          <div className="cursor-default rounded-md bg-gradient-to-br from-[rgba(52,211,253,0.6)] to-[rgba(50,70,100,0.8)] p-5 text-[#fff] drop-shadow-md">
             Want to expand your network?
           </div>
         </SwiperSlide>
         <SwiperSlide>
-          <div className="bg-gradient-to-br from-[rgba(52,211,253,0.6)] to-[rgba(50,70,100,0.8)] p-5 rounded-md text-[#fff] drop-shadow-md cursor-default">
+          <div className="cursor-default rounded-md bg-gradient-to-br from-[rgba(52,211,253,0.6)] to-[rgba(50,70,100,0.8)] p-5 text-[#fff] drop-shadow-md">
             Need a social media without distractions?
           </div>
         </SwiperSlide>

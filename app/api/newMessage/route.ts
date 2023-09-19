@@ -20,7 +20,7 @@ export async function POST(req: Request) {
       receiverId: request.receiverId,
       message: request.message,
       timeStamp: request.timeStamp,
-    }
+    },
   );
   return NextResponse.json("ok");
 }

@@ -38,9 +38,9 @@ export default function Settings({ params }: Params) {
   return (
     <>
       <UserInfoContainer props={{ state: state }}>
-        <div className="sm:min-w-[60vw] transition-colors duration-200">
-          <div className="pt-5 mb-7">
-            <h1 className="text-6xl text-center font-merri tracking-tighter">
+        <div className="transition-colors duration-200 sm:min-w-[60vw]">
+          <div className="mb-7 pt-5">
+            <h1 className="text-center font-merri text-6xl tracking-tighter">
               Settings
             </h1>
           </div>

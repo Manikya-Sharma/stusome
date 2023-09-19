@@ -9,9 +9,9 @@ import reviews from "@/public/reviews.json";
 export default function Reviews() {
   return (
     <div className="max-w-full overflow-hidden">
-      <section className="relative text-gray-600 body-font mx-auto">
-        <div className="-z-50 absolute -top-28 left-0 bg-gradient-to-b from-amber-300 to-white w-[100vw] h-56"></div>
-        <h2 className="text-center text-3xl md:text-5xl text-slate-700 font-merri tracking-tight my-5">
+      <section className="body-font relative mx-auto text-gray-600">
+        <div className="absolute -top-28 left-0 -z-50 h-56 w-[100vw] bg-gradient-to-b from-amber-300 to-white"></div>
+        <h2 className="my-5 text-center font-merri text-3xl tracking-tight text-slate-700 md:text-5xl">
           Reviews from our Users
         </h2>
         <Swiper
@@ -34,11 +34,11 @@ export default function Reviews() {
               return (
                 <SwiperSlide key={elem.name}>
                   <div className="container mx-auto mb-7">
-                    <div className="lg:w-1/3 lg:mb-0 mb-6 p-4 mx-auto">
+                    <div className="mx-auto mb-6 p-4 lg:mb-0 lg:w-1/3">
                       <div className="h-full text-center">
                         <Image
                           alt=""
-                          className="w-20 h-20 mb-8 object-cover object-center rounded-full inline-block border-2 border-gray-200 bg-gray-100"
+                          className="mb-8 inline-block h-20 w-20 rounded-full border-2 border-gray-200 bg-gray-100 object-cover object-center"
                           src={elem.image}
                           width={300}
                           height={300}
@@ -46,8 +46,8 @@ export default function Reviews() {
                         <p className="leading-relaxed md:text-lg">
                           {elem.content}
                         </p>
-                        <span className="inline-block h-1 w-10 rounded bg-red-500 mt-6 mb-4"></span>
-                        <h2 className="text-gray-900 font-medium title-font tracking-wider text-sm md:text-md">
+                        <span className="mb-4 mt-6 inline-block h-1 w-10 rounded bg-red-500"></span>
+                        <h2 className="title-font md:text-md text-sm font-medium tracking-wider text-gray-900">
                           {elem.name.toUpperCase()}
                         </h2>
                         <p className="text-gray-500">{elem.position}</p>
@@ -56,7 +56,7 @@ export default function Reviews() {
                   </div>
                 </SwiperSlide>
               );
-            }
+            },
           )}
         </Swiper>
       </section>

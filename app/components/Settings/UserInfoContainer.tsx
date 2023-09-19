@@ -39,7 +39,7 @@ export default function UserInfoContainer({
   const [showMenu, setShowMenu] = useState<boolean>(false);
 
   return (
-    <div className="sm:flex sm:justify-between sm:pr-5 pt-10 sm:pt-0">
+    <div className="pt-10 sm:flex sm:justify-between sm:pr-5 sm:pt-0">
       <IconContext.Provider value={{ className: "shared-class", size: "23" }}>
         <div
           className="absolute right-3 top-2 sm:hidden"
@@ -50,14 +50,14 @@ export default function UserInfoContainer({
       </IconContext.Provider>
       <div
         className={
-          "fixed border-l border-t border-zinc-300 sm:border-none sm:static sm:block bg-[rgba(226,232,240,0.7)] backdrop-blur-sm px-5 max-w-fit sm:max-w-full lg:max-w-[30vw] dark:bg-[rgba(51,65,85,0.7)] h-[100vh] overflow-y-hidden rounded-tl-3xl sm:rounded-tr-3xl sm:mr-3 sm:grow transition-all duration-200" +
+          "fixed h-[100vh] max-w-fit overflow-y-hidden rounded-tl-3xl border-l border-t border-zinc-300 bg-[rgba(226,232,240,0.7)] px-5 backdrop-blur-sm transition-all duration-200 dark:bg-[rgba(51,65,85,0.7)] sm:static sm:mr-3 sm:block sm:max-w-full sm:grow sm:rounded-tr-3xl sm:border-none lg:max-w-[30vw]" +
           (showMenu
             ? " translate-x-[calc(100vw-100%)] sm:translate-x-0"
             : " translate-x-[110vw] sm:translate-x-0")
         }
       >
-        <div className="pt-[4rem] flex flex-col items-center space-y-3 text-center">
-          <div className="flex flex-col items-center align-middle justify-center w-32 h-32 rounded-full bg-slate-300 overflow-hidden dark:border-slate-400 dark:border-2">
+        <div className="flex flex-col items-center space-y-3 pt-[4rem] text-center">
+          <div className="flex h-32 w-32 flex-col items-center justify-center overflow-hidden rounded-full bg-slate-300 align-middle dark:border-2 dark:border-slate-400">
             {props.state.hasPic && (
               <Image
                 src={`data:image/png;base64,${props.state.picture}`}
@@ -67,16 +67,16 @@ export default function UserInfoContainer({
               />
             )}
           </div>
-          <p className="text-3xl font-merri">{props.state.name}</p>
+          <p className="font-merri text-3xl">{props.state.name}</p>
           <p className="text-sm text-slate-500 dark:text-slate-400">
             {props.state.email}
           </p>
-          <div className="w-[80%] h-[3px] my-10 bg-slate-500" />
+          <div className="my-10 h-[3px] w-[80%] bg-slate-500" />
           <h2 className="text-lg">Quick Setup</h2>
           <ul>
             <li>
               <div
-                className="w-[80px] dark:bg-slate-500 bg-slate-300 py-2 px-3 rounded-3xl cursor-pointer"
+                className="w-[80px] cursor-pointer rounded-3xl bg-slate-300 px-3 py-2 dark:bg-slate-500"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleTheme(theme == "dark" ? "light" : "dark");
