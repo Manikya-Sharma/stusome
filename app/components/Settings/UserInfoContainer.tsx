@@ -1,22 +1,19 @@
 "use client";
 import { useState, useEffect } from "react";
-import { State } from "@/app/types/user";
+import { State } from "@/types/user";
 import { DarkModeSwitch } from "react-toggle-dark-mode";
 import Image from "next/image";
 import React from "react";
 import { LuMenu, LuPanelRightClose } from "react-icons/lu";
 import { IconContext } from "react-icons";
-
-type Props = {
-  state: State;
-};
+import { useSession } from "next-auth/react";
 
 export default function UserInfoContainer({
   children,
-  props,
+
 }: {
   children: React.ReactNode;
-  props: Props;
+
 }) {
   const [theme, setTheme] = useState<"light" | "dark">("dark");
 
@@ -37,6 +34,7 @@ export default function UserInfoContainer({
   }
 
   const [showMenu, setShowMenu] = useState<boolean>(false);
+  const {data:session} = useSession()
 
   return (
     <div className="pt-10 sm:flex sm:justify-between sm:pr-5 sm:pt-0">
@@ -58,18 +56,18 @@ export default function UserInfoContainer({
       >
         <div className="flex flex-col items-center space-y-3 pt-[4rem] text-center">
           <div className="flex h-32 w-32 flex-col items-center justify-center overflow-hidden rounded-full bg-slate-300 align-middle dark:border-2 dark:border-slate-400">
-            {props.state.hasPic && (
+            {session && session.user && session.user.image && (
               <Image
-                src={`data:image/png;base64,${props.state.picture}`}
+                src={session.user.image}
                 alt=""
                 width={170}
                 height={170}
               />
             )}
           </div>
-          <p className="font-merri text-3xl">{props.state.name}</p>
+          <p className="font-merri text-3xl">{session?.user?.name}</p>
           <p className="text-sm text-slate-500 dark:text-slate-400">
-            {props.state.email}
+            {session?.user?.email}
           </p>
           <div className="my-10 h-[3px] w-[80%] bg-slate-500" />
           <h2 className="text-lg">Quick Setup</h2>

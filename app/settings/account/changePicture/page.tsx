@@ -5,7 +5,7 @@ import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import BarLoader from "react-spinners/BarLoader";
-import { State } from "@/app/types/user";
+import { State } from "@/types/user";
 import { LuTrash2 } from "react-icons/lu";
 import toast, { Toaster } from "react-hot-toast";
 import { IconContext } from "react-icons";

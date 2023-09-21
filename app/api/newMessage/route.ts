@@ -1,4 +1,4 @@
-import { Message } from "@/app/types/user";
+import { Message } from "@/types/user";
 import { db } from "@/lib/db";
 import { pusherServer } from "@/lib/pusher";
 import { getChatId, toPusherKey } from "@/lib/utils";

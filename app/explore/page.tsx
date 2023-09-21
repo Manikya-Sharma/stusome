@@ -7,37 +7,8 @@ import Welcome from "@/app/components/LoggedIn/Welcome";
 import MostViewed from "@/app/components/LoggedIn/MostVeiwed";
 import Frequents from "@/app/components/LoggedIn/Frequents";
 
-type Params = {
-  params: { id: string };
-};
-
-export default function LoggedIn({ params }: Params) {
+export default function LoggedIn() {
   const router = useRouter();
-  const id = params.id;
-  const [state, setState] = useState({
-    _id: "",
-    name: "",
-    email: "",
-    password: "",
-    picture: "",
-    hasPic: false,
-  });
-  useEffect(() => {
-    const account = localStorage.getItem("account");
-    if (account == null) {
-      router.replace("/login");
-    } else {
-      setState(() => JSON.parse(account));
-    }
-  }, [router]);
-  useEffect(() => {
-    // different user
-    if (id != state._id && state._id != "") {
-      localStorage.removeItem("account");
-      router.replace("/login");
-    }
-  }, [id, router, state._id]);
-
   // dark mode
   useEffect(() => {
     const theme = localStorage.getItem("theme");
@@ -59,9 +30,9 @@ export default function LoggedIn({ params }: Params) {
 
   return (
     <main className="min-h-screen font-fancy dark:bg-gradient-to-b dark:from-slate-700 dark:to-slate-950 dark:text-zinc-200">
-      <Navbar state={state} />
+      <Navbar />
       <div className="px-8 py-20 sm:py-32">
-        <Welcome user={state} />
+        <Welcome />
 
         <div className="items-center justify-around gap-5 sm:flex">
           <MostViewed />

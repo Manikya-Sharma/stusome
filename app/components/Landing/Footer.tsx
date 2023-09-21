@@ -17,13 +17,13 @@ export default function Footer() {
         <h2 className="text-center text-3xl md:text-left">Begin the journey</h2>
         <IconContext.Provider value={{ className: "shared-class", size: "30" }}>
           <Link
-            href="/signup"
+            href="/login"
             className="mx-auto mt-5 flex w-fit items-center gap-3 rounded-lg border-2 border-emerald-400 px-5 py-3 text-lg transition-all duration-200 hover:bg-emerald-400 hover:text-slate-900 md:mr-0 md:mt-0"
             onMouseEnter={() => setDoor("open")}
             onMouseLeave={() => setDoor("close")}
           >
             {open == "close" ? <LuDoorClosed /> : <LuDoorOpen />}
-            Signup
+            Signin
           </Link>
         </IconContext.Provider>
       </div>

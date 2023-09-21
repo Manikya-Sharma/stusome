@@ -5,7 +5,7 @@ import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import BarLoader from "react-spinners/BarLoader";
-import { State } from "@/app/types/user";
+import { State } from "@/types/user";
 import toast, { Toaster } from "react-hot-toast";
 
 export default function ChangeUsername({ params }: { params: { id: string } }) {

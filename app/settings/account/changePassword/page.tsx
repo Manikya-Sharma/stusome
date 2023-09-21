@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import BarLoader from "react-spinners/BarLoader";
-import { State } from "@/app/types/user";
+import { State } from "@/types/user";
 import toast, { Toaster } from "react-hot-toast";
 
 export default function ChangePassword({ params }: { params: { id: string } }) {

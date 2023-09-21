@@ -1,5 +1,5 @@
 "use Client";
-import { State } from "@/app/types/user";
+import { State } from "@/types/user";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { FC, useRef } from "react";
@@ -7,6 +7,8 @@ import { usePathname } from "next/navigation";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import Image from "next/image";
+
+// TODO: user photo might be stored as 3rd party link instead of BASE64
 
 interface SidebarProps {
   userEmail: string;
@@ -109,18 +111,16 @@ const Sidebar: FC<SidebarProps> = ({ userEmail }) => {
               return (
                 <Link
                   href={pathName + `/${elem.email}`}
-                  key={elem._id}
+                  key={elem.email}
                   className="group mx-auto flex w-full min-w-fit max-w-[80%] items-center justify-start gap-4 rounded-lg bg-slate-300 px-3 py-4 font-fancy text-xl tracking-wide transition-colors duration-300 hover:bg-slate-700 hover:text-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 dark:hover:text-white"
                 >
                   <div className="flex h-12 w-12 cursor-pointer flex-col items-center justify-center overflow-hidden rounded-full bg-slate-300 align-middle dark:border-2 dark:border-slate-400">
-                    {elem.hasPic && (
-                      <Image
-                        src={`data:image/png;base64,${elem.picture}`}
-                        alt=""
-                        width={70}
-                        height={70}
-                      />
-                    )}
+                    <Image
+                      src={`data:image/png;base64,${elem.picture}`}
+                      alt=""
+                      width={70}
+                      height={70}
+                    />
                   </div>
                   <div className="flex flex-col gap-1">
                     <p>{elem.name}</p>
