@@ -1,52 +1,24 @@
-"use client";
-import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
 import Link from "next/link";
 import Tile from "@/app/components/Settings/Tile";
-import { LuArrowLeft } from "react-icons/lu";
+import SyncTile from "@/app/components/Settings/SyncTile";
 
-type Params = {
-  params: { id: string };
-};
-
-export default function AccountSettings({ params }: Params) {
-  const router = useRouter();
-  const id = params.id;
-  const [state, setState] = useState({
-    _id: "",
-    name: "",
-    email: "",
-    password: "",
-  });
-  useEffect(() => {
-    const account = localStorage.getItem("account");
-    if (account == null) {
-      localStorage.removeItem("account");
-      router.replace("/login");
-    } else {
-      setState(() => JSON.parse(account));
-    }
-  }, [router]);
-  useEffect(() => {
-    if (id != state._id && state._id != "") {
-      router.push("/login");
-    }
-  }, [id, router, state._id]);
+export default function AccountSettings() {
   return (
     <div className="pt-10">
-      <Link href={`/logged-in/${state._id}/settings/account/changePicture`}>
+      <Link href={`/settings/account/changePicture`}>
         <Tile
           description="Change Profile Picture"
           type="normal"
           logo="addPhoto"
         />
       </Link>
-      <Link href={`/logged-in/${state._id}/settings/account/changeUsername`}>
-        <Tile description="Change Username" type="normal" logo="rename" />
+      <Link href={`/settings/account/changeUsername`}>
+        <Tile description="Change Display Name" type="normal" logo="rename" />
       </Link>
-      <Link href={`/logged-in/${state._id}/settings/account/changePassword`}>
+      {/* <Link href={`/settings/account/changePassword`}>
         <Tile description="Change Password" type="normal" logo="password" />
-      </Link>
+      </Link> */}
+      <SyncTile />
     </div>
   );
 }

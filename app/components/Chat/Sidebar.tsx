@@ -32,17 +32,17 @@ const Sidebar: FC<SidebarProps> = ({ userEmail }) => {
       });
       const rawExistingFriendIds =
         (await rawExistingFriends.json()) as string[];
-      const existingFriendIds = rawExistingFriendIds
+      const existingFriendEmails = rawExistingFriendIds
         .filter((elem) => elem.includes(userEmail))
-        .map((idBelonging) =>
-          idBelonging
+        .map((emailBelonging) =>
+          emailBelonging
             .split(":")
-            .filter((id) => id != userEmail && id != "friend"),
+            .filter((email) => email != userEmail && email != "friend"),
         );
       const existingFriends: State[] = [];
 
-      for (const id of existingFriendIds) {
-        const friend = await fetch(`/api/getAccountByEmail/${id[0]}`);
+      for (const email of existingFriendEmails) {
+        const friend = await fetch(`/api/getAccountByEmail/${email[0]}`);
         const parsedFriend = await friend.json();
         if (parsedFriend != null) {
           existingFriends.push(parsedFriend);
@@ -115,12 +115,7 @@ const Sidebar: FC<SidebarProps> = ({ userEmail }) => {
                   className="group mx-auto flex w-full min-w-fit max-w-[80%] items-center justify-start gap-4 rounded-lg bg-slate-300 px-3 py-4 font-fancy text-xl tracking-wide transition-colors duration-300 hover:bg-slate-700 hover:text-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 dark:hover:text-white"
                 >
                   <div className="flex h-12 w-12 cursor-pointer flex-col items-center justify-center overflow-hidden rounded-full bg-slate-300 align-middle dark:border-2 dark:border-slate-400">
-                    <Image
-                      src={`data:image/png;base64,${elem.picture}`}
-                      alt=""
-                      width={70}
-                      height={70}
-                    />
+                    <Image src={elem.image} alt="" width={70} height={70} />
                   </div>
                   <div className="flex flex-col gap-1">
                     <p>{elem.name}</p>

@@ -1,19 +1,18 @@
 "use client";
-import { useState, useEffect } from "react";
-import { State } from "@/types/user";
+import { useState, useEffect, useRef } from "react";
 import { DarkModeSwitch } from "react-toggle-dark-mode";
 import Image from "next/image";
 import React from "react";
 import { LuMenu, LuPanelRightClose } from "react-icons/lu";
 import { IconContext } from "react-icons";
 import { useSession } from "next-auth/react";
+import { LiaSyncAltSolid } from "react-icons/lia";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function UserInfoContainer({
   children,
-
 }: {
   children: React.ReactNode;
-
 }) {
   const [theme, setTheme] = useState<"light" | "dark">("dark");
 
@@ -34,10 +33,43 @@ export default function UserInfoContainer({
   }
 
   const [showMenu, setShowMenu] = useState<boolean>(false);
-  const {data:session} = useSession()
+  const { data: session } = useSession();
+
+  const [syncing, setSyncing] = useState(false);
+
+  const syncedData = useRef<string | null>(null);
+
+  useEffect(() => {
+    syncedData.current = localStorage.getItem("account");
+  });
+
+  async function syncData() {
+    setSyncing(true);
+    let synced = false;
+    if (session && session.user && session.user.email) {
+      try {
+        const rawData = await fetch(
+          `/api/getAccountByEmail/${session.user.email}`,
+        );
+        const dataFromCloud = await rawData.json();
+        localStorage.setItem("account", JSON.stringify(dataFromCloud));
+        syncedData.current = dataFromCloud;
+        synced = true;
+      } catch {
+        synced = false;
+      }
+    }
+    setSyncing(false);
+    if (synced) {
+      toast.success("Account synced successfully");
+    } else {
+      toast.error("Could not sync account, please try again later");
+    }
+  }
 
   return (
     <div className="pt-10 sm:flex sm:justify-between sm:pr-5 sm:pt-0">
+      <Toaster position="top-center" />
       <IconContext.Provider value={{ className: "shared-class", size: "23" }}>
         <div
           className="absolute right-3 top-2 sm:hidden"
@@ -56,25 +88,38 @@ export default function UserInfoContainer({
       >
         <div className="flex flex-col items-center space-y-3 pt-[4rem] text-center">
           <div className="flex h-32 w-32 flex-col items-center justify-center overflow-hidden rounded-full bg-slate-300 align-middle dark:border-2 dark:border-slate-400">
-            {session && session.user && session.user.image && (
+            {syncedData && syncedData.current ? (
               <Image
-                src={session.user.image}
+                src={JSON.parse(syncedData.current).image}
                 alt=""
                 width={170}
                 height={170}
               />
+            ) : (
+              session &&
+              session.user &&
+              session.user.image && (
+                <Image
+                  src={session.user.image}
+                  alt=""
+                  width={170}
+                  height={170}
+                />
+              )
             )}
           </div>
           <p className="font-merri text-3xl">{session?.user?.name}</p>
           <p className="text-sm text-slate-500 dark:text-slate-400">
-            {session?.user?.email}
+            {syncedData && syncedData.current
+              ? JSON.parse(syncedData.current).name
+              : session?.user?.email}
           </p>
           <div className="my-10 h-[3px] w-[80%] bg-slate-500" />
           <h2 className="text-lg">Quick Setup</h2>
           <ul>
             <li>
               <div
-                className="w-[80px] cursor-pointer rounded-3xl bg-slate-300 px-3 py-2 dark:bg-slate-500"
+                className="mx-auto w-[80px] cursor-pointer rounded-3xl bg-slate-300 px-3 py-2 dark:bg-slate-500"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleTheme(theme == "dark" ? "light" : "dark");
@@ -97,6 +142,19 @@ export default function UserInfoContainer({
                   }
                 </div>
               </div>
+            </li>
+            <li>
+              <button
+                className="my-3 flex w-fit items-center justify-center gap-2 rounded-md border border-green-500 px-4 py-2 text-green-900 transition-all duration-300 hover:bg-green-400"
+                onClick={() => {
+                  syncData();
+                }}
+              >
+                <p className={`${syncing ? "animate-spin" : "animate-none"}`}>
+                  <LiaSyncAltSolid />
+                </p>
+                <p>Sync Account</p>
+              </button>
             </li>
           </ul>
         </div>

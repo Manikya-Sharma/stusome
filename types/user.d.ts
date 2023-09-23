@@ -1,12 +1,13 @@
 export type State = {
   name: string;
   email: string;
-  picture: string;
+  image: string;
+  image_third_party: boolean;
 };
 
 export type Message = {
-  senderId: string;
-  receiverId: string;
+  senderEmail: string;
+  receiverEmail: string;
   message: string;
   timeStamp: number;
 };

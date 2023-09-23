@@ -1,3 +1,4 @@
+"use client";
 import { IconContext } from "react-icons";
 import { LuUser, LuSettings2, LuLock, LuLogOut } from "react-icons/lu";
 import {

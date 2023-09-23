@@ -23,9 +23,8 @@ export default function Login() {
         </div>
       ) : (
         <div className="gradient flex h-screen items-center">
-          <div className="mx-auto flex h-fit w-fit flex-col gap-3">
+          <div className="mx-auto flex h-fit w-fit flex-col gap-3 rounded-md px-5 py-8">
             <LoginTile type="github">Sign in with github</LoginTile>
-            <LoginTile type="email">Login with email</LoginTile>
           </div>
         </div>
       )}

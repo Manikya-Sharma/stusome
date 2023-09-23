@@ -1,8 +1,6 @@
 "use client";
-import { useState } from "react";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import { State } from "@/types/user";
 import { LuLayoutDashboard, LuSettings, LuLogOut } from "react-icons/lu";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
@@ -10,14 +8,30 @@ import Link from "next/link";
 export default function NavDropdown() {
   const { data: session } = useSession();
   const [open, setOpen] = useState(false);
+  let syncedData = useRef<string | null>(null);
+  useEffect(() => {
+    syncedData.current = localStorage.getItem("account");
+  }, []);
+
   return (
     <div className="relative">
       <div
         className="flex h-12 w-12 cursor-pointer flex-col items-center justify-center overflow-hidden rounded-full bg-slate-300 align-middle dark:border-2 dark:border-slate-400"
         onClick={() => setOpen(!open)}
       >
-        {session && session.user && session.user.image && (
-          <Image src={session.user.image} alt="" width={70} height={70} />
+        {syncedData && syncedData.current ? (
+          <Image
+            src={JSON.parse(syncedData.current).image}
+            alt=""
+            width={70}
+            height={70}
+          />
+        ) : (
+          session &&
+          session.user &&
+          session.user.image && (
+            <Image src={session.user.image} alt="" width={70} height={70} />
+          )
         )}
       </div>
       {open ? (

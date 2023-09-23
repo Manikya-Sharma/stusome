@@ -55,8 +55,8 @@ const ChatApp: FC<ChatAppProps> = ({ userEmail, friendEmail }) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        senderId: userData._id,
-        receiverId: friendData._id,
+        senderEmail: userData.email,
+        receiverEmail: friendData.email,
         message: messageRef.current?.value,
         timeStamp: Date.now(),
       }),
@@ -69,7 +69,7 @@ const ChatApp: FC<ChatAppProps> = ({ userEmail, friendEmail }) => {
   }
 
   useEffect(() => {
-    if (friendData == null) {
+    if (friendData == null || userData == null) {
       return;
     }
     const fetchData = async () => {
@@ -78,13 +78,19 @@ const ChatApp: FC<ChatAppProps> = ({ userEmail, friendEmail }) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(getChatId(userData._id, friendData._id)),
+        body: JSON.stringify(getChatId(userData.email, friendData.email)),
       });
       const chats = (await rawChats.json()) as Message[];
       setChats(chats);
       setLoadingChats(false);
     };
-    fetchData();
+    try {
+      fetchData();
+    } catch (e) {
+      console.log("Error: ", e);
+    } finally {
+      setLoadingChats(false);
+    }
   }, [friendData, userData]);
 
   useEffect(() => {
@@ -95,29 +101,46 @@ const ChatApp: FC<ChatAppProps> = ({ userEmail, friendEmail }) => {
   }, [chats]);
 
   useEffect(() => {
-    if (friendData == null) {
+    if (friendData == null || userData == null) {
       return;
     }
     const chatHandler = ({
-      senderId,
-      receiverId,
+      senderEmail: senderEmail,
+      receiverEmail: receiverEmail,
       message,
       timeStamp,
     }: Message) => {
       setChats((prev) => {
         if (prev != null) {
-          return [...prev, { senderId, receiverId, message, timeStamp }];
+          return [
+            ...prev,
+            {
+              senderEmail: senderEmail,
+              receiverEmail: receiverEmail,
+              message,
+              timeStamp,
+            },
+          ];
         } else {
-          return [{ senderId, receiverId, message, timeStamp }];
+          return [
+            {
+              senderEmail: senderEmail,
+              receiverEmail: receiverEmail,
+              message,
+              timeStamp,
+            },
+          ];
         }
       });
     };
-    pusherClient.subscribe(`chat-${getChatId(userData._id, friendData._id)}`);
+    pusherClient.subscribe(
+      `chat-${getChatId(userData.email, friendData.email)}`,
+    );
     pusherClient.bind("chat", chatHandler);
 
     return () => {
       pusherClient.unsubscribe(
-        `chat-${getChatId(userData._id, friendData._id)}`,
+        `chat-${getChatId(userData.email, friendData.email)}`,
       );
       pusherClient.unbind("chat", chatHandler);
     };
@@ -133,13 +156,8 @@ const ChatApp: FC<ChatAppProps> = ({ userEmail, friendEmail }) => {
         ) : (
           <div className="fixed flex h-[10vh] w-[100vw] items-center justify-center gap-2 bg-slate-700 px-2 py-1 sm:h-[15vh] sm:py-2 ">
             <div className="flex h-12 w-12 flex-col items-center justify-center overflow-hidden rounded-full bg-slate-300 align-middle dark:border-2 dark:border-slate-400">
-              {friendData?.hasPic && (
-                <Image
-                  src={`data:image/png;base64,${friendData?.picture}`}
-                  alt=""
-                  width={70}
-                  height={70}
-                />
+              {friendData && (
+                <Image src={friendData.image} alt="" width={70} height={70} />
               )}
             </div>
             <div className="flex flex-col items-center justify-center truncate">
@@ -178,7 +196,7 @@ const ChatApp: FC<ChatAppProps> = ({ userEmail, friendEmail }) => {
                     <div
                       className={
                         "my-1 max-w-[80%] rounded-3xl px-3 py-2" +
-                        (chat.senderId == userData._id
+                        (chat.senderEmail == userData?.email
                           ? " ml-auto rounded-br-none bg-slate-700"
                           : " mr-auto rounded-bl-none bg-slate-900")
                       }
@@ -187,7 +205,7 @@ const ChatApp: FC<ChatAppProps> = ({ userEmail, friendEmail }) => {
                       <p
                         className={
                           "text-xs text-slate-400" +
-                          (chat.senderId == userData._id
+                          (chat.senderEmail == userData?.email
                             ? " text-right"
                             : " text-left")
                         }

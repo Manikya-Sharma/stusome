@@ -1,13 +1,22 @@
 import Link from "next/link";
 import { LuLayoutDashboard, LuArrowRight } from "react-icons/lu";
 import { useSession } from "next-auth/react";
+import { useEffect, useRef } from "react";
 
 export default function Welcome() {
   const { data: session } = useSession();
+  const syncedData = useRef<string | null>(null);
+  useEffect(() => {
+    syncedData.current = localStorage.getItem("account");
+  }, []);
   return (
     <section className="font-fancy">
       <h1 className="text-center font-merri text-3xl sm:pb-4 sm:text-5xl">
-        Welcome {session?.user?.name}!
+        Welcome{" "}
+        {syncedData && syncedData.current
+          ? JSON.parse(syncedData.current).name
+          : session?.user?.name}
+        !
       </h1>
       <div className="group mx-auto w-fit">
         <Link
