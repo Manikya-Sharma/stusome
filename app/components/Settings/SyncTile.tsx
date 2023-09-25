@@ -32,10 +32,9 @@ export default function SyncTile() {
 
   return (
     <div>
-      {/* TODO: Add proper style */}
       <Toaster position="top-center" />
       <button
-        className="my-3 flex w-fit items-center justify-center gap-2 rounded-md border border-green-500 px-4 py-2 text-green-900 transition-all duration-300 hover:bg-green-400"
+        className="mx-auto my-3 flex w-fit max-w-[80%] items-center justify-center gap-2 rounded-md border border-green-500 bg-green-200 px-4 py-2 text-green-900 transition-all duration-300 hover:bg-green-400"
         onClick={() => {
           syncData();
         }}

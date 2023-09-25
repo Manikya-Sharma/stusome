@@ -1,13 +1,13 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { DarkModeSwitch } from "react-toggle-dark-mode";
-import Image from "next/image";
 import React from "react";
 import { LuMenu, LuPanelRightClose } from "react-icons/lu";
 import { IconContext } from "react-icons";
 import { useSession } from "next-auth/react";
 import { LiaSyncAltSolid } from "react-icons/lia";
 import toast, { Toaster } from "react-hot-toast";
+import ProfilePic from "../LoggedIn/ProfilePic";
 
 export default function UserInfoContainer({
   children,
@@ -53,7 +53,7 @@ export default function UserInfoContainer({
         );
         const dataFromCloud = await rawData.json();
         localStorage.setItem("account", JSON.stringify(dataFromCloud));
-        syncedData.current = dataFromCloud;
+        syncedData.current = JSON.stringify(dataFromCloud);
         synced = true;
       } catch {
         synced = false;
@@ -88,30 +88,12 @@ export default function UserInfoContainer({
       >
         <div className="flex flex-col items-center space-y-3 pt-[4rem] text-center">
           <div className="flex h-32 w-32 flex-col items-center justify-center overflow-hidden rounded-full bg-slate-300 align-middle dark:border-2 dark:border-slate-400">
-            {syncedData && syncedData.current ? (
-              <Image
-                src={JSON.parse(syncedData.current).image}
-                alt=""
-                width={170}
-                height={170}
-              />
-            ) : (
-              session &&
-              session.user &&
-              session.user.image && (
-                <Image
-                  src={session.user.image}
-                  alt=""
-                  width={170}
-                  height={170}
-                />
-              )
-            )}
+            <ProfilePic />
           </div>
           <p className="font-merri text-3xl">{session?.user?.name}</p>
           <p className="text-sm text-slate-500 dark:text-slate-400">
             {syncedData && syncedData.current
-              ? JSON.parse(syncedData.current).name
+              ? JSON.parse(syncedData.current).email
               : session?.user?.email}
           </p>
           <div className="my-10 h-[3px] w-[80%] bg-slate-500" />
@@ -145,7 +127,7 @@ export default function UserInfoContainer({
             </li>
             <li>
               <button
-                className="my-3 flex w-fit items-center justify-center gap-2 rounded-md border border-green-500 px-4 py-2 text-green-900 transition-all duration-300 hover:bg-green-400"
+                className="my-3 flex w-fit items-center justify-center gap-2 rounded-md border border-green-500 bg-green-200 px-4 py-2 text-green-900 transition-all duration-300 hover:bg-green-400"
                 onClick={() => {
                   syncData();
                 }}

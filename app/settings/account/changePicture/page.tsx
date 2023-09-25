@@ -8,6 +8,7 @@ import { LuTrash2 } from "react-icons/lu";
 import toast, { Toaster } from "react-hot-toast";
 import { IconContext } from "react-icons";
 import { useSession } from "next-auth/react";
+import ProfilePic from "@/app/components/LoggedIn/ProfilePic";
 
 export default function ChangePicture() {
   const [loading, setLoading] = useState(false);
@@ -35,13 +36,13 @@ export default function ChangePicture() {
               headers: {
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify({ picture: base64, hasPic: true }),
+              body: JSON.stringify({ image: base64, image_third_party: false }),
             }).then(() => {
               const existing = localStorage.getItem("account");
               if (existing != null && pic != null) {
                 const new_account = {
                   ...JSON.parse(existing),
-                  picture: base64,
+                  image: base64,
                   image_third_party: false,
                 };
                 localStorage.setItem("account", JSON.stringify(new_account));
@@ -68,7 +69,7 @@ export default function ChangePicture() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          picture: session?.user?.image,
+          image: session?.user?.image,
           image_third_party: true,
         }),
       }).then(() => {
@@ -76,8 +77,8 @@ export default function ChangePicture() {
         if (existing != null) {
           const new_account = {
             ...JSON.parse(existing),
-            picture: "",
-            hasPic: false,
+            image: session?.user?.image,
+            image_third_party: true,
           };
           localStorage.setItem("account", JSON.stringify(new_account));
           setLoading(false);
@@ -104,7 +105,6 @@ export default function ChangePicture() {
         />
       </div>
       <main className="gradient flex h-full items-center font-fancy">
-
         <div className="mx-auto w-fit">
           <div className="gradient-sub mx-auto w-fit max-w-[80%] rounded-lg p-10 text-white">
             <h1 className="mb-3 text-center font-merri text-5xl">
@@ -116,15 +116,7 @@ export default function ChangePicture() {
             <div className="flex flex-col items-center">
               <label className="text-xl" htmlFor="pic">
                 <div className="flex h-52 max-h-full w-52 max-w-full cursor-pointer flex-col items-center justify-center overflow-hidden rounded-full bg-slate-400 align-middle hover:grayscale">
-                  {session && session.user && session.user.image && (
-                    <Image
-                      src={session?.user?.image}
-                      referrerPolicy="no-referrer"
-                      alt=""
-                      width={260}
-                      height={260}
-                    />
-                  )}
+                  <ProfilePic />
                 </div>
               </label>
               <input
