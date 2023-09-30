@@ -32,7 +32,7 @@ const Sidebar: FC<SidebarProps> = ({ userEmail }) => {
       });
       const rawExistingFriendIds =
         (await rawExistingFriends.json()) as string[];
-      const existingFriendEmails = rawExistingFriendIds
+      let existingFriendEmails = rawExistingFriendIds
         .filter((elem) => elem.includes(userEmail))
         .map((emailBelonging) =>
           emailBelonging
@@ -41,15 +41,19 @@ const Sidebar: FC<SidebarProps> = ({ userEmail }) => {
         );
       const existingFriends: State[] = [];
 
-      for (const email of existingFriendEmails) {
-        const friend = await fetch(`/api/getAccountByEmail/${email[0]}`);
-        const parsedFriend = await friend.json();
-        if (parsedFriend != null) {
-          existingFriends.push(parsedFriend);
-        }
-      }
-      setFriends(existingFriends);
-      setLoadingData(false);
+      const promises = existingFriendEmails.map((email) => {
+          return fetch(`/api/getAccountByEmail/${email[0]}`)
+          .then((rawData) => rawData.json())
+          .then((data) => {
+              existingFriends.push(data);
+          })
+          .catch((error) => console.log(`Error fetching friends data: ${error}`))
+      });
+
+      Promise.all(promises).then(() => {
+          setFriends(existingFriends.filter((elem) => elem != null));
+          setLoadingData(false);
+      }).catch((error) => console.log(`Error occured: ${error}`))
     }
     fetchData();
   }, [userEmail]);

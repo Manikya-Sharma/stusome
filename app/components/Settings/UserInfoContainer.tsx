@@ -8,6 +8,7 @@ import { useSession } from "next-auth/react";
 import { LiaSyncAltSolid } from "react-icons/lia";
 import toast, { Toaster } from "react-hot-toast";
 import ProfilePic from "../LoggedIn/ProfilePic";
+import { Turn as Hamburger } from "hamburger-react";
 
 export default function UserInfoContainer({
   children,
@@ -70,14 +71,15 @@ export default function UserInfoContainer({
   return (
     <div className="pt-10 sm:flex sm:justify-between sm:pr-5 sm:pt-0">
       <Toaster position="top-center" />
-      <IconContext.Provider value={{ className: "shared-class", size: "23" }}>
-        <div
-          className="absolute right-3 top-2 sm:hidden"
-          onClick={() => setShowMenu(!showMenu)}
-        >
-          {showMenu ? <LuPanelRightClose /> : <LuMenu />}
-        </div>
-      </IconContext.Provider>
+
+      <div className="absolute top-2 right-2 z-[100]">
+        <Hamburger
+          toggled={showMenu}
+          onToggle={() => setShowMenu(!showMenu)}
+          size={22}
+        />
+      </div>
+
       <div
         className={
           "fixed h-[100vh] max-w-fit overflow-y-hidden rounded-tl-3xl border-l border-t border-zinc-300 bg-[rgba(226,232,240,0.7)] px-5 backdrop-blur-sm transition-all duration-200 dark:bg-[rgba(51,65,85,0.7)] sm:static sm:mr-3 sm:block sm:max-w-full sm:grow sm:rounded-tr-3xl sm:border-none lg:max-w-[30vw]" +

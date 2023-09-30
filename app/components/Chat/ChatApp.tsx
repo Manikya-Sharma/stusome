@@ -12,7 +12,6 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { LuLoader } from "react-icons/lu";
 import { IconContext } from "react-icons";
 
-// TODO: Make email based data storage or do something about _id
 interface ChatAppProps {
   userEmail: string;
   friendEmail: string;
@@ -156,9 +155,17 @@ const ChatApp: FC<ChatAppProps> = ({ userEmail, friendEmail }) => {
         ) : (
           <div className="fixed flex h-[10vh] w-[100vw] items-center justify-center gap-2 bg-slate-700 px-2 py-1 sm:h-[15vh] sm:py-2 ">
             <div className="flex h-12 w-12 flex-col items-center justify-center overflow-hidden rounded-full bg-slate-300 align-middle dark:border-2 dark:border-slate-400">
-              {friendData && (
-                <Image src={friendData.image} alt="" width={70} height={70} />
-              )}
+              {friendData &&
+                (friendData.image_third_party ? (
+                  <Image src={friendData.image} alt="" width={70} height={70} />
+                ) : (
+                  <Image
+                    src={`data:image/png;base64,${friendData.image}`}
+                    alt=""
+                    width={70}
+                    height={70}
+                  />
+                ))}
             </div>
             <div className="flex flex-col items-center justify-center truncate">
               <h1 className="max-w-full truncate px-2 text-center text-3xl sm:text-5xl">
