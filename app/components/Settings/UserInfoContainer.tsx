@@ -2,13 +2,12 @@
 import { useState, useEffect, useRef } from "react";
 import { DarkModeSwitch } from "react-toggle-dark-mode";
 import React from "react";
-import { LuMenu, LuPanelRightClose } from "react-icons/lu";
-import { IconContext } from "react-icons";
 import { useSession } from "next-auth/react";
 import { LiaSyncAltSolid } from "react-icons/lia";
 import toast, { Toaster } from "react-hot-toast";
 import ProfilePic from "../LoggedIn/ProfilePic";
 import { Turn as Hamburger } from "hamburger-react";
+import { quicksand } from "@/custom-fonts/fonts";
 
 export default function UserInfoContainer({
   children,
@@ -72,7 +71,7 @@ export default function UserInfoContainer({
     <div className="pt-10 sm:flex sm:justify-between sm:pr-5 sm:pt-0">
       <Toaster position="top-center" />
 
-      <div className="absolute top-2 right-2 z-[100]">
+      <div className="absolute right-2 top-2 z-[100] sm:hidden">
         <Hamburger
           toggled={showMenu}
           onToggle={() => setShowMenu(!showMenu)}
@@ -93,7 +92,12 @@ export default function UserInfoContainer({
             <ProfilePic />
           </div>
           <p className="font-merri text-3xl">{session?.user?.name}</p>
-          <p className="text-sm text-slate-500 dark:text-slate-400">
+          <p
+            className={
+              "text-sm text-slate-500 dark:text-slate-400 " +
+              quicksand.className
+            }
+          >
             {syncedData && syncedData.current
               ? JSON.parse(syncedData.current).email
               : session?.user?.email}
@@ -137,7 +141,7 @@ export default function UserInfoContainer({
                 <p className={`${syncing ? "animate-spin" : "animate-none"}`}>
                   <LiaSyncAltSolid />
                 </p>
-                <p>Sync Account</p>
+                <p className={quicksand.className}>Sync Account</p>
               </button>
             </li>
           </ul>

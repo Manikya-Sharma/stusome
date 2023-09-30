@@ -9,10 +9,9 @@ import Link from "next/link";
 import { MdOutlineChat, MdOutlineMarkUnreadChatAlt } from "react-icons/md";
 import { IconContext } from "react-icons";
 
-
 export default function Navbar() {
   const router = useRouter();
-  const {data:session} = useSession();
+  const { data: session } = useSession();
   return (
     <nav className="fixed z-[100] flex w-[100vw] items-center justify-between px-4 py-1 backdrop-blur-sm dark:bg-[rgba(39,39,52,0.8)] sm:px-8 sm:py-4">
       <div className="items-center rounded-lg bg-[rgba(200,200,200,0.7)] px-2 transition-all duration-200 hover:bg-white sm:flex">

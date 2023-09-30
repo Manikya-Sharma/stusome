@@ -12,7 +12,7 @@ export default function LoginTile(
   props: PropsWithChildren<{ type: "github" | "email" | "google" }>,
 ) {
   const [loading, setLoading] = useState<boolean>(false);
-  async function loadSigning(via: "github"|"google") {
+  async function loadSigning(via: "github" | "google") {
     setLoading(true);
     const load = await signIn(via);
     if (load?.ok) {

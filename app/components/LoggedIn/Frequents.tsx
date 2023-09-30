@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { quicksand } from "@/custom-fonts/fonts";
 
 import popularDoubts from "@/public/popular-doubts.json";
 
@@ -8,7 +9,7 @@ export default function PopularDoubts() {
       <h2 className="mb-3 mt-7 font-merri text-3xl sm:text-5xl">
         Popular Doubts
       </h2>
-      <div>
+      <div className={quicksand.className}>
         <ul className="flex flex-col text-lg">
           {popularDoubts.map((doubt) => {
             return (

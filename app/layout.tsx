@@ -11,6 +11,7 @@ const merriweather = Merriweather({
 });
 const quicksand = Quicksand({
   subsets: ["latin"],
+  weight: "300",
   variable: "--font-quick",
 });
 const preahvihear = Preahvihear({
@@ -46,7 +47,7 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={
-          inter.className + " selection:bg-teal-400 selection:text-white"
+          merriweather.className + " selection:bg-teal-400 selection:text-white"
         }
       >
         <NextAuthProvider>{children}</NextAuthProvider>

@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import Image from "next/image";
-
+import { quicksand } from "@/custom-fonts/fonts";
 // TODO: user photo might be stored as 3rd party link instead of BASE64
 
 interface SidebarProps {
@@ -42,18 +42,22 @@ const Sidebar: FC<SidebarProps> = ({ userEmail }) => {
       const existingFriends: State[] = [];
 
       const promises = existingFriendEmails.map((email) => {
-          return fetch(`/api/getAccountByEmail/${email[0]}`)
+        return fetch(`/api/getAccountByEmail/${email[0]}`)
           .then((rawData) => rawData.json())
           .then((data) => {
-              existingFriends.push(data);
+            existingFriends.push(data);
           })
-          .catch((error) => console.log(`Error fetching friends data: ${error}`))
+          .catch((error) =>
+            console.log(`Error fetching friends data: ${error}`),
+          );
       });
 
-      Promise.all(promises).then(() => {
+      Promise.all(promises)
+        .then(() => {
           setFriends(existingFriends.filter((elem) => elem != null));
           setLoadingData(false);
-      }).catch((error) => console.log(`Error occured: ${error}`))
+        })
+        .catch((error) => console.log(`Error occured: ${error}`));
     }
     fetchData();
   }, [userEmail]);
@@ -110,7 +114,11 @@ const Sidebar: FC<SidebarProps> = ({ userEmail }) => {
             </div>
           </div>
         ) : (
-          <div className="flex flex-col items-center gap-2">
+          <div
+            className={
+              "flex flex-col items-center gap-2 " + quicksand.className
+            }
+          >
             {friends.map((elem) => {
               return (
                 <Link
@@ -148,7 +156,10 @@ const Sidebar: FC<SidebarProps> = ({ userEmail }) => {
             <input
               type="text"
               ref={inputRef}
-              className="rounded-md bg-slate-300 px-3 py-2 leading-relaxed placeholder:text-slate-800 dark:bg-slate-200 dark:text-slate-950 dark:placeholder:text-slate-700 dark:hover:bg-slate-300"
+              className={
+                "min-w-[40%] rounded-md bg-slate-300 px-3 py-2 leading-relaxed placeholder:text-slate-800 dark:bg-slate-200 dark:text-slate-950 dark:placeholder:text-slate-700 dark:hover:bg-slate-300 " +
+                quicksand.className
+              }
               placeholder="Enter email of your friend"
               onKeyDown={(e) => {
                 if (e.key == "Enter") {
