@@ -209,7 +209,7 @@ export default function Post({ params }: Params) {
 
         <div className="sm:inline-flex md:max-w-[75vw]">
           <div className="flex-[3]">
-            <div className={"markdown-wrapper " + preahvihear}>
+            <div className={"markdown-wrapper " + preahvihear.className}>
               <ShowMarkdown data={state.content} />
             </div>
           </div>
@@ -232,7 +232,7 @@ export default function Post({ params }: Params) {
         </div>
       </div>
 
-      <div className={preahvihear}>
+      <div className={preahvihear.className}>
         <div className="mx-auto my-5 h-[2px] w-[90%] bg-slate-600"></div>
         <h2 className="mb-3 mt-6 text-4xl sm:text-center">Discussions:-</h2>
 

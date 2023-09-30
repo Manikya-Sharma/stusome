@@ -4,7 +4,7 @@ import { LuArrowLeft, LuFlashlight, LuFlashlightOff } from "react-icons/lu";
 import { DarkModeSwitch } from "react-toggle-dark-mode";
 
 export default function AppSettings() {
-  const [theme, setTheme] = useState<"dark" | "light">(null);
+  const [theme, setTheme] = useState<"dark" | "light"|null>(null);
   useEffect(() => {
     if (document.documentElement.classList.contains("dark")) {
       setTheme("dark");
