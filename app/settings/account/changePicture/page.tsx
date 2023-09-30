@@ -2,44 +2,23 @@
 
 import { useRouter } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
-import Link from "next/link";
 import Image from "next/image";
 import BarLoader from "react-spinners/BarLoader";
-import { State } from "@/app/types/user";
 import { LuTrash2 } from "react-icons/lu";
 import toast, { Toaster } from "react-hot-toast";
 import { IconContext } from "react-icons";
+import { useSession } from "next-auth/react";
+import ProfilePic from "@/app/components/LoggedIn/ProfilePic";
 
-export default function ChangePicture({ params }: { params: { id: string } }) {
-  const router = useRouter();
-  const id = params.id;
-  const [state, setState] = useState<State>({
-    _id: "",
-    name: "",
-    email: "",
-    password: "",
-    picture: "",
-    hasPic: false,
-  });
-  useEffect(() => {
-    const account = localStorage.getItem("account");
-    if (account == null) {
-      localStorage.removeItem("account");
-      router.replace("/login");
-    } else {
-      setState(() => JSON.parse(account));
-    }
-  }, [router]);
-  useEffect(() => {
-    if (id != state._id && state._id != "") {
-      router.push("/login");
-    }
-  }, [id, router, state._id]);
+export default function ChangePicture() {
   const [loading, setLoading] = useState(false);
   const [width, setWidth] = useState(0);
   useEffect(() => {
     setWidth(window.innerWidth);
   }, []);
+
+  const { data: session } = useSession();
+  const router = useRouter();
 
   const picRef = useRef<HTMLInputElement>(null);
 
@@ -52,23 +31,23 @@ export default function ChangePicture({ params }: { params: { id: string } }) {
           const data = reader.result;
           if (typeof data == "string") {
             const base64 = data.replace("data:", "").replace(/^.+,/, "");
-            fetch(`/api/updateAccountByEmail/${state.email}`, {
+            fetch(`/api/updateAccountByEmail/${session?.user?.email}`, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify({ picture: base64, hasPic: true }),
+              body: JSON.stringify({ image: base64, image_third_party: false }),
             }).then(() => {
               const existing = localStorage.getItem("account");
               if (existing != null && pic != null) {
                 const new_account = {
                   ...JSON.parse(existing),
-                  picture: base64,
-                  hasPic: true,
+                  image: base64,
+                  image_third_party: false,
                 };
                 localStorage.setItem("account", JSON.stringify(new_account));
                 setLoading(false);
-                router.push(`/logged-in/${state._id}`);
+                router.push("/explore");
               }
             });
           }
@@ -84,23 +63,26 @@ export default function ChangePicture({ params }: { params: { id: string } }) {
 
   async function removeProfile() {
     try {
-      fetch(`/api/updateAccountByEmail/${state.email}`, {
+      fetch(`/api/updateAccountByEmail/${session?.user?.email}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ picture: "", hasPic: false }),
+        body: JSON.stringify({
+          image: session?.user?.image,
+          image_third_party: true,
+        }),
       }).then(() => {
         const existing = localStorage.getItem("account");
         if (existing != null) {
           const new_account = {
             ...JSON.parse(existing),
-            picture: "",
-            hasPic: false,
+            image: session?.user?.image,
+            image_third_party: true,
           };
           localStorage.setItem("account", JSON.stringify(new_account));
           setLoading(false);
-          router.push(`/logged-in/${state._id}`);
+          router.push(`/explore`);
         }
       });
     } catch (e) {
@@ -123,7 +105,6 @@ export default function ChangePicture({ params }: { params: { id: string } }) {
         />
       </div>
       <main className="gradient flex h-full items-center font-fancy">
-        {" "}
         <div className="mx-auto w-fit">
           <div className="gradient-sub mx-auto w-fit max-w-[80%] rounded-lg p-10 text-white">
             <h1 className="mb-3 text-center font-merri text-5xl">
@@ -135,14 +116,7 @@ export default function ChangePicture({ params }: { params: { id: string } }) {
             <div className="flex flex-col items-center">
               <label className="text-xl" htmlFor="pic">
                 <div className="flex h-52 max-h-full w-52 max-w-full cursor-pointer flex-col items-center justify-center overflow-hidden rounded-full bg-slate-400 align-middle hover:grayscale">
-                  {state.hasPic && (
-                    <Image
-                      src={`data:image/png;base64,${state.picture}`}
-                      alt=""
-                      width={260}
-                      height={260}
-                    />
-                  )}
+                  <ProfilePic />
                 </div>
               </label>
               <input

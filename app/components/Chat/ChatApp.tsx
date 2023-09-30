@@ -1,5 +1,5 @@
 "use client";
-import { Message, State } from "@/app/types/user";
+import { Message, State } from "@/types/user";
 import { pusherClient } from "@/lib/pusher";
 import { getChatId } from "@/lib/utils";
 import { FC, useEffect, useRef, useState } from "react";
@@ -13,30 +13,39 @@ import { LuLoader } from "react-icons/lu";
 import { IconContext } from "react-icons";
 
 interface ChatAppProps {
-  userId: string;
+  userEmail: string;
   friendEmail: string;
 }
 
-const ChatApp: FC<ChatAppProps> = ({ userId, friendEmail }) => {
+const ChatApp: FC<ChatAppProps> = ({ userEmail, friendEmail }) => {
   const messageRef = useRef<HTMLTextAreaElement | null>(null);
   const chatsRef = useRef<HTMLDivElement | null>(null);
   const [friendData, setFriendData] = useState<State | null>(null);
+  const [userData, setUserData] = useState<State | null>(null);
   const [chats, setChats] = useState<Message[] | null>(null);
   const [loadingData, setLoadingData] = useState<boolean>(true);
   const [loadingChats, setLoadingChats] = useState<boolean>(true);
   const [loadingSend, setLoadingSend] = useState<boolean>(false);
   useEffect(() => {
-    async function fetchData() {
+    async function fetchData1() {
       const rawData = await fetch(`/api/getAccountByEmail/${friendEmail}`);
       const data = (await rawData.json()) as State;
       setFriendData(data);
       setLoadingData(false);
     }
-    fetchData();
-  }, [friendEmail]);
+    async function fetchData2() {
+      const rawData = await fetch(`/api/getAccountByEmail/${userEmail}`);
+      const data = (await rawData.json()) as State;
+      setUserData(data);
+      setLoadingData(false);
+    }
+    fetchData1();
+    fetchData2();
+  }, [friendEmail, userEmail]);
+
   async function handleSubmit() {
     setLoadingSend(true);
-    if (friendData == null) {
+    if (friendData == null || userData == null) {
       return;
     }
     await fetch("/api/newMessage", {
@@ -45,8 +54,8 @@ const ChatApp: FC<ChatAppProps> = ({ userId, friendEmail }) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        senderId: userId,
-        receiverId: friendData._id,
+        senderEmail: userData.email,
+        receiverEmail: friendData.email,
         message: messageRef.current?.value,
         timeStamp: Date.now(),
       }),
@@ -59,7 +68,7 @@ const ChatApp: FC<ChatAppProps> = ({ userId, friendEmail }) => {
   }
 
   useEffect(() => {
-    if (friendData == null) {
+    if (friendData == null || userData == null) {
       return;
     }
     const fetchData = async () => {
@@ -68,14 +77,20 @@ const ChatApp: FC<ChatAppProps> = ({ userId, friendEmail }) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(getChatId(userId, friendData._id)),
+        body: JSON.stringify(getChatId(userData.email, friendData.email)),
       });
       const chats = (await rawChats.json()) as Message[];
       setChats(chats);
       setLoadingChats(false);
     };
-    fetchData();
-  }, [friendData, userId]);
+    try {
+      fetchData();
+    } catch (e) {
+      console.log("Error: ", e);
+    } finally {
+      setLoadingChats(false);
+    }
+  }, [friendData, userData]);
 
   useEffect(() => {
     if (chatsRef.current != null) {
@@ -85,31 +100,50 @@ const ChatApp: FC<ChatAppProps> = ({ userId, friendEmail }) => {
   }, [chats]);
 
   useEffect(() => {
-    if (friendData == null) {
+    if (friendData == null || userData == null) {
       return;
     }
     const chatHandler = ({
-      senderId,
-      receiverId,
+      senderEmail: senderEmail,
+      receiverEmail: receiverEmail,
       message,
       timeStamp,
     }: Message) => {
       setChats((prev) => {
         if (prev != null) {
-          return [...prev, { senderId, receiverId, message, timeStamp }];
+          return [
+            ...prev,
+            {
+              senderEmail: senderEmail,
+              receiverEmail: receiverEmail,
+              message,
+              timeStamp,
+            },
+          ];
         } else {
-          return [{ senderId, receiverId, message, timeStamp }];
+          return [
+            {
+              senderEmail: senderEmail,
+              receiverEmail: receiverEmail,
+              message,
+              timeStamp,
+            },
+          ];
         }
       });
     };
-    pusherClient.subscribe(`chat-${getChatId(userId, friendData._id)}`);
+    pusherClient.subscribe(
+      `chat-${getChatId(userData.email, friendData.email)}`,
+    );
     pusherClient.bind("chat", chatHandler);
 
     return () => {
-      pusherClient.unsubscribe(`chat-${getChatId(userId, friendData._id)}`);
+      pusherClient.unsubscribe(
+        `chat-${getChatId(userData.email, friendData.email)}`,
+      );
       pusherClient.unbind("chat", chatHandler);
     };
-  }, [friendData, userId]);
+  }, [friendData, userData]);
 
   return (
     <SkeletonTheme baseColor="#333344" highlightColor="#aaa" duration={0.7}>
@@ -121,14 +155,17 @@ const ChatApp: FC<ChatAppProps> = ({ userId, friendEmail }) => {
         ) : (
           <div className="fixed flex h-[10vh] w-[100vw] items-center justify-center gap-2 bg-slate-700 px-2 py-1 sm:h-[15vh] sm:py-2 ">
             <div className="flex h-12 w-12 flex-col items-center justify-center overflow-hidden rounded-full bg-slate-300 align-middle dark:border-2 dark:border-slate-400">
-              {friendData?.hasPic && (
-                <Image
-                  src={`data:image/png;base64,${friendData?.picture}`}
-                  alt=""
-                  width={70}
-                  height={70}
-                />
-              )}
+              {friendData &&
+                (friendData.image_third_party ? (
+                  <Image src={friendData.image} alt="" width={70} height={70} />
+                ) : (
+                  <Image
+                    src={`data:image/png;base64,${friendData.image}`}
+                    alt=""
+                    width={70}
+                    height={70}
+                  />
+                ))}
             </div>
             <div className="flex flex-col items-center justify-center truncate">
               <h1 className="max-w-full truncate px-2 text-center text-3xl sm:text-5xl">
@@ -166,7 +203,7 @@ const ChatApp: FC<ChatAppProps> = ({ userId, friendEmail }) => {
                     <div
                       className={
                         "my-1 max-w-[80%] rounded-3xl px-3 py-2" +
-                        (chat.senderId == userId
+                        (chat.senderEmail == userData?.email
                           ? " ml-auto rounded-br-none bg-slate-700"
                           : " mr-auto rounded-bl-none bg-slate-900")
                       }
@@ -175,7 +212,7 @@ const ChatApp: FC<ChatAppProps> = ({ userId, friendEmail }) => {
                       <p
                         className={
                           "text-xs text-slate-400" +
-                          (chat.senderId == userId
+                          (chat.senderEmail == userData?.email
                             ? " text-right"
                             : " text-left")
                         }

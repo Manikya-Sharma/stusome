@@ -1,43 +1,15 @@
 "use client";
-import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+
 import Link from "next/link";
 
 import Tile from "@/app/components/Settings/Tile";
 import UserInfoContainer from "@/app/components/Settings/UserInfoContainer";
+import { signOut } from "next-auth/react";
 
-type Params = {
-  params: { id: string };
-};
-
-export default function Settings({ params }: Params) {
-  const router = useRouter();
-  const id = params.id;
-  const [state, setState] = useState({
-    _id: "",
-    name: "",
-    email: "",
-    password: "",
-    picture: "",
-    hasPic: false,
-  });
-  useEffect(() => {
-    const account = localStorage.getItem("account");
-    if (account == null) {
-      localStorage.removeItem("account");
-      router.replace("/login");
-    } else {
-      setState(() => JSON.parse(account));
-    }
-  }, [router]);
-  useEffect(() => {
-    if (id != state._id && state._id != "") {
-      router.push("/login");
-    }
-  }, [id, router, state._id]);
+export default function Settings() {
   return (
     <>
-      <UserInfoContainer props={{ state: state }}>
+      <UserInfoContainer>
         <div className="transition-colors duration-200 sm:min-w-[60vw]">
           <div className="mb-7 pt-5">
             <h1 className="text-center font-merri text-6xl tracking-tighter">
@@ -48,12 +20,12 @@ export default function Settings({ params }: Params) {
           <div className="text-lg">
             <div className="">
               <div>
-                <Link href={`/logged-in/${params.id}/settings/account`}>
+                <Link href={`/settings/account`}>
                   <Tile description="Account" type="normal" logo={"user"} />
                 </Link>
               </div>
               <div>
-                <Link href={`/logged-in/${params.id}/settings/app`}>
+                <Link href={`/settings/app`}>
                   <Tile
                     description="App Settings"
                     type="normal"
@@ -62,15 +34,14 @@ export default function Settings({ params }: Params) {
                 </Link>
               </div>
               <div>
-                <Link href={`/logged-in/${params.id}/settings/privacy`}>
+                <Link href={`/settings/privacy`}>
                   <Tile description="Privacy" type="normal" logo="lock" />
                 </Link>
               </div>
             </div>
             <div
               onClick={() => {
-                localStorage.clear();
-                router.push("/");
+                signOut();
               }}
             >
               <Tile description="Logout" type="danger" logo="logout" />

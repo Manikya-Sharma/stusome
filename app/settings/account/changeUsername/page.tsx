@@ -2,39 +2,20 @@
 
 import { useRouter } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
-import Link from "next/link";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import BarLoader from "react-spinners/BarLoader";
-import { State } from "@/app/types/user";
 import toast, { Toaster } from "react-hot-toast";
 
-export default function ChangeUsername({ params }: { params: { id: string } }) {
+export default function ChangeUsername() {
   const router = useRouter();
-  const id = params.id;
-  const [state, setState] = useState<State>({
-    _id: "",
-    name: "",
-    email: "",
-    password: "",
-    picture: "",
-    hasPic: false,
-  });
-  useEffect(() => {
-    const account = localStorage.getItem("account");
-    if (account == null) {
-      localStorage.removeItem("account");
-      router.replace("/login");
-    } else {
-      setState(() => JSON.parse(account));
-    }
-  }, [router]);
-  useEffect(() => {
-    if (id != state._id && state._id != "") {
-      router.push("/login");
-    }
-  }, [id, router, state._id]);
   const [loading, setLoading] = useState(false);
   const [width, setWidth] = useState(0);
+  const [state, setState] = useState({ name: "", email: "" });
+  useEffect(() => {
+    const account = localStorage.getItem("account");
+    if (account) {
+      setState(JSON.parse(account));
+    }
+  }, []);
   useEffect(() => {
     setWidth(window.innerWidth);
   }, []);
@@ -71,7 +52,7 @@ export default function ChangeUsername({ params }: { params: { id: string } }) {
             };
             localStorage.setItem("account", JSON.stringify(new_account));
             setLoading(false);
-            router.push(`/logged-in/${state._id}`);
+            router.push(`/explore`);
           }
         });
       } catch (e) {
@@ -98,7 +79,7 @@ export default function ChangeUsername({ params }: { params: { id: string } }) {
         <div className="mx-auto w-fit">
           <div className="gradient-sub mx-auto w-fit max-w-[80%] rounded-lg p-10 text-white">
             <h1 className="mb-10 text-center font-merri text-5xl">
-              Change Username
+              Change Display Name
             </h1>
             <form
               onSubmit={(e) => {
@@ -109,7 +90,7 @@ export default function ChangeUsername({ params }: { params: { id: string } }) {
             >
               <div className="grid grid-cols-2 grid-rows-1 items-center gap-2">
                 <label className="text-xl" htmlFor="username">
-                  New Username
+                  New Name
                 </label>
                 <input
                   type="text"

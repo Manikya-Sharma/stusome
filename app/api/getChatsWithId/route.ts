@@ -12,15 +12,15 @@ export async function POST(req: Request) {
 
   const messages: [
     {
-      senderId: string;
-      receiverId: string;
+      senderEmail: string;
+      receiverEmail: string;
       message: string;
       timeStamp: number;
     },
   ] = [
     {
-      senderId: "",
-      receiverId: "",
+      senderEmail: "",
+      receiverEmail: "",
       message: "",
       timeStamp: 0,
     },
@@ -29,8 +29,8 @@ export async function POST(req: Request) {
   for (const chat of chats) {
     if (typeof chat == "string") {
       messages.push({
-        senderId: chat.split("--")[0],
-        receiverId: chat.split("--")[1],
+        senderEmail: chat.split("--")[0],
+        receiverEmail: chat.split("--")[1],
         message: chat.split("--")[2],
         timeStamp: 0,
       });
@@ -46,6 +46,6 @@ export async function POST(req: Request) {
   }
 
   return NextResponse.json(
-    messages.filter((elem) => elem.receiverId.trim() != ""),
+    messages.filter((elem) => elem.receiverEmail.trim() != ""),
   );
 }
