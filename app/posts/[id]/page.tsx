@@ -3,8 +3,9 @@ import posts from "@/public/posts.json";
 import Discussions from "@/app/components/Posts/Discussions";
 import Markdown from "@/app/components/Posts/MarkdownInput";
 import ShowMarkdown from "@/app/components/Markdown/ShowMarkdown";
+import { DarkModeSwitch } from "react-toggle-dark-mode";
 
-import { preahvihear } from "@/custom-fonts/fonts";
+import { inter } from "@/custom-fonts/fonts";
 
 import { useState, useEffect, useRef } from "react";
 
@@ -21,6 +22,23 @@ type Params = {
 };
 
 export default function Post({ params }: Params) {
+  // theme
+  const [theme, setTheme] = useState<"dark" | "light" | null>(null);
+  useEffect(() => {
+    if (document.documentElement.classList.contains("dark")) {
+      setTheme("dark");
+    } else {
+      setTheme("light");
+    }
+  }, []);
+
+  function handleTheme(mode: "light" | "dark") {
+    localStorage.setItem("theme", mode);
+    document.documentElement.classList.remove("dark");
+    document.documentElement.classList.remove("light");
+    document.documentElement.classList.add(mode);
+    setTheme(mode);
+  }
   // fetching data
   const id = parseInt(params.id);
   const [state, setState] = useState({
@@ -60,14 +78,6 @@ export default function Post({ params }: Params) {
       setHeadings(Array.from(arr));
     }
   }, [state]);
-
-  const [theme, setTheme] = useState<"dark" | "light">("light");
-  // theme
-  useEffect(() => {
-    if (document.documentElement.classList.contains("dark")) {
-      setTheme("dark");
-    }
-  }, []);
 
   // post new discussion
   const [takeNewMarkdownInput, setTakeNewMarkdownInput] = useState(false);
@@ -153,7 +163,7 @@ export default function Post({ params }: Params) {
       </div>
     </SkeletonTheme>
   ) : (
-    <div className="scroll-smooth p-4 font-fancy dark:bg-slate-900 dark:text-slate-100">
+    <div className="scroll-smooth p-4 font-fancy transition-colors duration-200 dark:bg-slate-900 dark:text-slate-100">
       <nav className="fixed left-0 top-0 z-[100] flex h-fit w-[100vw] items-center justify-start overflow-hidden bg-[rgba(50,50,50,0.1)] backdrop-blur-md md:hidden">
         <div className="py-1 pl-3">
           <Hamburger
@@ -163,6 +173,23 @@ export default function Post({ params }: Params) {
           />
         </div>
       </nav>
+      <div
+        className="fixed right-2 top-2 z-[200] w-fit cursor-pointer rounded-3xl bg-slate-100 px-3 py-2 dark:bg-slate-400 sm:absolute"
+        onClick={(e) => {
+          e.stopPropagation();
+          handleTheme(theme == "dark" ? "light" : "dark");
+        }}
+      >
+        <div>
+          {
+            <DarkModeSwitch
+              checked={theme == "dark"}
+              onChange={() => handleTheme(theme == "dark" ? "light" : "dark")}
+              size={25}
+            />
+          }
+        </div>
+      </div>
       <div className="mb-5 mt-10 md:mt-0">
         <h1 className="text-center text-5xl">{state.title}</h1>
 
@@ -209,7 +236,12 @@ export default function Post({ params }: Params) {
 
         <div className="sm:inline-flex md:max-w-[75vw]">
           <div className="flex-[3]">
-            <div className={"markdown-wrapper " + preahvihear.className}>
+            <div
+              className={
+                "markdown-wrapper transition-colors duration-200 " +
+                inter.className
+              }
+            >
               <ShowMarkdown data={state.content} />
             </div>
           </div>
@@ -232,7 +264,7 @@ export default function Post({ params }: Params) {
         </div>
       </div>
 
-      <div className={preahvihear.className}>
+      <div className={inter.className}>
         <div className="mx-auto my-5 h-[2px] w-[90%] bg-slate-600"></div>
         <h2 className="mb-3 mt-6 text-4xl sm:text-center">Discussions:-</h2>
 
