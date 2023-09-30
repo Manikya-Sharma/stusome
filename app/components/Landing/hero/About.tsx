@@ -2,11 +2,17 @@
 import React, { useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
+import { quicksand } from "@/custom-fonts/fonts";
 import "swiper/css";
 
 export default function About() {
   return (
-    <div className="mx-auto my-5 w-[50%] text-center font-fancy text-lg sm:text-2xl">
+    <div
+      className={
+        "mx-auto my-5 w-[50%] text-center text-lg sm:text-2xl" +
+        quicksand.className
+      }
+    >
       <Swiper
         spaceBetween={10}
         centeredSlides={true}

@@ -11,6 +11,7 @@ import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { LuLoader } from "react-icons/lu";
 import { IconContext } from "react-icons";
+import { quicksand } from "@/custom-fonts/fonts";
 
 interface ChatAppProps {
   userEmail: string;
@@ -199,7 +200,12 @@ const ChatApp: FC<ChatAppProps> = ({ userEmail, friendEmail }) => {
             chats.map((chat) => {
               return (
                 <div key={chat.timeStamp}>
-                  <div className="flex flex-col-reverse space-y-2 px-5">
+                  <div
+                    className={
+                      "flex flex-col-reverse space-y-2 px-5 " +
+                      quicksand.className
+                    }
+                  >
                     <div
                       className={
                         "my-1 max-w-[80%] rounded-3xl px-3 py-2" +

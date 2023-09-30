@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { quicksand } from "@/custom-fonts/fonts";
 
 import mostViewedPosts from "@/public/most-viewed.json";
 
@@ -8,7 +9,7 @@ export default function MostViewed() {
       <h2 className="mb-3 mt-7 font-merri text-3xl sm:text-5xl">
         Most Viewed Posts
       </h2>
-      <div>
+      <div className={quicksand.className}>
         <ul className="flex flex-col text-lg">
           {mostViewedPosts.map((post) => {
             return (

@@ -4,10 +4,14 @@ import Discussions from "@/app/components/Posts/Discussions";
 import Markdown from "@/app/components/Posts/MarkdownInput";
 import ShowMarkdown from "@/app/components/Markdown/ShowMarkdown";
 
+import { preahvihear } from "@/custom-fonts/fonts";
+
 import { useState, useEffect, useRef } from "react";
 
 import { LuMenu, LuPanelLeftClose } from "react-icons/lu";
 import { IconContext } from "react-icons";
+
+import { Turn as Hamburger } from "hamburger-react";
 
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
@@ -150,20 +154,16 @@ export default function Post({ params }: Params) {
     </SkeletonTheme>
   ) : (
     <div className="scroll-smooth p-4 font-fancy dark:bg-slate-900 dark:text-slate-100">
-      <IconContext.Provider value={{ className: "shared-class", size: "23" }}>
-        <nav className="fixed left-0 top-0 z-[100] flex h-fit w-[100vw] items-center justify-start overflow-hidden bg-[rgba(50,50,50,0.1)] pb-3 pt-1 backdrop-blur-md md:hidden">
-          {openMenu ? (
-            <button onClick={() => setOpenMenu(false)} className="py-1 pl-3">
-              <LuPanelLeftClose />
-            </button>
-          ) : (
-            <button onClick={() => setOpenMenu(true)} className="py-1 pl-3">
-              <LuMenu />
-            </button>
-          )}
-        </nav>
-      </IconContext.Provider>
-      <div className="mb-5 mt-7 md:mt-0">
+      <nav className="fixed left-0 top-0 z-[100] flex h-fit w-[100vw] items-center justify-start overflow-hidden bg-[rgba(50,50,50,0.1)] backdrop-blur-md md:hidden">
+        <div className="py-1 pl-3">
+          <Hamburger
+            toggled={openMenu}
+            onToggle={() => setOpenMenu(!openMenu)}
+            size={20}
+          />
+        </div>
+      </nav>
+      <div className="mb-5 mt-10 md:mt-0">
         <h1 className="text-center text-5xl">{state.title}</h1>
 
         {!loading && (
@@ -175,7 +175,7 @@ export default function Post({ params }: Params) {
       <div className="relative">
         <ul
           className={
-            "fixed left-0 top-10 z-[100] h-[100vh] w-[50vw] overflow-y-auto rounded-md bg-slate-800 px-3 py-2 text-slate-200 transition-transform duration-200 md:sticky md:left-2 md:top-10 md:mr-2 md:inline-flex md:h-fit md:max-h-[70vh] md:w-[15vw] md:flex-col md:justify-start md:bg-transparent md:p-0 md:pr-2 md:text-inherit" +
+            "fixed left-0 top-[50px] z-[100] h-[100vh] w-[50vw] overflow-y-auto rounded-md bg-slate-800 px-3 py-2 text-slate-200 transition-transform duration-200 md:sticky md:left-2 md:top-10 md:mr-2 md:inline-flex md:h-fit md:max-h-[70vh] md:w-[15vw] md:flex-col md:justify-start md:bg-transparent md:p-0 md:pr-2 md:text-inherit" +
             (openMenu
               ? " translate-x-0"
               : " -translate-x-[80vw] md:translate-x-0")
@@ -209,7 +209,7 @@ export default function Post({ params }: Params) {
 
         <div className="sm:inline-flex md:max-w-[75vw]">
           <div className="flex-[3]">
-            <div className="markdown-wrapper">
+            <div className={"markdown-wrapper " + preahvihear}>
               <ShowMarkdown data={state.content} />
             </div>
           </div>
@@ -232,7 +232,7 @@ export default function Post({ params }: Params) {
         </div>
       </div>
 
-      <>
+      <div className={preahvihear}>
         <div className="mx-auto my-5 h-[2px] w-[90%] bg-slate-600"></div>
         <h2 className="mb-3 mt-6 text-4xl sm:text-center">Discussions:-</h2>
 
@@ -251,7 +251,7 @@ export default function Post({ params }: Params) {
         ) : (
           ""
         )}
-      </>
+      </div>
     </div>
   );
 }
