@@ -8,10 +8,6 @@ import { DarkModeSwitch } from "react-toggle-dark-mode";
 import { inter } from "@/custom-fonts/fonts";
 
 import { useState, useEffect, useRef } from "react";
-
-import { LuMenu, LuPanelLeftClose } from "react-icons/lu";
-import { IconContext } from "react-icons";
-
 import { Turn as Hamburger } from "hamburger-react";
 
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
@@ -104,12 +100,12 @@ export default function Post({ params }: Params) {
   function submitData(inputValue: string) {
     // new discussion
     if (typeof inputValueStatus == "number") {
-      console.log(inputValue, inputValueStatus);
+      console.log(JSON.stringify(inputValue), inputValueStatus);
     }
     // new reply
     else {
       console.log(
-        inputValue,
+        JSON.stringify(inputValue),
         inputValueStatus.discussion,
         inputValueStatus.reply,
       );
