@@ -7,12 +7,13 @@ import { LiaGithub } from "react-icons/lia";
 import { IconContext } from "react-icons";
 import { LuMail } from "react-icons/lu";
 import { FcGoogle } from "react-icons/fc";
+import { BsDiscord } from "react-icons/bs";
 
 export default function LoginTile(
-  props: PropsWithChildren<{ type: "github" | "email" | "google" }>,
+  props: PropsWithChildren<{ type: "github" | "email" | "google" | "discord" }>,
 ) {
   const [loading, setLoading] = useState<boolean>(false);
-  async function loadSigning(via: "github" | "google") {
+  async function loadSigning(via: "github" | "google" | "discord") {
     setLoading(true);
     const load = await signIn(via);
     if (load?.ok) {
@@ -37,6 +38,7 @@ export default function LoginTile(
               <div>
                 {props.type == "github" && <LiaGithub />}
                 {props.type == "google" && <FcGoogle />}
+                {props.type == "discord" && <BsDiscord />}
                 {props.type == "email" && <LuMail />}
               </div>
             )}
