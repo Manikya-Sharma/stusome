@@ -24,7 +24,8 @@
         ]
       }
     ],
-    "tags": ["stress", "psychology", "improvement", "self-help", "motivation"]
+    "tags": ["stress", "psychology", "improvement", "self-help", "motivation"],
+    "coverImgFull": ""
   },
   {
     "id": 2,
@@ -62,7 +63,8 @@
         ]
       }
     ],
-    "tags": ["networking", "coding", "placement"]
+    "tags": ["networking", "coding", "placement"],
+    "coverImgFull": ""
   },
   {
     "id": 3,
@@ -83,7 +85,8 @@
         ]
       }
     ],
-    "tags": ["coding", "learning", "studies", "placement"]
+    "tags": ["coding", "learning", "studies", "placement"],
+    "coverImgFull": ""
   },
   {
     "id": 4,
@@ -112,6 +115,7 @@
         "replies": []
       }
     ],
-    "tags": ["studies", "strategy", "exams", "improvement", "motivation"]
+    "tags": ["studies", "strategy", "exams", "improvement", "motivation"],
+    "coverImgFull": "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?crop=entropy&cs=srgb&fm=jpg&ixid=M3w1MTEwNTR8MHwxfHNlYXJjaHwxfHxzdHVkeXxlbnwwfHx8fDE2OTYzNDIxODd8MA&ixlib=rb-4.0.3&q=85"
   }
 ]

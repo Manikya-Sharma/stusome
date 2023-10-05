@@ -1,4 +1,7 @@
 "use client";
+
+import Image from "next/image";
+
 import posts from "@/public/posts.json";
 import Discussions from "@/app/components/Posts/Discussions";
 import Markdown from "@/app/components/Posts/MarkdownInput";
@@ -51,6 +54,7 @@ export default function Post({ params }: Params) {
       },
     ],
     tags: [""],
+    coverImgFull: "",
   });
   const [loading, setLoading] = useState<boolean>(true);
   const [headings, setHeadings] = useState<string[]>([]);
@@ -159,126 +163,138 @@ export default function Post({ params }: Params) {
       </div>
     </SkeletonTheme>
   ) : (
-    <div className="scroll-smooth p-4 font-fancy transition-colors duration-200 dark:bg-slate-900 dark:text-slate-100">
-      <nav className="fixed left-0 top-0 z-[100] flex h-fit w-[100vw] items-center justify-start overflow-hidden bg-[rgba(50,50,50,0.1)] backdrop-blur-md md:hidden">
-        <div className="py-1 pl-3">
-          <Hamburger
-            toggled={openMenu}
-            onToggle={() => setOpenMenu(!openMenu)}
-            size={20}
-          />
-        </div>
-      </nav>
-      <div
-        className="fixed right-2 top-2 z-[200] w-fit cursor-pointer rounded-3xl bg-slate-100 px-3 py-2 dark:bg-slate-400 sm:absolute"
-        onClick={(e) => {
-          e.stopPropagation();
-          handleTheme(theme == "dark" ? "light" : "dark");
-        }}
-      >
-        <div>
-          {
-            <DarkModeSwitch
-              checked={theme == "dark"}
-              onChange={() => handleTheme(theme == "dark" ? "light" : "dark")}
-              size={25}
+    <div className="dark:bg-slate-900 dark:text-slate-100">
+      <div className="scroll-smooth p-4 font-fancy transition-colors duration-200">
+        <nav className="fixed left-0 top-0 z-[100] flex h-fit max-h-[50px] w-[100vw] items-center justify-start overflow-hidden bg-[rgba(50,50,50,0.1)] backdrop-blur-md md:hidden">
+          <div className="py-1 pl-3">
+            <Hamburger
+              toggled={openMenu}
+              onToggle={() => setOpenMenu(!openMenu)}
+              size={20}
             />
-          }
-        </div>
-      </div>
-      <div className="mb-5 mt-10 md:mt-0">
-        <h1 className="text-center text-5xl">{state.title}</h1>
-
-        {!loading && (
-          <cite className="mt-3 block text-center text-lg text-slate-400">
-            - {state.author}
-          </cite>
-        )}
-      </div>
-      <div className="relative">
-        <ul
-          className={
-            "fixed left-0 top-[50px] z-[100] h-[100vh] w-[50vw] overflow-y-auto rounded-md bg-slate-800 px-3 py-2 text-slate-200 transition-transform duration-200 md:sticky md:left-2 md:top-10 md:mr-2 md:inline-flex md:h-fit md:max-h-[70vh] md:w-[15vw] md:flex-col md:justify-start md:bg-transparent md:p-0 md:pr-2 md:text-inherit" +
-            (openMenu
-              ? " translate-x-0"
-              : " -translate-x-[80vw] md:translate-x-0")
-          }
+          </div>
+        </nav>
+        <div
+          className="fixed right-2 top-1 z-[200] w-fit cursor-pointer rounded-3xl bg-slate-100 px-3 py-2 dark:bg-slate-400 sm:absolute"
+          onClick={(e) => {
+            e.stopPropagation();
+            handleTheme(theme == "dark" ? "light" : "dark");
+          }}
         >
-          {headings.map((h) => {
-            return (
-              <li
-                key={h}
-                className="my-4 w-fit text-lg text-slate-400 underline-offset-2 hover:underline dark:text-slate-300 md:my-2 md:text-sm"
-              >
-                <p
-                  className={`${getId()} cursor-pointer`}
-                  onClick={(e) => {
-                    const id = e.currentTarget.classList[0];
-                    const heading = document.getElementById(id);
-                    if (heading != null) {
-                      heading.scrollIntoView({
-                        behavior: "smooth",
-                        block: "start",
-                      });
-                    }
-                  }}
-                >
-                  {h}
-                </p>
-              </li>
-            );
-          })}
-        </ul>
-
-        <div className="sm:inline-flex md:max-w-[75vw]">
-          <div className="flex-[3]">
-            <div
-              className={
-                "markdown-wrapper transition-colors duration-200 " +
-                inter.className
-              }
-            >
-              <ShowMarkdown data={state.content} />
+          <div>
+            {
+              <DarkModeSwitch
+                checked={theme == "dark"}
+                onChange={() => handleTheme(theme == "dark" ? "light" : "dark")}
+                size={25}
+              />
+            }
+          </div>
+        </div>
+        {/* Title */}
+        <div className="relative mb-5 mt-10 dark:z-10 md:mt-0">
+          <h1 className="text-center text-5xl">{state.title}</h1>
+          {!loading && (
+            <cite className="mt-3 block text-center text-lg text-slate-400">
+              - {state.author}
+            </cite>
+          )}
+        </div>
+        {/* Background Image */}
+        {state.coverImgFull && (
+          <div className="absolute left-0 top-0 -z-[100] h-[55vh] w-[100vw] dark:z-0">
+            <div className="relative h-full w-full blur-sm filter">
+              <Image src={state.coverImgFull} alt="" fill />
+              <div className="fixed z-0 h-full w-full bg-[rgba(255,255,255,0.7)] dark:bg-[rgba(0,0,0,0.7)]"></div>
             </div>
           </div>
-
-          <div className="my-3 flex flex-[1] flex-wrap items-center justify-center text-center text-slate-200 sm:flex-col sm:justify-start">
-            <p className="mb-2 hidden text-lg text-slate-800 dark:text-slate-200 sm:block">
-              Tags
-            </p>
-            {state.tags.map((tag) => {
+        )}
+        <div className="relative">
+          {/* Headings */}
+          <ul
+            className={
+              "fixed left-0 top-[50px] z-[100] h-[100vh] w-[50vw] overflow-y-auto rounded-md bg-slate-800 px-3 py-2 text-slate-400 transition-transform duration-200 md:sticky md:left-2 md:top-10 md:mx-2 md:mr-2 md:inline-flex md:h-fit md:max-h-[70vh] md:w-[15vw] md:flex-col md:justify-start md:bg-[rgba(250,250,250,0.65)] md:p-2 md:text-inherit md:text-slate-600 md:dark:bg-[rgba(50,50,50,0.65)]" +
+              (openMenu
+                ? " translate-x-0"
+                : " -translate-x-[80vw] md:translate-x-0")
+            }
+          >
+            {headings.map((h) => {
               return (
-                <div
-                  key={tag}
-                  className="mx-[2px] my-[2px] rounded-xl bg-slate-600 px-[4px] py-[2px] dark:text-slate-300 sm:w-[80%]"
+                <li
+                  key={h}
+                  className="my-4 w-fit text-lg underline-offset-2 hover:underline dark:text-slate-300 md:my-2 md:text-sm"
                 >
-                  {tag}
-                </div>
+                  <p
+                    className={`${getId()} cursor-pointer`}
+                    onClick={(e) => {
+                      const id = e.currentTarget.classList[0];
+                      const heading = document.getElementById(id);
+                      if (heading != null) {
+                        heading.scrollIntoView({
+                          behavior: "smooth",
+                          block: "start",
+                        });
+                      }
+                    }}
+                  >
+                    {h}
+                  </p>
+                </li>
               );
             })}
+          </ul>
+
+          <div className="sm:inline-flex md:max-w-[75vw]">
+            <div className="flex-[3]">
+              <div
+                className={
+                  "markdown-wrapper transition-colors duration-200 " +
+                  inter.className
+                }
+              >
+                <ShowMarkdown data={state.content} />
+              </div>
+            </div>
+
+            <div className="my-3 flex flex-[1] flex-wrap items-center justify-center text-center text-slate-200 sm:flex-col sm:justify-start">
+              <p className="mb-2 hidden text-lg text-slate-800 dark:text-slate-200 sm:block">
+                Tags
+              </p>
+              {state.tags.map((tag) => {
+                return (
+                  <div
+                    key={tag}
+                    className="mx-[2px] my-[2px] rounded-xl bg-slate-600 px-[4px] py-[2px] dark:text-slate-300 sm:w-[80%]"
+                  >
+                    {tag}
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className={inter.className}>
-        <div className="mx-auto my-5 h-[2px] w-[90%] bg-slate-600"></div>
-        <h2 className="mb-3 mt-6 text-4xl sm:text-center">Discussions:-</h2>
+        <div className={inter.className}>
+          <div className="mx-auto my-5 h-[2px] w-[90%] bg-slate-600"></div>
+          <h2 className="mb-3 mt-6 text-4xl sm:text-center">Discussions:-</h2>
 
-        <Discussions
-          discussion={state.discussions}
-          discussionHandler={handleInput}
-        />
-
-        {takeNewMarkdownInput ? (
-          <Markdown
-            rows={10}
-            cols={50}
-            uploadMarkdown={submitData}
-            discussionHandler={setTakeNewMarkdownInput}
+          <Discussions
+            discussion={state.discussions}
+            discussionHandler={handleInput}
           />
-        ) : (
-          ""
-        )}
+
+          {takeNewMarkdownInput ? (
+            <Markdown
+              rows={10}
+              cols={50}
+              uploadMarkdown={submitData}
+              discussionHandler={setTakeNewMarkdownInput}
+            />
+          ) : (
+            ""
+          )}
+        </div>
       </div>
     </div>
   );
