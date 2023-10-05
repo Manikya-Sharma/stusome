@@ -37,7 +37,7 @@ export default function LoggedIn() {
         <div className="px-8 py-20 sm:py-32">
           <Welcome />
 
-          <div className="items-center justify-around gap-5 sm:flex">
+          <div>
             <MostViewed />
             <Frequents />
           </div>
