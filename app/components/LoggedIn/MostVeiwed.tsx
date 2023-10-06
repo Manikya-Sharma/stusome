@@ -10,6 +10,7 @@ import "swiper/css/navigation";
 
 import mostViewedPosts from "@/public/most-viewed.json";
 import Image from "next/image";
+import { randomColor } from "@/lib/utils";
 
 export default function MostViewed() {
   const [width, setWidth] = useState<number>(0);
@@ -39,10 +40,12 @@ export default function MostViewed() {
                   >
                     <div className="flex flex-col justify-start">
                       <div
-                        className={
-                          "relative h-[30vh] w-full rounded-md " +
-                          (!post.coverImgFull ? "bg-slate-200" : "")
-                        }
+                        className={"relative h-[30vh] w-full rounded-md "}
+                        style={{
+                          backgroundColor: !post.coverImgFull
+                            ? randomColor(0.4)
+                            : "",
+                        }}
                       >
                         {post.coverImgFull ? (
                           <Image
