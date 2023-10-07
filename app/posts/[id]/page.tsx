@@ -14,15 +14,20 @@ import { Turn as Hamburger } from "hamburger-react";
 
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import { Post } from "@/types/post";
+import { Discussion, Post, Reply } from "@/types/post";
 import { notFound } from "next/navigation";
 import { v4 as uuid } from "uuid";
+
+import toast, { Toaster } from "react-hot-toast";
+import { useSession } from "next-auth/react";
 
 type Params = {
   params: { id: string };
 };
 
 export default function Post({ params }: Params) {
+  const { data: session, status } = useSession();
+
   // theme
   const [theme, setTheme] = useState<"dark" | "light" | null>(null);
   useEffect(() => {
@@ -81,8 +86,11 @@ export default function Post({ params }: Params) {
     string | { discussion: string; reply: string }
   >("");
 
+  let currentId = 0;
+
   const getId = () => {
-    return uuid();
+    currentId += 1;
+    return currentId;
   };
 
   function handleInput(type: "discussion" | "reply", replyId?: string) {
@@ -96,13 +104,60 @@ export default function Post({ params }: Params) {
   }
 
   function submitData(inputValue: string) {
+    if (!session || !session.user || !session.user.email) {
+      return;
+    }
     // new discussion
-    if (typeof inputValueStatus == "number") {
-      console.log(JSON.stringify(inputValue), inputValueStatus);
+    async function uploadDiscussionData(newDiscussion: Discussion) {
+      await fetch(`/api/posts/newDiscussion/${inputValueStatus}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newDiscussion),
+      });
+    }
+
+    async function uploadReplyData(newReply: Reply) {
+      if (typeof inputValueStatus == "string") {
+        return;
+      }
+      await fetch(`/api/posts/newReply/${inputValueStatus.reply}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newReply),
+      });
+    }
+
+    if (typeof inputValueStatus == "string") {
+      const newId = uuid();
+      const newDiscussion: Discussion = {
+        author: session.user.email,
+        content: inputValue,
+        id: newId,
+        replies: [],
+      };
+      toast.promise(uploadDiscussionData(newDiscussion), {
+        loading: "Uploading the discussion",
+        success: "Posted",
+        error: "Could not post your discussion",
+      });
     }
     // new reply
     else {
-      console.log(JSON.stringify(inputValue));
+      const newId = uuid();
+      const newReply: Reply = {
+        author: session.user.email,
+        content: inputValue,
+        id: newId,
+      };
+      toast.promise(uploadReplyData(newReply), {
+        loading: "Uploading the reply",
+        success: "Posted",
+        error: "Could not post your reply",
+      });
     }
   }
 
@@ -154,6 +209,7 @@ export default function Post({ params }: Params) {
     </SkeletonTheme>
   ) : (
     <div className="dark:bg-slate-900 dark:text-slate-100">
+      <Toaster position="top-center" />
       <div className="scroll-smooth p-4 font-fancy transition-colors duration-200">
         <nav className="fixed left-0 top-0 z-[100] flex h-fit max-h-[50px] w-[100vw] items-center justify-start overflow-hidden bg-[rgba(50,50,50,0.1)] backdrop-blur-md md:hidden">
           <div className="py-1 pl-3">
@@ -264,7 +320,6 @@ export default function Post({ params }: Params) {
             </div>
           </div>
         </div>
-
         <div className={inter.className}>
           <div className="mx-auto my-5 h-[2px] w-[90%] bg-slate-600"></div>
           <h2 className="mb-3 mt-6 text-4xl sm:text-center">Discussions:-</h2>

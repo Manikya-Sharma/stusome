@@ -33,7 +33,7 @@ export default function Discussions(props: Props) {
         return (
           <div
             key={elem.id}
-            className="mx-auto my-2 w-full min-w-fit rounded-md border border-slate-400 p-3 sm:max-w-[80%]"
+            className="mx-auto my-2 w-full rounded-md border border-slate-400 p-3 sm:max-w-[80%]"
           >
             <cite className="mr-auto block w-fit text-sm text-slate-400">
               -- {elem.author}
@@ -48,19 +48,9 @@ export default function Discussions(props: Props) {
               <button
                 className=" my-2 flex w-fit items-center justify-start gap-2 rounded-lg bg-gradient-to-t from-teal-100 to-teal-300 px-2 py-1 hover:from-teal-300 hover:to-teal-100"
                 onClick={() => props.discussionHandler("reply", elem.id)}
-                // onClick={() => {
-                //   const arr = showReply;
-                //   arr[elem.id - 1] = true;
-                //   setShowReply(arr);
-                // }}
               >
                 <LuReply />
                 Reply
-                {/* {showReply[elem.id - 1] == true ? (
-                  <Markdown rows={10} cols={10} uploadMarkdown={() => {}} />
-                ) : (
-                  ""
-                )} */}
               </button>
             </div>
           </div>

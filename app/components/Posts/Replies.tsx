@@ -18,7 +18,6 @@ export default function Replies(props: Props) {
       const data = (await Promise.all(
         responses.map((response) => response.json()),
       )) as Array<Reply | null> | null;
-      console.log(data);
       setReplies(data);
     }
     fetchData();
