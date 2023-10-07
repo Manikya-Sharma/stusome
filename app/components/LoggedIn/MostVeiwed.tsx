@@ -8,14 +8,34 @@ import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 
-import mostViewedPosts from "@/public/most-viewed.json";
+import mostViewedPostIds from "@/public/most-viewed.json";
+
+import Skeleton from "react-loading-skeleton";
+
 import Image from "next/image";
 import { randomColor } from "@/lib/utils";
+import { Post } from "@/types/post";
 
 export default function MostViewed() {
   const [width, setWidth] = useState<number>(0);
+  const [mostViewed, setMostViewed] = useState<Post[] | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
   useEffect(() => {
     setWidth(() => window.innerWidth);
+  }, []);
+  useEffect(() => {
+    async function fetchData() {
+      const requests = mostViewedPostIds.map((id) => {
+        return fetch(`/api/posts/getPost/${id}`);
+      });
+      const responses = await Promise.all(requests);
+      const data = (await Promise.all(
+        responses.map((response) => response.json()),
+      )) as Post[];
+      setMostViewed(data);
+      setLoading(false);
+    }
+    fetchData();
   }, []);
   return (
     <section className="mb-20 mt-10">
@@ -31,7 +51,12 @@ export default function MostViewed() {
             modules={[Navigation]}
             className="w-full [&>*:first-child]:ml-10 [&>*:last-child]:mr-10"
           >
-            {mostViewedPosts.map((post) => {
+            {loading && (
+              <SwiperSlide>
+                <Skeleton />
+              </SwiperSlide>
+            )}
+            {mostViewed?.map((post) => {
               return (
                 <SwiperSlide key={post.id}>
                   <Link
