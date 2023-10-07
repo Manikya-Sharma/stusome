@@ -1,32 +1,35 @@
+"use client";
 import ShowMarkdown from "../Markdown/ShowMarkdown";
 import { LuReply } from "react-icons/lu";
 import { LiaPlusCircleSolid } from "react-icons/lia";
 import { IconContext } from "react-icons";
+import { Discussion } from "@/types/post";
+import { useEffect, useState } from "react";
+import Replies from "./Replies";
 
 type Props = {
-  discussion: {
-    id: number;
-    content: string;
-    author: string;
-    replies: { id: number; content: string; author: string }[];
-  }[];
+  discussionIds: string[];
   discussionHandler: Function;
 };
 
 export default function Discussions(props: Props) {
-  // const [showReply, setShowReply] = useState<boolean[]>([]);
-  // useEffect(() => {
-  //   const num_discussions = props.discussion.length;
-  //   let i = 0;
-  //   const arr = [];
-  //   while (i < num_discussions) {
-  //     arr[i] = false;
-  //   }
-  //   setShowReply(arr);
-  // }, [props.discussion.length]);
+  const [discussions, SetDiscussions] = useState<Discussion[] | null>(null);
+  useEffect(() => {
+    async function fetchData() {
+      const promises = props.discussionIds.map((discussionId) => {
+        return fetch(`/api/posts/getDiscussion/${discussionId}`);
+      });
+      const responses = await Promise.all(promises);
+      const data = (await Promise.all(
+        responses.map((response) => response.json()),
+      )) as Discussion[];
+      SetDiscussions(data);
+    }
+    fetchData();
+  }, [props.discussionIds]);
   return (
     <div>
-      {props.discussion.map((elem) => {
+      {discussions?.map((elem) => {
         return (
           <div
             key={elem.id}
@@ -39,19 +42,7 @@ export default function Discussions(props: Props) {
               <ShowMarkdown data={elem.content} />
             </div>
             <div>
-              {elem.replies.map((reply) => {
-                return (
-                  <div
-                    key={reply.id}
-                    className="markdown-wrapper min-w-fit max-w-[80%] border-2 border-transparent border-l-emerald-400 pl-3"
-                  >
-                    <ShowMarkdown data={reply.content} />
-                    <cite className="mr-auto block w-fit text-sm text-slate-400">
-                      - {reply.author}
-                    </cite>
-                  </div>
-                );
-              })}
+              <Replies replyIds={elem.replies} />
             </div>
             <div className="text-md font-semibold text-slate-800">
               <button

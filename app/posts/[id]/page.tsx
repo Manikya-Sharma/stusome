@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 
-import posts from "@/public/posts.json";
 import Discussions from "@/app/components/Posts/Discussions";
 import Markdown from "@/app/components/Posts/MarkdownInput";
 import ShowMarkdown from "@/app/components/Markdown/ShowMarkdown";
@@ -15,6 +14,9 @@ import { Turn as Hamburger } from "hamburger-react";
 
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { Post } from "@/types/post";
+import { notFound } from "next/navigation";
+import { v4 as uuid } from "uuid";
 
 type Params = {
   params: { id: string };
@@ -39,37 +41,31 @@ export default function Post({ params }: Params) {
     setTheme(mode);
   }
   // fetching data
-  const id = parseInt(params.id);
-  const [state, setState] = useState({
-    id: id,
-    title: "",
-    author: "",
-    content: "",
-    discussions: [
-      {
-        id: 0,
-        content: "",
-        author: "",
-        replies: [{ id: 0, content: "", author: "" }],
-      },
-    ],
-    tags: [""],
-    coverImgFull: "",
-  });
+  const id = params.id;
+  const [postData, setPostData] = useState<Post | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [headings, setHeadings] = useState<string[]>([]);
   useEffect(() => {
-    for (const post of posts) {
-      if (post.id == id) {
-        setState(post);
+    async function getData() {
+      try {
+        const rawPost = await fetch(`/api/posts/getPost/${id}`);
+        const post = (await rawPost.json()) as Post;
+        if (post == null) {
+          return notFound();
+        }
+        setPostData(post);
+      } catch (e) {
+        console.log(`Error: ${e}`);
+      } finally {
         setLoading(false);
       }
     }
+    getData();
   }, [id]);
 
   // finding headings from data
   useEffect(() => {
-    const arr = state.content
+    const arr = postData?.content
       .replaceAll(/```(.|\n)+```/gm, "")
       .split("\n")
       .filter((line) => line.startsWith("# "))
@@ -77,21 +73,19 @@ export default function Post({ params }: Params) {
     if (arr != null) {
       setHeadings(Array.from(arr));
     }
-  }, [state]);
+  }, [postData]);
 
   // post new discussion
   const [takeNewMarkdownInput, setTakeNewMarkdownInput] = useState(false);
   const [inputValueStatus, setInputValueStatus] = useState<
-    number | { discussion: number; reply: number }
-  >(0);
+    string | { discussion: string; reply: string }
+  >("");
 
-  let currentId = 0;
   const getId = () => {
-    currentId += 1;
-    return currentId;
+    return uuid();
   };
 
-  function handleInput(type: "discussion" | "reply", replyId?: number) {
+  function handleInput(type: "discussion" | "reply", replyId?: string) {
     if (type == "discussion") {
       setTakeNewMarkdownInput(true);
       setInputValueStatus(id);
@@ -108,11 +102,7 @@ export default function Post({ params }: Params) {
     }
     // new reply
     else {
-      console.log(
-        JSON.stringify(inputValue),
-        inputValueStatus.discussion,
-        inputValueStatus.reply,
-      );
+      console.log(JSON.stringify(inputValue));
     }
   }
 
@@ -193,18 +183,18 @@ export default function Post({ params }: Params) {
         </div>
         {/* Title */}
         <div className="relative mb-5 mt-10 dark:z-10 md:mt-0">
-          <h1 className="text-center text-5xl">{state.title}</h1>
+          <h1 className="text-center text-5xl">{postData?.title}</h1>
           {!loading && (
             <cite className="mt-3 block text-center text-lg text-slate-400">
-              - {state.author}
+              - {postData?.author}
             </cite>
           )}
         </div>
         {/* Background Image */}
-        {state.coverImgFull && (
+        {postData?.coverImgFull && (
           <div className="absolute left-0 top-0 -z-[100] h-[55vh] w-[100vw] dark:z-0">
             <div className="relative h-full w-full blur-sm filter">
-              <Image src={state.coverImgFull} alt="" fill />
+              <Image src={postData.coverImgFull} alt="" fill />
               <div className="fixed z-0 h-full w-full bg-[rgba(255,255,255,0.7)] dark:bg-[rgba(0,0,0,0.7)]"></div>
             </div>
           </div>
@@ -253,7 +243,7 @@ export default function Post({ params }: Params) {
                   inter.className
                 }
               >
-                <ShowMarkdown data={state.content} />
+                {postData && <ShowMarkdown data={postData.content} />}
               </div>
             </div>
 
@@ -261,7 +251,7 @@ export default function Post({ params }: Params) {
               <p className="mb-2 hidden text-lg text-slate-800 dark:text-slate-200 sm:block">
                 Tags
               </p>
-              {state.tags.map((tag) => {
+              {postData?.tags.map((tag) => {
                 return (
                   <div
                     key={tag}
@@ -279,10 +269,12 @@ export default function Post({ params }: Params) {
           <div className="mx-auto my-5 h-[2px] w-[90%] bg-slate-600"></div>
           <h2 className="mb-3 mt-6 text-4xl sm:text-center">Discussions:-</h2>
 
-          <Discussions
-            discussion={state.discussions}
-            discussionHandler={handleInput}
-          />
+          {postData && (
+            <Discussions
+              discussionIds={postData.discussions}
+              discussionHandler={handleInput}
+            />
+          )}
 
           {takeNewMarkdownInput ? (
             <Markdown
