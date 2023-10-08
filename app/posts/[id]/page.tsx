@@ -20,6 +20,7 @@ import { v4 as uuid } from "uuid";
 
 import toast, { Toaster } from "react-hot-toast";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 
 type Params = {
   params: { id: string };
@@ -161,6 +162,17 @@ export default function Post({ params }: Params) {
     }
   }
 
+  function validUser(email: string | null | undefined): boolean {
+    if (!email) {
+      return false;
+    }
+    if (postData?.author == email) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   // menu for small screens
   const [openMenu, setOpenMenu] = useState<boolean>(false);
 
@@ -220,6 +232,15 @@ export default function Post({ params }: Params) {
             />
           </div>
         </nav>
+        <div className="fixed right-20 top-1 z-[150] w-fit cursor-pointer rounded-3xl bg-slate-100 px-3 py-2 transition-all duration-200 hover:bg-slate-400 dark:bg-slate-400 dark:hover:bg-slate-100 sm:absolute">
+          {session && session.user && session.user.email ? (
+            validUser(session.user.email) && (
+              <Link href={`/posts/${postData?.id}/edit`}>Edit</Link>
+            )
+          ) : (
+            <Link href="/login">Login</Link>
+          )}
+        </div>
         <div
           className="fixed right-2 top-1 z-[200] w-fit cursor-pointer rounded-3xl bg-slate-100 px-3 py-2 dark:bg-slate-400 sm:absolute"
           onClick={(e) => {
@@ -228,13 +249,11 @@ export default function Post({ params }: Params) {
           }}
         >
           <div>
-            {
-              <DarkModeSwitch
-                checked={theme == "dark"}
-                onChange={() => handleTheme(theme == "dark" ? "light" : "dark")}
-                size={25}
-              />
-            }
+            <DarkModeSwitch
+              checked={theme == "dark"}
+              onChange={() => handleTheme(theme == "dark" ? "light" : "dark")}
+              size={25}
+            />
           </div>
         </div>
         {/* Title */}
@@ -334,7 +353,7 @@ export default function Post({ params }: Params) {
           {takeNewMarkdownInput ? (
             <Markdown
               rows={10}
-              cols={50}
+              cols={30}
               uploadMarkdown={submitData}
               discussionHandler={setTakeNewMarkdownInput}
             />

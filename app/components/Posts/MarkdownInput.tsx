@@ -1,5 +1,6 @@
 "use client";
 import { useState, useRef } from "react";
+import Textarea from "react-textarea-autosize";
 import ShowMarkdown from "../Markdown/ShowMarkdown";
 
 type Props = {
@@ -42,15 +43,15 @@ export default function Markdown(props: Props) {
         </div>
         <div className="min-h-[50vh] min-w-[70vw]">
           <div className={currentTab == 2 ? "hidden" : "block"}>
-            <textarea
+            <Textarea
               name="markdown"
               cols={props.cols}
               rows={props.rows}
               placeholder="Enter the content here"
-              className="mx-auto mb-3 block w-fit rounded-md border border-slate-300 bg-[rgba(250,250,250,0.8)] px-3 py-2 dark:border-slate-600 dark:bg-slate-700 sm:w-[70%]"
+              className="mx-auto mb-3 block max-h-[50vh] w-fit max-w-full rounded-md border border-slate-300 bg-[rgba(250,250,250,0.8)] px-3 py-2 dark:border-slate-600 dark:bg-slate-700 sm:w-[70%]"
               ref={mk_ref}
               onChange={() => setText(mk_ref.current?.value)}
-            ></textarea>
+            ></Textarea>
           </div>
           <div className={currentTab == 1 ? "hidden" : "block"}>
             <p className="markdown-wrapper mx-5 max-h-[40vh] min-h-[30vh] w-full overflow-y-auto rounded-lg border border-slate-300 bg-slate-300 px-3 py-2 dark:bg-slate-800">
