@@ -5,6 +5,7 @@ import Link from "next/link";
 import { BarLoader } from "react-spinners";
 import toast, { Toaster } from "react-hot-toast";
 import { LuHome } from "react-icons/lu";
+import { IconContext } from "react-icons";
 
 export default function Signup() {
   const router = useRouter();
@@ -40,12 +41,12 @@ export default function Signup() {
       // 8 characters, 1 letter, 1 number, 1 special character
       if (
         !password.match(
-          /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/
+          /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
         )
       ) {
         toast(
           "Password must contain at-least 8 characters with minimum one letter, one number and one special character",
-          { duration: 6000 }
+          { duration: 6000 },
         );
         toast.error("Invalid password");
         setLoading(false);
@@ -91,19 +92,22 @@ export default function Signup() {
           cssOverride={{ backgroundColor: "rgba(0,0,255,0.3)" }}
         />
       </div>
-      <main className="h-full flex items-center gradient font-fancy">
+      <main className="gradient flex h-full items-center font-fancy">
         <Link
           href="/"
-          className="absolute top-1 left-1 text-slate-200 text-lg hover:underline underline-offset-2"
+          className="absolute left-1 top-1 text-lg text-slate-200 underline-offset-2 hover:underline"
         >
-          <div className="flex items-center justify-start gap-2 ">
-            <LuHome />
-            Home
-          </div>
+          <IconContext.Provider
+            value={{ className: "shared-class", size: "30" }}
+          >
+            <div className="flex items-center justify-start gap-2 ">
+              <LuHome />
+            </div>
+          </IconContext.Provider>
         </Link>
-        <div className="w-fit mx-auto">
-          <div className="max-w-[80%] gradient-sub w-fit mx-auto p-10 text-white rounded-lg">
-            <h1 className="font-merri text-center text-5xl mb-10">Signup</h1>
+        <div className="mx-auto w-fit">
+          <div className="gradient-sub mx-auto w-fit max-w-[80%] rounded-lg p-10 text-white">
+            <h1 className="mb-10 text-center font-merri text-5xl">Signup</h1>
             <form
               onSubmit={(e) => {
                 e.preventDefault();
@@ -111,7 +115,7 @@ export default function Signup() {
                 handleSubmit();
               }}
             >
-              <div className="grid grid-rows-3 grid-cols-2 items-center gap-2">
+              <div className="grid grid-cols-2 grid-rows-3 items-center gap-2">
                 <label className="text-xl" htmlFor="name">
                   Name
                 </label>
@@ -119,7 +123,7 @@ export default function Signup() {
                   type="text"
                   name="name"
                   id="name"
-                  className="bg-fuchsia-200 text-fuchsia-800 font-semibold px-3 py-2 rounded-xl"
+                  className="rounded-xl bg-fuchsia-200 px-3 py-2 font-semibold text-fuchsia-800"
                   ref={nameRef}
                 />
 
@@ -130,7 +134,7 @@ export default function Signup() {
                   type="text"
                   name="email"
                   id="email"
-                  className="bg-fuchsia-200 text-fuchsia-800 font-semibold px-3 py-2 rounded-xl"
+                  className="rounded-xl bg-fuchsia-200 px-3 py-2 font-semibold text-fuchsia-800"
                   ref={emailRef}
                 />
 
@@ -141,14 +145,14 @@ export default function Signup() {
                   type="password"
                   name="password"
                   id="password"
-                  className="bg-fuchsia-200 text-fuchsia-800 font-semibold px-3 py-2 rounded-xl"
+                  className="rounded-xl bg-fuchsia-200 px-3 py-2 font-semibold text-fuchsia-800"
                   ref={passwordRef}
                 />
               </div>
 
               <button
                 type="submit"
-                className="block w-fit mx-auto px-4 py-2 rounded-md mt-5 bg-gradient-to-br from-fuchsia-300 to-fuchsia-500 hover:from-fuchsia-100 hover:to-rose-300 hover:text-rose-900 transition-all duration-300"
+                className="mx-auto mt-5 block w-fit rounded-md bg-gradient-to-br from-fuchsia-300 to-fuchsia-500 px-4 py-2 transition-all duration-300 hover:from-fuchsia-100 hover:to-rose-300 hover:text-rose-900"
               >
                 Continue
               </button>
@@ -158,7 +162,7 @@ export default function Signup() {
             Already a user?{" "}
             <Link
               href="/login"
-              className="text-fuchsia-200 hover:underline underline-offset-2"
+              className="text-fuchsia-200 underline-offset-2 hover:underline"
             >
               login
             </Link>

@@ -14,6 +14,7 @@ The various sections available are :-
 
 1. Posts
 2. Doubts
+3. Chats
 
 ### Posts
 
@@ -23,6 +24,11 @@ All followers will see the posts in their main feed, but they might also be visi
 ### Doubts
 
 Students can ask common doubts and also reply to others doubts. AI model will ensure that respect is maintained.
+
+### Chats
+
+They allow one to one interaction so that not all discussions are public. AI will be used to prevent spam and
+strict authorization will ensure that only realible people chat.
 
 ## How to start local server for the app
 

@@ -2,43 +2,23 @@
 
 import { useRouter } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
-import Link from "next/link";
 import Image from "next/image";
 import BarLoader from "react-spinners/BarLoader";
-import { State } from "@/app/types/user";
 import { LuTrash2 } from "react-icons/lu";
 import toast, { Toaster } from "react-hot-toast";
+import { IconContext } from "react-icons";
+import { useSession } from "next-auth/react";
+import ProfilePic from "@/app/components/LoggedIn/ProfilePic";
 
-export default function ChangePicture({ params }: { params: { id: string } }) {
-  const router = useRouter();
-  const id = params.id;
-  const [state, setState] = useState<State>({
-    _id: "",
-    name: "",
-    email: "",
-    password: "",
-    picture: "",
-    hasPic: false,
-  });
-  useEffect(() => {
-    const account = localStorage.getItem("account");
-    if (account == null) {
-      localStorage.removeItem("account");
-      router.replace("/login");
-    } else {
-      setState(() => JSON.parse(account));
-    }
-  }, [router]);
-  useEffect(() => {
-    if (id != state._id && state._id != "") {
-      router.push("/login");
-    }
-  }, [id, router, state._id]);
+export default function ChangePicture() {
   const [loading, setLoading] = useState(false);
   const [width, setWidth] = useState(0);
   useEffect(() => {
     setWidth(window.innerWidth);
   }, []);
+
+  const { data: session } = useSession();
+  const router = useRouter();
 
   const picRef = useRef<HTMLInputElement>(null);
 
@@ -51,23 +31,23 @@ export default function ChangePicture({ params }: { params: { id: string } }) {
           const data = reader.result;
           if (typeof data == "string") {
             const base64 = data.replace("data:", "").replace(/^.+,/, "");
-            fetch(`/api/updateAccountByEmail/${state.email}`, {
+            fetch(`/api/updateAccountByEmail/${session?.user?.email}`, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify({ picture: base64, hasPic: true }),
+              body: JSON.stringify({ image: base64, image_third_party: false }),
             }).then(() => {
               const existing = localStorage.getItem("account");
               if (existing != null && pic != null) {
                 const new_account = {
                   ...JSON.parse(existing),
-                  picture: base64,
-                  hasPic: true,
+                  image: base64,
+                  image_third_party: false,
                 };
                 localStorage.setItem("account", JSON.stringify(new_account));
                 setLoading(false);
-                router.push(`/logged-in/${state._id}`);
+                router.push("/explore");
               }
             });
           }
@@ -83,23 +63,26 @@ export default function ChangePicture({ params }: { params: { id: string } }) {
 
   async function removeProfile() {
     try {
-      fetch(`/api/updateAccountByEmail/${state.email}`, {
+      fetch(`/api/updateAccountByEmail/${session?.user?.email}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ picture: "", hasPic: false }),
+        body: JSON.stringify({
+          image: session?.user?.image,
+          image_third_party: true,
+        }),
       }).then(() => {
         const existing = localStorage.getItem("account");
         if (existing != null) {
           const new_account = {
             ...JSON.parse(existing),
-            picture: "",
-            hasPic: false,
+            image: session?.user?.image,
+            image_third_party: true,
           };
           localStorage.setItem("account", JSON.stringify(new_account));
           setLoading(false);
-          router.push(`/logged-in/${state._id}`);
+          router.push(`/explore`);
         }
       });
     } catch (e) {
@@ -121,27 +104,19 @@ export default function ChangePicture({ params }: { params: { id: string } }) {
           cssOverride={{ backgroundColor: "rgba(0,0,255,0.3)" }}
         />
       </div>
-      <main className="h-full flex items-center gradient font-fancy">
-        {" "}
-        <div className="w-fit mx-auto">
-          <div className="max-w-[80%] gradient-sub w-fit mx-auto p-10 text-white rounded-lg">
-            <h1 className="font-merri text-center text-5xl mb-3">
+      <main className="gradient flex h-full items-center font-fancy">
+        <div className="mx-auto w-fit">
+          <div className="gradient-sub mx-auto w-fit max-w-[80%] rounded-lg p-10 text-white">
+            <h1 className="mb-3 text-center font-merri text-5xl">
               Change Profile Picture
             </h1>
-            <p className="text-center mb-10 text-sm">
+            <p className="mb-10 text-center text-sm">
               Only png images supported as of now
             </p>
             <div className="flex flex-col items-center">
               <label className="text-xl" htmlFor="pic">
-                <div className="flex flex-col items-center align-middle justify-center cursor-pointer w-52 h-52 max-w-full max-h-full rounded-full bg-slate-400 overflow-hidden hover:grayscale">
-                  {state.hasPic && (
-                    <Image
-                      src={`data:image/png;base64,${state.picture}`}
-                      alt=""
-                      width={260}
-                      height={260}
-                    />
-                  )}
+                <div className="flex h-52 max-h-full w-52 max-w-full cursor-pointer flex-col items-center justify-center overflow-hidden rounded-full bg-slate-400 align-middle hover:grayscale">
+                  <ProfilePic />
                 </div>
               </label>
               <input
@@ -158,16 +133,20 @@ export default function ChangePicture({ params }: { params: { id: string } }) {
               />
             </div>
             <div>
-              <button
-                onClick={() => {
-                  setLoading(true);
-                  removeProfile();
-                }}
-                className="px-3 py-2 flex justify-between gap-2 items-center w-fit mx-auto bg-red-600 hover:bg-red-100 hover:text-slate-800 mt-5 transition-all duration-200 rounded-md"
+              <IconContext.Provider
+                value={{ className: "shared-class", size: "18" }}
               >
-                <LuTrash2 />
-                Remove
-              </button>
+                <button
+                  onClick={() => {
+                    setLoading(true);
+                    removeProfile();
+                  }}
+                  className="mx-auto mt-5 flex w-fit items-center justify-between gap-2 rounded-md bg-red-600 px-3 py-2 transition-all duration-200 hover:bg-red-100 hover:text-slate-800"
+                >
+                  <LuTrash2 />
+                  Remove
+                </button>
+              </IconContext.Provider>
             </div>
           </div>
         </div>

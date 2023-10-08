@@ -1,7 +1,7 @@
-import { url } from "inspector";
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter, Merriweather, Quicksand, Preahvihear } from "next/font/google";
+import NextAuthProvider from "./components/Auth/GlobalAuth";
 
 const inter = Inter({ subsets: ["latin"] });
 const merriweather = Merriweather({
@@ -11,6 +11,7 @@ const merriweather = Merriweather({
 });
 const quicksand = Quicksand({
   subsets: ["latin"],
+  weight: "300",
   variable: "--font-quick",
 });
 const preahvihear = Preahvihear({
@@ -46,10 +47,10 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={
-          inter.className + " selection:bg-teal-400 selection:text-white"
+          merriweather.className + " selection:bg-teal-400 selection:text-white"
         }
       >
-        {children}
+        <NextAuthProvider>{children}</NextAuthProvider>
       </body>
     </html>
   );

@@ -1,21 +1,18 @@
 "use client";
-import { useState, useEffect } from "react";
-import { State } from "@/app/types/user";
+import { useState, useEffect, useRef } from "react";
 import { DarkModeSwitch } from "react-toggle-dark-mode";
-import Image from "next/image";
 import React from "react";
-import { LuMenu, LuPanelLeftClose } from "react-icons/lu";
-
-type Props = {
-  state: State;
-};
+import { useSession } from "next-auth/react";
+import { LiaSyncAltSolid } from "react-icons/lia";
+import toast, { Toaster } from "react-hot-toast";
+import ProfilePic from "../LoggedIn/ProfilePic";
+import { Turn as Hamburger } from "hamburger-react";
+import { quicksand } from "@/custom-fonts/fonts";
 
 export default function UserInfoContainer({
   children,
-  props,
 }: {
   children: React.ReactNode;
-  props: Props;
 }) {
   const [theme, setTheme] = useState<"light" | "dark">("dark");
 
@@ -36,44 +33,81 @@ export default function UserInfoContainer({
   }
 
   const [showMenu, setShowMenu] = useState<boolean>(false);
+  const { data: session } = useSession();
+
+  const [syncing, setSyncing] = useState(false);
+
+  const syncedData = useRef<string | null>(null);
+
+  useEffect(() => {
+    syncedData.current = localStorage.getItem("account");
+  });
+
+  async function syncData() {
+    setSyncing(true);
+    let synced = false;
+    if (session && session.user && session.user.email) {
+      try {
+        const rawData = await fetch(
+          `/api/getAccountByEmail/${session.user.email}`,
+        );
+        const dataFromCloud = await rawData.json();
+        localStorage.setItem("account", JSON.stringify(dataFromCloud));
+        syncedData.current = JSON.stringify(dataFromCloud);
+        synced = true;
+      } catch {
+        synced = false;
+      }
+    }
+    setSyncing(false);
+    if (synced) {
+      toast.success("Account synced successfully");
+    } else {
+      toast.error("Could not sync account, please try again later");
+    }
+  }
 
   return (
-    <div className="sm:flex sm:justify-between pr-5 pt-7 sm:pt-0">
-      <div
-        className="absolute right-3 top-2 sm:hidden"
-        onClick={() => setShowMenu(!showMenu)}
-      >
-        {showMenu ? <LuPanelLeftClose /> : <LuMenu />}
+    <div className="pt-10 sm:flex sm:justify-between sm:pr-5 sm:pt-0">
+      <Toaster position="top-center" />
+
+      <div className="absolute right-2 top-2 z-[100] sm:hidden">
+        <Hamburger
+          toggled={showMenu}
+          onToggle={() => setShowMenu(!showMenu)}
+          size={22}
+        />
       </div>
+
       <div
         className={
-          "fixed border-l border-t border-zinc-300 sm:border-none sm:static sm:block bg-[rgba(226,232,240,0.7)] backdrop-blur-sm px-5 max-w-fit sm:max-w-full lg:max-w-[30vw] dark:bg-[rgba(51,65,85,0.7)] h-[100vh] overflow-y-hidden rounded-tl-3xl sm:rounded-tr-3xl sm:mr-3 sm:grow transition-all duration-200" +
+          "fixed h-[100vh] max-w-fit overflow-y-hidden rounded-tl-3xl border-l border-t border-zinc-300 bg-[rgba(226,232,240,0.7)] px-5 backdrop-blur-sm transition-all duration-200 dark:bg-[rgba(51,65,85,0.7)] sm:static sm:mr-3 sm:block sm:max-w-full sm:grow sm:rounded-tr-3xl sm:border-none lg:max-w-[30vw]" +
           (showMenu
             ? " translate-x-[calc(100vw-100%)] sm:translate-x-0"
             : " translate-x-[110vw] sm:translate-x-0")
         }
       >
-        <div className="pt-[4rem] flex flex-col items-center space-y-3 text-center">
-          <div className="flex flex-col items-center align-middle justify-center w-32 h-32 rounded-full bg-slate-300 overflow-hidden dark:border-slate-400 dark:border-2">
-            {props.state.hasPic && (
-              <Image
-                src={`data:image/png;base64,${props.state.picture}`}
-                alt=""
-                width={170}
-                height={170}
-              />
-            )}
+        <div className="flex flex-col items-center space-y-3 pt-[4rem] text-center">
+          <div className="flex h-32 w-32 flex-col items-center justify-center overflow-hidden rounded-full bg-slate-300 align-middle dark:border-2 dark:border-slate-400">
+            <ProfilePic />
           </div>
-          <p className="text-3xl font-merri">{props.state.name}</p>
-          <p className="text-sm text-slate-500 dark:text-slate-400">
-            {props.state.email}
+          <p className="font-merri text-3xl">{session?.user?.name}</p>
+          <p
+            className={
+              "text-sm text-slate-500 dark:text-slate-400 " +
+              quicksand.className
+            }
+          >
+            {syncedData && syncedData.current
+              ? JSON.parse(syncedData.current).email
+              : session?.user?.email}
           </p>
-          <div className="w-[80%] h-[3px] my-10 bg-slate-500" />
+          <div className="my-10 h-[3px] w-[80%] bg-slate-500" />
           <h2 className="text-lg">Quick Setup</h2>
           <ul>
             <li>
               <div
-                className="w-[80px] dark:bg-slate-500 bg-slate-300 py-2 px-3 rounded-3xl cursor-pointer"
+                className="mx-auto w-[80px] cursor-pointer rounded-3xl bg-slate-300 px-3 py-2 dark:bg-slate-500"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleTheme(theme == "dark" ? "light" : "dark");
@@ -96,6 +130,19 @@ export default function UserInfoContainer({
                   }
                 </div>
               </div>
+            </li>
+            <li>
+              <button
+                className="my-3 flex w-fit items-center justify-center gap-2 rounded-md border border-green-500 bg-green-200 px-4 py-2 text-green-900 transition-all duration-300 hover:bg-green-400"
+                onClick={() => {
+                  syncData();
+                }}
+              >
+                <p className={`${syncing ? "animate-spin" : "animate-none"}`}>
+                  <LiaSyncAltSolid />
+                </p>
+                <p className={quicksand.className}>Sync Account</p>
+              </button>
             </li>
           </ul>
         </div>

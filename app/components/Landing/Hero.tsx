@@ -5,15 +5,15 @@ import Image from "next/image";
 export default function Hero() {
   return (
     <div>
-      <div className="text-slate-100 text-sm sm:text-md md:text-lg text-right pr-3 text-md tracking-wider">
+      <div className="sm:text-md text-md pr-3 text-right text-sm tracking-wider text-slate-100 md:text-lg">
         Deep . Dive . Create
       </div>
-      <section className="relative px-3 flex flex-col gap-3 font-sans text-white pb-8 drop-shadow-md">
+      <section className="relative flex flex-col gap-3 px-3 pb-8 font-sans text-white drop-shadow-md">
         <div>
-          <h1 className="text-4xl sm:text-8xl font-extrabold tracking-tight font-merri mb-2">
+          <h1 className="mb-2 font-merri text-4xl font-extrabold tracking-tight sm:text-8xl">
             Our Services
           </h1>
-          <p className="text-slate-100 text-xl sm:text-2xl font-fancy">
+          <p className="font-fancy text-xl text-slate-100 sm:text-2xl">
             WHAT WE OFFER
           </p>
         </div>
