@@ -8,8 +8,6 @@ import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 
-import mostViewedPostIds from "@/public/most-viewed.json";
-
 import Skeleton from "react-loading-skeleton";
 
 import Image from "next/image";
@@ -25,14 +23,22 @@ export default function MostViewed() {
   }, []);
   useEffect(() => {
     async function fetchData() {
-      const requests = mostViewedPostIds.map((id) => {
-        return fetch(`/api/posts/getPost/${id}`);
+      const rawMostViewedPostIds = await fetch("/api/posts/getMostViewedPosts");
+
+      const mostViewedPostIds = (await rawMostViewedPostIds.json()) as Array<{
+        id: string;
+      }>;
+
+      const requests = mostViewedPostIds.map((elem) => {
+        return fetch(`/api/posts/getPost/${elem.id}`);
       });
       const responses = await Promise.all(requests);
       const data = (await Promise.all(
         responses.map((response) => response.json()),
       )) as Post[];
-      setMostViewed(data);
+      setMostViewed(
+        data.filter((post) => post != null && post.published == true),
+      );
       setLoading(false);
     }
     fetchData();
@@ -53,7 +59,13 @@ export default function MostViewed() {
           >
             {loading && (
               <SwiperSlide>
-                <Skeleton />
+                <Skeleton
+                  height={200}
+                  width={width - 150}
+                  baseColor="#333344"
+                  highlightColor="#aaa"
+                  duration={0.7}
+                />
               </SwiperSlide>
             )}
             {mostViewed?.map((post) => {

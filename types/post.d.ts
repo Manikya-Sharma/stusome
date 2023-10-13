@@ -6,6 +6,7 @@ export type Post = {
   discussions: Array<string>;
   tags: Array<string>;
   coverImgFull: string;
+  published: boolean;
 };
 
 export type Discussion = {

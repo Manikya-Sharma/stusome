@@ -8,5 +8,6 @@ export const config = {
     "/posts",
     "/explore",
     "/settings",
+    "/posts/:path/edit",
   ],
 };
