@@ -9,7 +9,7 @@ import { DarkModeSwitch } from "react-toggle-dark-mode";
 
 import { inter } from "@/custom-fonts/fonts";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Turn as Hamburger } from "hamburger-react";
 
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
@@ -21,13 +21,15 @@ import { v4 as uuid } from "uuid";
 import toast, { Toaster } from "react-hot-toast";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 type Params = {
   params: { id: string };
 };
 
 export default function Post({ params }: Params) {
-  const { data: session, status } = useSession();
+  const router = useRouter();
+  const { data: session } = useSession();
 
   // theme
   const [theme, setTheme] = useState<"dark" | "light" | null>(null);
@@ -59,6 +61,9 @@ export default function Post({ params }: Params) {
         if (post == null) {
           return notFound();
         }
+        if (post.published == false) {
+          router.replace(`/posts/${id}/edit`);
+        }
         setPostData(post);
       } catch (e) {
         console.log(`Error: ${e}`);
@@ -67,7 +72,7 @@ export default function Post({ params }: Params) {
       }
     }
     getData();
-  }, [id]);
+  }, [id, router]);
 
   // finding headings from data
   useEffect(() => {
@@ -232,15 +237,19 @@ export default function Post({ params }: Params) {
             />
           </div>
         </nav>
-        <div className="fixed right-20 top-1 z-[150] w-fit cursor-pointer rounded-3xl bg-slate-100 px-3 py-2 transition-all duration-200 hover:bg-slate-400 dark:bg-slate-400 dark:hover:bg-slate-100 sm:absolute">
-          {session && session.user && session.user.email ? (
-            validUser(session.user.email) && (
+
+        {session && session.user && session.user.email ? (
+          validUser(session.user.email) && (
+            <div className="fixed right-20 top-1 z-[150] w-fit cursor-pointer rounded-3xl bg-slate-100 px-3 py-2 transition-all duration-200 hover:bg-slate-400 dark:bg-slate-400 dark:hover:bg-slate-100 sm:absolute">
               <Link href={`/posts/${postData?.id}/edit`}>Edit</Link>
-            )
-          ) : (
+            </div>
+          )
+        ) : (
+          <div className="fixed right-20 top-1 z-[150] w-fit cursor-pointer rounded-3xl bg-slate-100 px-3 py-2 transition-all duration-200 hover:bg-slate-400 dark:bg-slate-400 dark:hover:bg-slate-100 sm:absolute">
             <Link href="/login">Login</Link>
-          )}
-        </div>
+          </div>
+        )}
+
         <div
           className="fixed right-2 top-1 z-[200] w-fit cursor-pointer rounded-3xl bg-slate-100 px-3 py-2 dark:bg-slate-400 sm:absolute"
           onClick={(e) => {

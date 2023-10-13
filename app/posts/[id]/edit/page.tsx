@@ -13,7 +13,7 @@ import { Post } from "@/types/post";
 import toast, { Toaster } from "react-hot-toast";
 import { useSession } from "next-auth/react";
 import { State } from "@/types/user";
-import { useRouter } from "next/navigation";
+import { notFound, useRouter } from "next/navigation";
 
 type Params = {
   params: { id: string };
@@ -53,31 +53,28 @@ export default function Post({ params }: Params) {
   const id = params.id;
   const [postData, setPostData] = useState<Post | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [errorState, setErrorState] = useState<boolean>(false);
   useEffect(() => {
     async function getData() {
       try {
         const rawPost = await fetch(`/api/posts/getPost/${id}`);
         const post = (await rawPost.json()) as Post;
         if (post == null) {
-          console.error("No such post");
-          return;
+          return "notfound";
         }
         if (session && session.user && session.user.email) {
           if (post.author != session.user.email) {
-            console.error("Unauthorized", post.author, session?.user?.email);
-            return;
+            return "unauthorized";
           }
         } else {
           const rawUser = localStorage.getItem("account");
           if (rawUser) {
             const user = JSON.parse(rawUser) as State;
             if (post.author != user.email) {
-              console.error("Unauthorized", post.author, session?.user?.email);
-              return;
+              return "unauthorized";
             }
           } else {
-            console.log("No account yet!");
-            return;
+            return "unauthorized";
           }
         }
         setPostData(post);
@@ -87,7 +84,11 @@ export default function Post({ params }: Params) {
         setLoading(false);
       }
     }
-    getData();
+    getData().then((result) => {
+      if (result == "notfound" || result == "unauthorized") {
+        setErrorState(true);
+      }
+    });
   }, [session, id]);
 
   useEffect(() => {
@@ -138,6 +139,7 @@ export default function Post({ params }: Params) {
     coverImgFull: string;
     content: string;
     tags: Array<string>;
+    published: boolean;
   }) {
     try {
       await fetch("/api/posts/updatePost", {
@@ -150,6 +152,10 @@ export default function Post({ params }: Params) {
     } catch (e) {
       console.error(`Error: ${e}`);
     }
+  }
+
+  if (errorState == true) {
+    return notFound();
   }
 
   return loading ? (
@@ -217,24 +223,24 @@ export default function Post({ params }: Params) {
           </div>
         </div>
         <div className="my-3">
-          <h1 className="text-center text-3xl">New Post</h1>
+          <h1 className="text-center text-3xl md:text-5xl">Edit your post</h1>
         </div>
-        <div className="my-3 flex items-center justify-start gap-2">
+        <div className="mx-auto my-3 flex w-fit items-center justify-start gap-2">
           <h2 className="text-lg">Heading: </h2>
           <input
             type="text"
-            className="mx-2 block rounded-md border-2 border-slate-200 px-3 py-1 placeholder:text-red-400 invalid:border-red-400 invalid:bg-red-100"
+            className="mx-2 block min-w-fit rounded-md border-2 border-slate-200 px-3 py-1 placeholder:text-red-400 invalid:border-red-400 invalid:bg-red-100 dark:text-slate-700"
             required={true}
             placeholder="Your heading"
             onChange={(e) => setHeading(e.target.value)}
             defaultValue={heading != null ? heading : ""}
           />
         </div>
-        <div className="my-3 flex items-center justify-start gap-2">
+        <div className="mx-auto my-3 flex w-fit items-center justify-start gap-2">
           <h2 className="text-lg">Cover Image: </h2>
           <input
             type="url"
-            className="mx-2 block rounded-md border-2 border-slate-200 px-3 py-1 placeholder:text-slate-400 invalid:border-red-400 invalid:bg-red-100"
+            className="mx-2 block rounded-md border-2 border-slate-200 px-3 py-1 placeholder:text-slate-400 invalid:border-red-400 invalid:bg-red-100 dark:text-slate-800 invalid:dark:text-rose-800"
             placeholder="Enter unsplash image url"
             onChange={(e) => setCoverImg(e.target.value)}
             defaultValue={coverImg ? coverImg : ""}
@@ -248,8 +254,8 @@ export default function Post({ params }: Params) {
                   className={
                     "block w-fit rounded-md px-4 py-2 transition-colors duration-200 " +
                     (currentTab == 1
-                      ? "bg-slate-800 text-slate-200"
-                      : "bg-slate-200 text-slate-700")
+                      ? "bg-slate-800 text-slate-200 dark:bg-slate-200 dark:text-slate-700"
+                      : "bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-200")
                   }
                   onClick={() => setCurrentTab(1)}
                 >
@@ -259,8 +265,8 @@ export default function Post({ params }: Params) {
                   className={
                     "block w-fit rounded-md px-4 py-2 transition-colors duration-200 " +
                     (currentTab == 2
-                      ? "bg-slate-800 text-slate-200"
-                      : "bg-slate-200 text-slate-700")
+                      ? "bg-slate-800 text-slate-200 dark:bg-slate-200 dark:text-slate-700"
+                      : "bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-200")
                   }
                   onClick={() => setCurrentTab(2)}
                 >
@@ -287,7 +293,7 @@ export default function Post({ params }: Params) {
             </div>
           </div>
         </div>
-        <div>
+        <div className="mx-auto sm:max-w-[80%] md:max-w-[70%]">
           <h2 className="my-5 text-xl">Tags</h2>
           <div className="flex flex-wrap items-center gap-2 space-y-1">
             <form
@@ -295,13 +301,13 @@ export default function Post({ params }: Params) {
                 e.preventDefault();
                 addTag();
               }}
-              className="my-2 flex cursor-pointer items-center justify-start gap-2 rounded-3xl border border-black/30 px-2 py-1"
+              className="group my-2 flex cursor-pointer items-center justify-start gap-2 rounded-3xl border border-black/30 bg-slate-200 px-2 py-1 text-slate-800 dark:bg-slate-700 dark:text-slate-100"
             >
               <input
                 type="text"
                 placeholder="+New Tag"
                 ref={tagRef}
-                className="block max-w-[80px] hover:placeholder:text-black/40 focus-visible:outline-none"
+                className="block h-fit max-w-[80px] rounded-lg bg-inherit focus-visible:outline-none group-hover:placeholder:text-black/40"
                 onChange={(e) => {
                   e.currentTarget.value.trim() == ""
                     ? setTyping(false)
@@ -321,7 +327,7 @@ export default function Post({ params }: Params) {
                 return (
                   <div
                     key={tag}
-                    className="group w-fit cursor-pointer rounded-3xl bg-slate-300 px-3 py-1 text-slate-800 hover:bg-slate-500 hover:text-white"
+                    className="group w-fit cursor-pointer rounded-3xl bg-slate-300 px-3 py-1 text-slate-800 hover:bg-slate-500 hover:text-white dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
                     onClick={() => removeTag(tag)}
                   >
                     {tag}
@@ -335,33 +341,7 @@ export default function Post({ params }: Params) {
         </div>
         <div className="max-auto my-5 flex w-[90%] items-center justify-center gap-3">
           <button
-            className="block w-fit rounded-md bg-rose-400 px-4 py-2 text-rose-100 transition-all duration-300 hover:bg-rose-200 hover:text-rose-950"
-            onClick={() => {
-              let email;
-              if (session && session.user && session.user.email) {
-                email = session.user.email;
-              } else {
-                const rawAccount = localStorage.getItem("account");
-                if (rawAccount) {
-                  const account = JSON.parse(rawAccount) as State;
-                  email = account.email;
-                }
-              }
-              const state = {
-                id: id,
-                title: heading,
-                author: email,
-                coverImgFull: coverImg,
-                content: markdown,
-                tags: tags,
-              };
-              console.log(state);
-            }}
-          >
-            Save as Draft
-          </button>
-          <button
-            className="block w-fit rounded-md bg-rose-400 px-4 py-2 text-rose-100 transition-all duration-300 hover:bg-rose-200 hover:text-rose-950"
+            className="block w-fit rounded-md bg-rose-400 px-4 py-2 text-rose-100 transition-all duration-300 hover:bg-rose-200 hover:text-rose-950 dark:text-slate-900"
             onClick={() => {
               let email;
               if (session && session.user && session.user.email) {
@@ -389,6 +369,47 @@ export default function Post({ params }: Params) {
                 coverImgFull: coverImg,
                 content: markdown,
                 tags: tags,
+                published: false,
+              };
+              toast.promise(postNow(state), {
+                loading: "Uploading your post",
+                error: "Could not publish, please try again",
+                success: "Post published successfully",
+              });
+            }}
+          >
+            Save as Draft
+          </button>
+          <button
+            className="block w-fit rounded-md bg-rose-400 px-4 py-2 text-rose-100 transition-all duration-300 hover:bg-rose-200 hover:text-rose-950 dark:text-slate-900"
+            onClick={() => {
+              let email;
+              if (session && session.user && session.user.email) {
+                email = session.user.email;
+              } else {
+                const rawAccount = localStorage.getItem("account");
+                if (rawAccount) {
+                  const account = JSON.parse(rawAccount) as State;
+                  email = account.email;
+                }
+              }
+              if (
+                heading == null ||
+                coverImg == null ||
+                markdown == null ||
+                tags == null ||
+                email == undefined
+              ) {
+                return;
+              }
+              const state = {
+                id: id,
+                title: heading,
+                author: email,
+                coverImgFull: coverImg,
+                content: markdown,
+                tags: tags,
+                published: true,
               };
               toast.promise(postNow(state), {
                 loading: "Uploading your post",
