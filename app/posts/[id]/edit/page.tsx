@@ -1,33 +1,36 @@
 "use client";
 
-import Image from "next/image";
-
-import Markdown from "@/app/components/Posts/MarkdownInput";
 import ShowMarkdown from "@/app/components/Markdown/ShowMarkdown";
 import { DarkModeSwitch } from "react-toggle-dark-mode";
 import Textarea from "react-textarea-autosize";
-
-import { inter } from "@/custom-fonts/fonts";
 
 import { useState, useEffect, useRef } from "react";
 
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { Post } from "@/types/post";
-import { notFound } from "next/navigation";
 
 import toast, { Toaster } from "react-hot-toast";
 import { useSession } from "next-auth/react";
+import { State } from "@/types/user";
+import { useRouter } from "next/navigation";
 
 type Params = {
   params: { id: string };
 };
 
 export default function Post({ params }: Params) {
+  const router = useRouter();
   const { data: session, status } = useSession();
 
-  const mk_ref = useRef<HTMLTextAreaElement>(null);
-  const [text, setText] = useState<string | undefined>("");
+  const tagRef = useRef<HTMLInputElement>(null);
+
+  const [tags, setTags] = useState<Array<string> | null>(null);
+  const [markdown, setMarkdown] = useState<string | null>(null);
+  const [coverImg, setCoverImg] = useState<string | null>(null);
+  const [heading, setHeading] = useState<string | null>(null);
+
+  const [typing, setTyping] = useState<boolean>(false);
 
   // theme
   const [theme, setTheme] = useState<"dark" | "light" | null>(null);
@@ -56,10 +59,26 @@ export default function Post({ params }: Params) {
         const rawPost = await fetch(`/api/posts/getPost/${id}`);
         const post = (await rawPost.json()) as Post;
         if (post == null) {
-          return notFound();
+          console.error("No such post");
+          return;
         }
-        if (post.author != session?.user?.email) {
-          return notFound();
+        if (session && session.user && session.user.email) {
+          if (post.author != session.user.email) {
+            console.error("Unauthorized", post.author, session?.user?.email);
+            return;
+          }
+        } else {
+          const rawUser = localStorage.getItem("account");
+          if (rawUser) {
+            const user = JSON.parse(rawUser) as State;
+            if (post.author != user.email) {
+              console.error("Unauthorized", post.author, session?.user?.email);
+              return;
+            }
+          } else {
+            console.log("No account yet!");
+            return;
+          }
         }
         setPostData(post);
       } catch (e) {
@@ -69,16 +88,69 @@ export default function Post({ params }: Params) {
       }
     }
     getData();
-  }, [id, session?.user]);
+  }, [session, id]);
 
   useEffect(() => {
-    if (postData && mk_ref.current) {
-      console.log(postData.content);
-      mk_ref.current.value = postData.content;
+    if (postData) {
+      setMarkdown(postData.content);
+      setHeading(postData.title);
+      setCoverImg(postData.coverImgFull);
+      setTags(postData.tags);
     }
   }, [postData]);
 
+  function addTag() {
+    if (!tagRef.current) {
+      return;
+    }
+    const value = tagRef.current.value;
+    if (value.trim() == "") {
+      return;
+    }
+    if (tags == null) {
+      setTags([value]);
+    } else {
+      if (tags.map((tag) => tag.toLowerCase()).includes(value.toLowerCase())) {
+        return;
+      }
+      setTags([...tags, value.toLowerCase()]);
+      tagRef.current.value = "";
+    }
+  }
+
+  function removeTag(tag: string) {
+    if (!tags) {
+      return;
+    }
+    setTags(
+      tags?.filter((currentTag) => {
+        return tag != currentTag;
+      }),
+    );
+  }
+
   const [currentTab, setCurrentTab] = useState<1 | 2>(1);
+
+  async function postNow(state: {
+    id: string;
+    title: string;
+    author: string;
+    coverImgFull: string;
+    content: string;
+    tags: Array<string>;
+  }) {
+    try {
+      await fetch("/api/posts/updatePost", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(state),
+      });
+    } catch (e) {
+      console.error(`Error: ${e}`);
+    }
+  }
 
   return loading ? (
     <SkeletonTheme
@@ -154,6 +226,8 @@ export default function Post({ params }: Params) {
             className="mx-2 block rounded-md border-2 border-slate-200 px-3 py-1 placeholder:text-red-400 invalid:border-red-400 invalid:bg-red-100"
             required={true}
             placeholder="Your heading"
+            onChange={(e) => setHeading(e.target.value)}
+            defaultValue={heading != null ? heading : ""}
           />
         </div>
         <div className="my-3 flex items-center justify-start gap-2">
@@ -162,18 +236,20 @@ export default function Post({ params }: Params) {
             type="url"
             className="mx-2 block rounded-md border-2 border-slate-200 px-3 py-1 placeholder:text-slate-400 invalid:border-red-400 invalid:bg-red-100"
             placeholder="Enter unsplash image url"
+            onChange={(e) => setCoverImg(e.target.value)}
+            defaultValue={coverImg ? coverImg : ""}
           />
         </div>
         <div>
-          <div className="bg-slate-300 py-3">
+          <div className="py-3">
             <div className="flex h-full flex-col items-center justify-center gap-2">
               <div className="flex w-[80%] items-center justify-center gap-2">
                 <button
                   className={
                     "block w-fit rounded-md px-4 py-2 transition-colors duration-200 " +
                     (currentTab == 1
-                      ? "bg-slate-200 text-slate-700"
-                      : "bg-slate-800 text-slate-200")
+                      ? "bg-slate-800 text-slate-200"
+                      : "bg-slate-200 text-slate-700")
                   }
                   onClick={() => setCurrentTab(1)}
                 >
@@ -183,33 +259,146 @@ export default function Post({ params }: Params) {
                   className={
                     "block w-fit rounded-md px-4 py-2 transition-colors duration-200 " +
                     (currentTab == 2
-                      ? "bg-slate-200 text-slate-700"
-                      : "bg-slate-800 text-slate-200")
+                      ? "bg-slate-800 text-slate-200"
+                      : "bg-slate-200 text-slate-700")
                   }
                   onClick={() => setCurrentTab(2)}
                 >
                   Preview
                 </button>
               </div>
-              <div className="min-h-[50vh] min-w-[70vw]">
+              <div className="min-w-[70vw]">
                 <div className={currentTab == 2 ? "hidden" : "block"}>
                   <Textarea
                     name="markdown"
                     cols={20}
                     placeholder="Enter the content here"
                     className="mx-auto mb-3 block max-h-[50vh] w-fit max-w-full rounded-md border border-slate-300 bg-[rgba(250,250,250,0.8)] px-3 py-2 dark:border-slate-600 dark:bg-slate-700 sm:w-[70%]"
-                    ref={mk_ref}
-                    onChange={() => setText(mk_ref.current?.value)}
+                    onChange={(e) => setMarkdown(e.target.value)}
+                    defaultValue={markdown ? markdown : ""}
                   ></Textarea>
                 </div>
                 <div className={currentTab == 1 ? "hidden" : "block"}>
-                  <p className="markdown-wrapper mx-5 max-h-[40vh] min-h-[30vh] w-full overflow-y-auto rounded-lg border border-slate-300 bg-slate-300 px-3 py-2 dark:bg-slate-800">
-                    <ShowMarkdown data={text != undefined ? text : "preview"} />
-                  </p>
+                  <div className="markdown-wrapper mx-5 max-h-[40vh] min-h-[30vh] w-full overflow-y-auto rounded-lg border border-slate-300 bg-slate-300 px-3 py-2 dark:bg-slate-800">
+                    <ShowMarkdown data={markdown ? markdown : "preview"} />
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+        </div>
+        <div>
+          <h2 className="my-5 text-xl">Tags</h2>
+          <div className="flex flex-wrap items-center gap-2 space-y-1">
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                addTag();
+              }}
+              className="my-2 flex cursor-pointer items-center justify-start gap-2 rounded-3xl border border-black/30 px-2 py-1"
+            >
+              <input
+                type="text"
+                placeholder="+New Tag"
+                ref={tagRef}
+                className="block max-w-[80px] hover:placeholder:text-black/40 focus-visible:outline-none"
+                onChange={(e) => {
+                  e.currentTarget.value.trim() == ""
+                    ? setTyping(false)
+                    : setTyping(true);
+                }}
+              />
+
+              <button
+                type="submit"
+                className={typing ? "opacity-100" : "opacity-0"}
+              >
+                +
+              </button>
+            </form>
+            {tags &&
+              tags.map((tag) => {
+                return (
+                  <div
+                    key={tag}
+                    className="group w-fit cursor-pointer rounded-3xl bg-slate-300 px-3 py-1 text-slate-800 hover:bg-slate-500 hover:text-white"
+                    onClick={() => removeTag(tag)}
+                  >
+                    {tag}
+                    <button className="ml-2 inline-block h-fit w-fit rounded-full bg-rose-300 px-2 text-rose-600 group-hover:bg-rose-600 group-hover:text-rose-100">
+                      x
+                    </button>
+                  </div>
+                );
+              })}
+          </div>
+        </div>
+        <div className="max-auto my-5 flex w-[90%] items-center justify-center gap-3">
+          <button
+            className="block w-fit rounded-md bg-rose-400 px-4 py-2 text-rose-100 transition-all duration-300 hover:bg-rose-200 hover:text-rose-950"
+            onClick={() => {
+              let email;
+              if (session && session.user && session.user.email) {
+                email = session.user.email;
+              } else {
+                const rawAccount = localStorage.getItem("account");
+                if (rawAccount) {
+                  const account = JSON.parse(rawAccount) as State;
+                  email = account.email;
+                }
+              }
+              const state = {
+                id: id,
+                title: heading,
+                author: email,
+                coverImgFull: coverImg,
+                content: markdown,
+                tags: tags,
+              };
+              console.log(state);
+            }}
+          >
+            Save as Draft
+          </button>
+          <button
+            className="block w-fit rounded-md bg-rose-400 px-4 py-2 text-rose-100 transition-all duration-300 hover:bg-rose-200 hover:text-rose-950"
+            onClick={() => {
+              let email;
+              if (session && session.user && session.user.email) {
+                email = session.user.email;
+              } else {
+                const rawAccount = localStorage.getItem("account");
+                if (rawAccount) {
+                  const account = JSON.parse(rawAccount) as State;
+                  email = account.email;
+                }
+              }
+              if (
+                heading == null ||
+                coverImg == null ||
+                markdown == null ||
+                tags == null ||
+                email == undefined
+              ) {
+                return;
+              }
+              const state = {
+                id: id,
+                title: heading,
+                author: email,
+                coverImgFull: coverImg,
+                content: markdown,
+                tags: tags,
+              };
+              toast.promise(postNow(state), {
+                loading: "Uploading your post",
+                error: "Could not publish, please try again",
+                success: "Post published successfully",
+              });
+            }}
+          >
+            Post
+          </button>
         </div>
       </div>
     </div>

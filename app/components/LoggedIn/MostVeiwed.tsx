@@ -10,7 +10,7 @@ import "swiper/css/navigation";
 
 import mostViewedPostIds from "@/public/most-viewed.json";
 
-import Skeleton from "react-loading-skeleton";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 
 import Image from "next/image";
 import { randomColor } from "@/lib/utils";
@@ -53,7 +53,13 @@ export default function MostViewed() {
           >
             {loading && (
               <SwiperSlide>
-                <Skeleton />
+                <Skeleton
+                  height={200}
+                  width={width - 150}
+                  baseColor="#333344"
+                  highlightColor="#aaa"
+                  duration={0.7}
+                />
               </SwiperSlide>
             )}
             {mostViewed?.map((post) => {
