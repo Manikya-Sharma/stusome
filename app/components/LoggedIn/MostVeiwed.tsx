@@ -23,7 +23,7 @@ export default function MostViewed() {
   }, []);
   useEffect(() => {
     async function fetchData() {
-      const rawMostViewedPostIds = await fetch("/api/posts/getMostViewedPosts");
+      const rawMostViewedPostIds = await fetch("/api/posts/getMostViewedPosts", {cache: "no-cache"});
 
       const mostViewedPostIds = (await rawMostViewedPostIds.json()) as Array<{
         id: string;
