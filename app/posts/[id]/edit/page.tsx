@@ -200,11 +200,20 @@ export default function Post({ params }: Params) {
       tags: tags,
       published: type == "publish",
     };
-    toast.promise(postNow(state), {
-      loading: "Uploading your post",
-      error: "Could not publish, please try again",
-      success: "Post published successfully",
-    });
+    if (type == "publish") {
+        toast.promise(postNow(state), {
+          loading: "Uploading your post",
+          error: "Could not publish, please try again",
+          success: "Post published successfully",
+        });
+    } else {
+
+        toast.promise(postNow(state), {
+          loading: "Saving your post",
+          error: "Could not save, please try again",
+          success: "Post saved successfully",
+        });
+    }
   }
 
   return loading ? (
