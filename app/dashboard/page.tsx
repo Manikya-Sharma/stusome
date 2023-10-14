@@ -1,4 +1,5 @@
 "use client";
+
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
@@ -7,10 +8,51 @@ import { LuArrowLeft } from "react-icons/lu";
 import { v4 as uuid } from "uuid";
 import toast, { Toaster } from "react-hot-toast";
 import { Post } from "@/types/post";
+import { useEffect, useState } from "react";
+import { State } from "@/types/user";
+import { IconContext } from "react-icons";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation } from "swiper/modules";
+import Skeleton from "react-loading-skeleton";
+import "swiper/css";
+import "swiper/css/navigation";
 
 export default function Dashboard() {
   const { data: session } = useSession();
   const router = useRouter();
+
+  const [loading, setLoading] = useState<boolean>(true);
+  const [posts, setPosts] = useState<Array<Post> | null>(null);
+  const [width, setWidth] = useState<number>(0);
+
+  useEffect(() => {
+    setWidth(() => window.innerWidth);
+  }, []);
+
+  useEffect(() => {
+    async function fetchPosts() {
+      if (!session || !session.user || !session.user.email) {
+        return;
+      }
+      const rawAccount = await fetch(
+        `/api/getAccountByEmail/${session.user.email}`,
+      );
+
+      let account = (await rawAccount.json()) as State;
+      const postIds = account.posts;
+
+      const requests = postIds.map((elem) => {
+        return fetch(`/api/posts/getPost/${elem}`, { cache: "no-cache" });
+      });
+      const responses = await Promise.all(requests);
+      const data = (await Promise.all(
+        responses.map((response) => response.json()),
+      )) as Post[];
+      setPosts(data.filter((post) => post != null));
+    }
+    fetchPosts();
+    setLoading(false);
+  }, [session]);
 
   async function newPost() {
     if (session && session.user && session.user.email) {
@@ -40,18 +82,20 @@ export default function Dashboard() {
     }
   }
   return (
-    <main className="px-4">
+    <main className="relative">
+      <IconContext.Provider value={{ className: "shared-class", size: "23" }}>
+        <div className="absolute left-2 top-2 z-[100]">
+          <button
+            onClick={() => router.back()}
+            className="text-lg text-slate-800 underline-offset-2 hover:underline dark:text-slate-200"
+          >
+            <LuArrowLeft />
+          </button>
+        </div>
+      </IconContext.Provider>
+
       <Toaster position="top-center" />
-      <div className="h-10">
-        <button
-          onClick={() => {
-            router.back();
-          }}
-        >
-          <LuArrowLeft />
-        </button>
-      </div>
-      <div className="h-screen bg-gray-100 dark:bg-slate-800">
+      <div className="h-screen bg-gray-100 pt-10 dark:bg-slate-800">
         <div className="container mx-auto p-4">
           {/* <!-- Top navigation bar --> */}
           <nav className="bg-blue-500 p-4 text-slate-200 dark:bg-black">
@@ -69,35 +113,57 @@ export default function Dashboard() {
                 My Posts
               </h2>
               {/* <!-- Blog-style posts with responsive widths --> */}
-              <div className="flex flex-col gap-2  sm:flex-row md:flex-nowrap">
-                <div className="sm:w-47.5 md:w-47.5 lg:w-23.75 w-full rounded-lg bg-slate-200 p-4 transition-transform hover:scale-105">
-                  <h3 className="text-xl font-semibold">Post 1</h3>
-                  <p>This is the content of post 1.</p>
-                </div>
-                <div className="sm:w-47.5 md:w-47.5 lg:w-23.75 w-full rounded-lg bg-slate-200 p-4 transition-transform hover:scale-105">
-                  <h3 className="text-xl font-semibold">Post 2</h3>
-                  <p>This is the content of post 2.</p>
-                </div>
-                <div className="sm:w-47.5 md:w-47.5 lg:w-23.75 w-full rounded-lg bg-slate-200 p-4 transition-transform hover:scale-105">
-                  <h3 className="text-xl font-semibold">Post 3</h3>
-                  <p>This is the content of post 3.</p>
-                </div>
-                <div className="sm:w-47.5 md:w-47.5 lg:w-23.75 w-full rounded-lg bg-slate-200 p-4 transition-transform hover:scale-105">
-                  <h3 className="text-xl font-semibold">Post 4</h3>
-                  <p>This is the content of post 4.</p>
-                </div>
-              </div>
+
+              <Swiper
+                allowTouchMove={true}
+                slidesPerView={width < 600 ? 1 : 3}
+                navigation={true}
+                modules={[Navigation]}
+                className="w-full [&>*:first-child]:ml-10 [&>*:last-child]:mr-10"
+              >
+                {loading && (
+                  <SwiperSlide>
+                    <Skeleton
+                      height={200}
+                      width={width - 150}
+                      baseColor="#333344"
+                      highlightColor="#aaa"
+                      duration={0.7}
+                    />
+                  </SwiperSlide>
+                )}
+
+                {posts &&
+                  posts.map((post) => {
+                    return (
+                      <SwiperSlide key={post.title}>
+                        <div
+                          className="mx-3 my-5 cursor-pointer overflow-hidden rounded-lg bg-slate-200 p-4 py-5 transition-transform hover:scale-105"
+                          onClick={() => router.push(`/posts/${post.id}`)}
+                        >
+                          <h3 className="text-xl font-semibold">
+                            Post {posts.indexOf(post) + 1}
+                            {post.published == false && " - draft"}
+                          </h3>
+                          <p>{post.content.slice(0, 150)} ...</p>
+                        </div>
+                      </SwiperSlide>
+                    );
+                  })}
+                <SwiperSlide></SwiperSlide>
+              </Swiper>
             </section>
 
             {/* <!-- Create New Post button --> */}
             <div className="mt-4">
               <button
-                className="hover: scale-105 rounded border-2 border-green-400 bg-blue-500 px-4 py-2 font-bold text-slate-200 hover:scale-105 hover:bg-blue-700 dark:bg-black"
+                className="hover: scale-105 rounded border-2 border-green-400 bg-blue-500 px-4 py-2 font-bold text-slate-200 transition-all duration-200 hover:scale-105 hover:bg-blue-700 dark:bg-black dark:hover:bg-green-400 dark:hover:text-black/80"
                 onClick={() => {
                   toast.promise(newPost(), {
                     loading: "Creating new post",
                     error: "Error occurred, Please try again later",
-                    success: "Created post successfully, please wait while we redirect",
+                    success:
+                      "Created post successfully, please wait while we redirect",
                   });
                 }}
               >

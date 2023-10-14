@@ -14,6 +14,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { useSession } from "next-auth/react";
 import { State } from "@/types/user";
 import { notFound, useRouter } from "next/navigation";
+import { inter } from "@/custom-fonts/fonts";
 
 type Params = {
   params: { id: string };
@@ -149,6 +150,9 @@ export default function Post({ params }: Params) {
         },
         body: JSON.stringify(state),
       });
+      if (postData != null) {
+        setPostData({ ...postData, published: state.published });
+      }
     } catch (e) {
       console.error(`Error: ${e}`);
     }
@@ -156,6 +160,51 @@ export default function Post({ params }: Params) {
 
   if (errorState == true) {
     return notFound();
+  }
+
+  function handleClick(type: "publish" | "draft") {
+    if (heading == null || heading.trim() == "") {
+      toast.error("Heading is missing");
+      return;
+    }
+    if (tags == null || tags.length == 0) {
+      toast.error("No tags provided");
+      return;
+    }
+
+    let email;
+    if (session && session.user && session.user.email) {
+      email = session.user.email;
+    } else {
+      const rawAccount = localStorage.getItem("account");
+      if (rawAccount) {
+        const account = JSON.parse(rawAccount) as State;
+        email = account.email;
+      }
+    }
+    if (
+      heading == null ||
+      coverImg == null ||
+      markdown == null ||
+      tags == null ||
+      email == undefined
+    ) {
+      return;
+    }
+    const state = {
+      id: id,
+      title: heading,
+      author: email,
+      coverImgFull: coverImg,
+      content: markdown,
+      tags: tags,
+      published: type == "publish",
+    };
+    toast.promise(postNow(state), {
+      loading: "Uploading your post",
+      error: "Could not publish, please try again",
+      success: "Post published successfully",
+    });
   }
 
   return loading ? (
@@ -223,7 +272,9 @@ export default function Post({ params }: Params) {
           </div>
         </div>
         <div className="my-3">
-          <h1 className="text-center text-3xl md:text-5xl">Edit your post</h1>
+          <h1 className="text-center text-3xl sm:mb-10 sm:text-5xl md:text-7xl">
+            Edit your post
+          </h1>
         </div>
         <div className="mx-auto my-3 flex w-fit items-center justify-start gap-2">
           <h2 className="text-lg">Heading: </h2>
@@ -285,7 +336,12 @@ export default function Post({ params }: Params) {
                   ></Textarea>
                 </div>
                 <div className={currentTab == 1 ? "hidden" : "block"}>
-                  <div className="markdown-wrapper mx-5 max-h-[40vh] min-h-[30vh] w-full overflow-y-auto rounded-lg border border-slate-300 bg-slate-300 px-3 py-2 dark:bg-slate-800">
+                  <div
+                    className={
+                      "markdown-wrapper mx-5 max-h-[40vh] min-h-[30vh] w-full max-w-fit overflow-y-auto rounded-lg border border-slate-300 bg-slate-300 px-3 py-2 dark:bg-slate-800 " +
+                      inter.className
+                    }
+                  >
                     <ShowMarkdown data={markdown ? markdown : "preview"} />
                   </div>
                 </div>
@@ -301,13 +357,14 @@ export default function Post({ params }: Params) {
                 e.preventDefault();
                 addTag();
               }}
-              className="group my-2 flex cursor-pointer items-center justify-start gap-2 rounded-3xl border border-black/30 bg-slate-200 px-2 py-1 text-slate-800 dark:bg-slate-700 dark:text-slate-100"
+              className="group my-2 flex cursor-pointer items-center justify-start gap-2 rounded-3xl border border-slate-300 bg-slate-200 px-2 py-1 text-slate-800 dark:border-black/30 dark:bg-slate-700 dark:text-slate-100"
+              onClick={() => tagRef.current?.focus()}
             >
               <input
                 type="text"
                 placeholder="+New Tag"
                 ref={tagRef}
-                className="block h-fit max-w-[80px] rounded-lg bg-inherit focus-visible:outline-none group-hover:placeholder:text-black/40"
+                className="block h-fit max-w-[80px] cursor-pointer rounded-lg bg-inherit focus-visible:outline-none group-hover:placeholder:text-black/40 dark:group-hover:placeholder:text-slate-50"
                 onChange={(e) => {
                   e.currentTarget.value.trim() == ""
                     ? setTyping(false)
@@ -327,11 +384,14 @@ export default function Post({ params }: Params) {
                 return (
                   <div
                     key={tag}
-                    className="group w-fit cursor-pointer rounded-3xl bg-slate-300 px-3 py-1 text-slate-800 hover:bg-slate-500 hover:text-white dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
+                    className={
+                      "group w-fit cursor-pointer rounded-3xl bg-slate-300 px-3 py-1 text-slate-800 transition-all duration-300 hover:bg-slate-500 hover:text-white dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 " +
+                      inter.className
+                    }
                     onClick={() => removeTag(tag)}
                   >
                     {tag}
-                    <button className="ml-2 inline-block h-fit w-fit rounded-full bg-rose-300 px-2 text-rose-600 group-hover:bg-rose-600 group-hover:text-rose-100">
+                    <button className="ml-2 inline-block rounded-full border-[1px] border-red-400 bg-rose-200 px-2 text-red-800 transition-opacity duration-300 dark:text-rose-400 md:opacity-0 md:group-hover:opacity-100">
                       x
                     </button>
                   </div>
@@ -339,86 +399,29 @@ export default function Post({ params }: Params) {
               })}
           </div>
         </div>
-        <div className="max-auto my-5 flex w-[90%] items-center justify-center gap-3">
+        <div
+          className={
+            "max-auto mx-auto my-5 flex w-[90%] items-center justify-center gap-3 " +
+            inter.className
+          }
+        >
           <button
-            className="block w-fit rounded-md bg-rose-400 px-4 py-2 text-rose-100 transition-all duration-300 hover:bg-rose-200 hover:text-rose-950 dark:text-slate-900"
+            className="block w-fit rounded-md bg-rose-400 px-4 py-2 text-rose-100 transition-all duration-300 hover:bg-rose-200 hover:text-rose-950 dark:bg-rose-500 dark:text-slate-50 dark:hover:bg-rose-100 dark:hover:text-rose-900"
             onClick={() => {
-              let email;
-              if (session && session.user && session.user.email) {
-                email = session.user.email;
-              } else {
-                const rawAccount = localStorage.getItem("account");
-                if (rawAccount) {
-                  const account = JSON.parse(rawAccount) as State;
-                  email = account.email;
-                }
-              }
-              if (
-                heading == null ||
-                coverImg == null ||
-                markdown == null ||
-                tags == null ||
-                email == undefined
-              ) {
-                return;
-              }
-              const state = {
-                id: id,
-                title: heading,
-                author: email,
-                coverImgFull: coverImg,
-                content: markdown,
-                tags: tags,
-                published: false,
-              };
-              toast.promise(postNow(state), {
-                loading: "Uploading your post",
-                error: "Could not publish, please try again",
-                success: "Post published successfully",
-              });
+              handleClick("draft");
             }}
           >
-            Save as Draft
+            {postData?.published == true
+              ? "Convert to Private"
+              : "Save as Draft"}
           </button>
           <button
-            className="block w-fit rounded-md bg-rose-400 px-4 py-2 text-rose-100 transition-all duration-300 hover:bg-rose-200 hover:text-rose-950 dark:text-slate-900"
+            className="block w-fit rounded-md bg-rose-400 px-4 py-2 text-rose-100 transition-all duration-300 hover:bg-rose-200 hover:text-rose-950 dark:bg-rose-500 dark:text-slate-50 dark:hover:bg-rose-100 dark:hover:text-rose-900"
             onClick={() => {
-              let email;
-              if (session && session.user && session.user.email) {
-                email = session.user.email;
-              } else {
-                const rawAccount = localStorage.getItem("account");
-                if (rawAccount) {
-                  const account = JSON.parse(rawAccount) as State;
-                  email = account.email;
-                }
-              }
-              if (
-                heading == null ||
-                coverImg == null ||
-                markdown == null ||
-                tags == null ||
-                email == undefined
-              ) {
-                return;
-              }
-              const state = {
-                id: id,
-                title: heading,
-                author: email,
-                coverImgFull: coverImg,
-                content: markdown,
-                tags: tags,
-                published: true,
-              };
-              toast.promise(postNow(state), {
-                loading: "Uploading your post",
-                error: "Could not publish, please try again",
-                success: "Post published successfully",
-              });
+              handleClick("publish");
             }}
           >
-            Post
+            {postData?.published == true ? "Update" : "Post"}
           </button>
         </div>
       </div>

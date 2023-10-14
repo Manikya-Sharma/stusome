@@ -13,12 +13,22 @@ export async function POST(request: Request) {
     .db(database)
     .collection(collection)
     .insertOne(post);
-  await fetch("/api/posts/addNewMostViewedPost", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ id: post.id }),
-  });
+  // add to top posts
+  await client
+    .db(database)
+    .collection("popular_posts")
+    .insertOne({ id: post.id });
+  // add to user profile
+  const account = await client
+    .db(database)
+    .collection("accounts")
+    .findOne({ email: post.author });
+  const result2 = await client
+    .db(database)
+    .collection("accounts")
+    .updateOne(
+      { email: post.author },
+      { $set: { posts: [...account.posts, post.id] } },
+    );
   return NextResponse.json(result);
 }
