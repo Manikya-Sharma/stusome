@@ -3,6 +3,7 @@ export type State = {
   email: string;
   image: string;
   image_third_party: boolean;
+  posts: Array<string>;
 };
 
 export type Message = {

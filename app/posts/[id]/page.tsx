@@ -22,6 +22,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { MdEdit } from "react-icons/md";
 
 type Params = {
   params: { id: string };
@@ -240,8 +241,14 @@ export default function Post({ params }: Params) {
 
         {session && session.user && session.user.email ? (
           validUser(session.user.email) && (
-            <div className="fixed right-20 top-1 z-[150] w-fit cursor-pointer rounded-3xl bg-slate-100 px-3 py-2 transition-all duration-200 hover:bg-slate-400 dark:bg-slate-400 dark:hover:bg-slate-100 sm:absolute">
-              <Link href={`/posts/${postData?.id}/edit`}>Edit</Link>
+            <div className="fixed right-20 top-1 z-[150] w-fit cursor-pointer rounded-3xl bg-slate-100 px-3 py-2 transition-all duration-200 hover:bg-slate-400 hover:text-slate-100 dark:bg-slate-400 dark:hover:bg-slate-100 dark:hover:text-slate-800 sm:absolute">
+              <Link
+                href={`/posts/${postData?.id}/edit`}
+                className="flex w-fit items-center justify-center gap-2"
+              >
+                <MdEdit />
+                <p>Edit</p>
+              </Link>
             </div>
           )
         ) : (

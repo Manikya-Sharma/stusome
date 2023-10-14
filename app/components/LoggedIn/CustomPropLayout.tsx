@@ -37,6 +37,7 @@ export default function CustomPropLayout({
             email: session.user.email,
             image: session.user.image,
             image_third_party: true,
+            posts: [],
           }),
         });
         displayAccount = {
@@ -44,6 +45,7 @@ export default function CustomPropLayout({
           email: session.user.email,
           image: session.user.image,
           image_third_party: true,
+          posts: [],
         };
       }
 

@@ -12,6 +12,6 @@ export async function POST(request: Request) {
   const result = await client
     .db(database)
     .collection(collection)
-    .insertOne({ id });
+    .insertOne({ id: id });
   return NextResponse.json(result);
 }
