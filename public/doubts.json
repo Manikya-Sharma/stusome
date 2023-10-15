@@ -1,14 +1,79 @@
 [
   {
     "id": 5,
-    "title": "How many societies to join?"
+    "title": "How many societies to join?",
+    "author":"Lavya Thapar",
+    "content":">Entering into the college life with an energetic mindset, students get over-exicited to join lots of societies.Later on due to increase academic stress, when they leave or become inactive in many of them, it imposes a bad impression.So how many societies should a student join and what must be the decision criteria?",
+    "answers":[
+      {
+          "id":5,
+          "content":"\n\n#Chosing on the basis of interest\n\n The decision of choosing a particular society largely depends on your interest.What have you been actively participating in from your school life? Things that you excel at and that can grab you a lot of certificates and prizes?This would be the most comfortable option to go with.Whatever domain you want to select, you name it and there is a high chance you will find a society emphasising on that.",
+          "author":"Author B",
+          "replies":[
+            {
+              "id":6,
+              "author":"Auhtor A",
+              "content":"Seems like a good and effective option. Thankyou!"
+            }
+          ]
+      },
+      {
+          "id":5,
+          "content":"\n\n#Acquiring new skill set\n\n Another option that you can consider is if there is a spark inside you to have a new skill set and are ready to improve upon things that you are afraid of.Suppose you have always had ***stage fright*** and lack of confidence speaking to large group of people A debating society thus would be the best option to go to.Being an active member there would take out that fea and might give you a lot of competition experience.",
+          "author":"Author B",
+          "replies":[
+            {
+              "id":6,
+              "author":"Author A",
+              "content":"Thank you so much ."
+
+            }
+          ]
+      }
+    ],
+    "tags":["societies","skillset","social_life"]
   },
+
   {
     "id": 6,
-    "title": "Should I make notes?"
+    "title": "Should I make notes?",
+    "author":"Manikya Sharma",
+    "content":">As far as I have seen, most of the teachers take their lectures through slideshows and ppts.They provide them later on to the students.Thus, i see no point in making notes.Suggest if my thinking is right or wrong?",
+    "answers":[
+      {
+        "id":7,
+        "content":"As far as i have experienced, that making notes has always helped me during the exam times.Sometimes the crucial conetnt does not lie within the slideshows r pdfs but what the teacher is explaining by his words. Noting down those points would give an upper edge to solve tricky questions if they appear in exams.",
+        "author":"Lavya Thapar",
+        "replies":[
+          {
+            "id":6,
+            "content":"Very true. That was one area where i did not ponder upon so much. Thankyou for making me realise that.",
+            "author":"Manikya Sharma"
+          }
+        ]
+      }
+    ],
+    "tags":["notes","exams"]
   },
   {
     "id": 7,
-    "title": "How to balance enjoyment and studies?"
+    "title": "How to balance enjoyment and studies?",
+    "author":"Nikhil Sharma",
+    "content":">I am currently a third semester student.In my first semester,I was pretty relaxed and did not give much attention on studies(trying to relive the JEE stress).As a result i did not get a good SGPA. Later i realised the importance of SGPA after interacting with my seniors and studied dedicatedly. I scored a good SGPA in the second semester but realised that those 3 months did not have any relaxation.So how can i balance studies with enjoyment? ",
+    "answers":[
+      {
+        "id":8,
+        "author":"Author A",
+        "content":"I read an article regarding the same and got an interesting solution called as the 8-8-8 rule. It says you to have 8 hours of sleep, 8 hours of study and 8 hours of enjoyment and other stuff.Try adapting this by making a schedule following the same.",
+        "replies":[
+          {
+            "id":7,
+            "author":"Nikhil Sharma",
+            "content":"Thats a pretty impressive strategy. Thank you, I will try implementing this."
+          }
+        ]
+      }
+    ],
+    "tags":["study_n_chill","strategy","cool_rules"]
   }
 ]
