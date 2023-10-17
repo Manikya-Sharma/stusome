@@ -6,6 +6,7 @@ import { IconContext } from "react-icons";
 import { Discussion } from "@/types/post";
 import { useEffect, useState } from "react";
 import Replies from "./Replies";
+import { State } from "@/types/user";
 
 type Props = {
   discussionIds: string[];
@@ -14,8 +15,13 @@ type Props = {
 
 export default function Discussions(props: Props) {
   const [discussions, SetDiscussions] = useState<Discussion[] | null>(null);
+  const [authors, setAuthors] = useState<Array<{
+    email: string;
+    data: State;
+  }> | null>(null);
   useEffect(() => {
     async function fetchData() {
+      // get discussion
       const promises = props.discussionIds.map((discussionId) => {
         return fetch(`/api/posts/getDiscussion/${discussionId}`);
       });
@@ -24,6 +30,24 @@ export default function Discussions(props: Props) {
         responses.map((response) => response.json()),
       )) as Discussion[];
       SetDiscussions(data);
+
+      // get author
+      const authorEmails = data.map((discussion) => {
+        return discussion.author;
+      });
+      const authorPromises = authorEmails.map((author) => {
+        return fetch(`/api/getAccountByEmail/${author}`);
+      });
+      const authorResponses = await Promise.all(authorPromises);
+      const authors = (await Promise.all(
+        authorResponses.map((author) => author.json()),
+      )) as Array<State>;
+
+      const authorsArray: Array<{ email: string; data: State }> = [];
+      for (let i = 0; i < authorEmails.length; i++) {
+        authorsArray.push({ email: authorEmails[i], data: authors[i] });
+      }
+      setAuthors(authorsArray);
     }
     fetchData();
   }, [props.discussionIds]);
@@ -36,7 +60,11 @@ export default function Discussions(props: Props) {
             className="mx-auto my-2 w-full rounded-md border border-slate-400 p-3 sm:max-w-[80%]"
           >
             <cite className="mr-auto block w-fit text-sm text-slate-400">
-              -- {elem.author}
+              --{" "}
+              {authors &&
+                authors
+                  .filter((author) => author.email == elem.author)[0]
+                  .data.name.split(" ")[0]}
             </cite>
             <div className="markdown-wrapper">
               <ShowMarkdown data={elem.content} />

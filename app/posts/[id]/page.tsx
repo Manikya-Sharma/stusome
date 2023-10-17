@@ -22,7 +22,9 @@ import toast, { Toaster } from "react-hot-toast";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { MdEdit } from "react-icons/md";
+import { MdEdit, MdOutlineChat } from "react-icons/md";
+import { State } from "@/types/user";
+import { LuLogIn } from "react-icons/lu";
 
 type Params = {
   params: { id: string };
@@ -54,9 +56,11 @@ export default function Post({ params }: Params) {
   const [postData, setPostData] = useState<Post | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [headings, setHeadings] = useState<string[]>([]);
+  const [author, setAuthor] = useState<State | null>(null);
   useEffect(() => {
     async function getData() {
       try {
+        // get post data
         const rawPost = await fetch(`/api/posts/getPost/${id}`);
         const post = (await rawPost.json()) as Post;
         if (post == null) {
@@ -66,6 +70,13 @@ export default function Post({ params }: Params) {
           router.replace(`/posts/${id}/edit`);
         }
         setPostData(post);
+
+        // get author info
+        const rawAuthorInfo = await fetch(
+          `/api/getAccountByEmail/${post.author}`,
+        );
+        const authorInfo = (await rawAuthorInfo.json()) as State;
+        setAuthor(authorInfo);
       } catch (e) {
         console.log(`Error: ${e}`);
       } finally {
@@ -179,6 +190,70 @@ export default function Post({ params }: Params) {
     }
   }
 
+  async function handleChat() {
+    if (!session || !session.user || !session.user.email) {
+      return;
+    }
+    const email = session.user.email;
+    // get friends
+    const rawExistingFriends = await fetch("/api/getFriends", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(email),
+    });
+    const rawExistingFriendIds = (await rawExistingFriends.json()) as string[];
+    let existingFriendEmails = rawExistingFriendIds
+      .filter((elem) => elem.includes(email))
+      .map((emailBelonging) =>
+        emailBelonging
+          .split(":")
+          .filter((email) => email != email && email != "friend"),
+      );
+    const existingFriends: State[] = [];
+
+    const promises = existingFriendEmails.map((email) => {
+      return fetch(`/api/getAccountByEmail/${email[0]}`)
+        .then((rawData) => rawData.json())
+        .then((data) => {
+          existingFriends.push(data);
+        })
+        .catch((error) => console.log(`Error fetching friends data: ${error}`));
+    });
+
+    let friends: Array<State> = [];
+    Promise.all(promises)
+      .then(() => {
+        friends = existingFriends.filter((elem) => elem != null);
+      })
+      .catch((error) => console.log(`Error occurred: ${error}`));
+
+    const friendsEmails = friends.map((friend) => friend.email);
+    if (author == null) {
+      return;
+    }
+    if (friendsEmails.includes(author.email)) {
+      router.push(`/chat/${author.email}`);
+    } else {
+      // we need to create a new friend
+      const rawFriendAccount = await fetch(
+        `/api/getAccountByEmail/${author.email}`,
+      );
+      const friendAccount = (await rawFriendAccount.json()) as State;
+      await fetch("/api/addFriend", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userEmail: email,
+          friendEmail: friendAccount.email,
+        }),
+      });
+      router.push(`/chat/${author.email}`);
+    }
+  }
   // menu for small screens
   const [openMenu, setOpenMenu] = useState<boolean>(false);
 
@@ -240,7 +315,7 @@ export default function Post({ params }: Params) {
         </nav>
 
         {session && session.user && session.user.email ? (
-          validUser(session.user.email) && (
+          validUser(session.user.email) ? (
             <div className="fixed right-20 top-1 z-[150] w-fit cursor-pointer rounded-3xl bg-slate-100 px-3 py-2 transition-all duration-200 hover:bg-slate-400 hover:text-slate-100 dark:bg-slate-400 dark:hover:bg-slate-100 dark:hover:text-slate-800 sm:absolute">
               <Link
                 href={`/posts/${postData?.id}/edit`}
@@ -250,10 +325,28 @@ export default function Post({ params }: Params) {
                 <p>Edit</p>
               </Link>
             </div>
+          ) : (
+            <div className="fixed right-20 top-1 z-[150] w-fit cursor-pointer rounded-3xl bg-slate-100 px-3 py-2 transition-all duration-200 hover:bg-slate-400 hover:text-slate-100 dark:bg-slate-400 dark:hover:bg-slate-100 dark:hover:text-slate-800 sm:absolute">
+              <button
+                onClick={() => {
+                  toast.promise(handleChat(), {
+                    loading: "Please wait while we redirect",
+                    error: "Could not start chat, please try again later",
+                    success: "redirecting...",
+                  });
+                }}
+                className="flex w-fit items-center justify-center gap-2"
+              >
+                <MdOutlineChat />
+                <p>Chat</p>
+              </button>
+            </div>
           )
         ) : (
           <div className="fixed right-20 top-1 z-[150] w-fit cursor-pointer rounded-3xl bg-slate-100 px-3 py-2 transition-all duration-200 hover:bg-slate-400 dark:bg-slate-400 dark:hover:bg-slate-100 sm:absolute">
-            <Link href="/login">Login</Link>
+            <Link href="/login">
+              <LuLogIn />
+            </Link>
           </div>
         )}
 
@@ -277,7 +370,7 @@ export default function Post({ params }: Params) {
           <h1 className="text-center text-5xl">{postData?.title}</h1>
           {!loading && (
             <cite className="mt-3 block text-center text-lg text-slate-400">
-              - {postData?.author}
+              - {author && author.name}
             </cite>
           )}
         </div>

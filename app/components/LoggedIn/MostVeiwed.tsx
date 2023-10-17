@@ -13,32 +13,62 @@ import Skeleton from "react-loading-skeleton";
 import Image from "next/image";
 import { randomColor } from "@/lib/utils";
 import { Post } from "@/types/post";
+import { State } from "@/types/user";
 
 export default function MostViewed() {
   const [width, setWidth] = useState<number>(0);
   const [mostViewed, setMostViewed] = useState<Post[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [users, setUsers] = useState<Array<{
+    email: string;
+    data: State;
+  }> | null>(null);
   useEffect(() => {
     setWidth(() => window.innerWidth);
   }, []);
   useEffect(() => {
     async function fetchData() {
-      const rawMostViewedPostIds = await fetch("/api/posts/getMostViewedPosts", {cache: "no-cache"});
-
+      // get posts
+      const rawMostViewedPostIds = await fetch(
+        "/api/posts/getMostViewedPosts",
+        { cache: "no-cache" },
+      );
       const mostViewedPostIds = (await rawMostViewedPostIds.json()) as Array<{
         id: string;
       }>;
-
       const requests = mostViewedPostIds.map((elem) => {
         return fetch(`/api/posts/getPost/${elem.id}`);
       });
       const responses = await Promise.all(requests);
-      const data = (await Promise.all(
+      let data = (await Promise.all(
         responses.map((response) => response.json()),
       )) as Post[];
-      setMostViewed(
-        data.filter((post) => post != null && post.published == true),
-      );
+
+      data = data.filter((post) => post != null && post.published == true);
+      setMostViewed(data);
+
+      // authors
+      const authorEmails = data.map((post) => post.author);
+      const EmailRequests = authorEmails.map((email) => {
+        return fetch(`/api/getAccountByEmail/${email}`);
+      });
+      const emailResponses = await Promise.all(EmailRequests);
+      const authors = (await Promise.all(
+        emailResponses.map((account) => {
+          return account.json();
+        }),
+      )) as State[];
+
+      const authorsArray: Array<{
+        email: string;
+        data: State;
+      }> = [];
+      for (let i = 0; i < authorEmails.length; i += 1) {
+        authorsArray.push({ email: authorEmails[i], data: authors[i] });
+      }
+      console.log(authorsArray);
+      setUsers(authorsArray);
+
       setLoading(false);
     }
     fetchData();
@@ -98,7 +128,16 @@ export default function MostViewed() {
                       <div className="pb-3 pt-5 text-center text-xl">
                         {post.title}
                       </div>
-                      <div className="text-right text-sm">-{post.author}</div>
+                      {users && (
+                        <div className="text-right text-sm">
+                          -
+                          {
+                            users
+                              .filter((user) => user.email == post.author)[0]
+                              .data.name.split(" ")[0]
+                          }
+                        </div>
+                      )}
                     </div>
                   </Link>
                 </SwiperSlide>
