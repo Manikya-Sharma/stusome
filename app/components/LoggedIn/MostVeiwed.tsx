@@ -15,10 +15,13 @@ import { randomColor } from "@/lib/utils";
 import { Post } from "@/types/post";
 import { State } from "@/types/user";
 
-export default function MostViewed() {
+type Props = {
+  setLoader: Function;
+};
+
+export default function MostViewed(props: Props) {
   const [width, setWidth] = useState<number>(0);
   const [mostViewed, setMostViewed] = useState<Post[] | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
   const [users, setUsers] = useState<Array<{
     email: string;
     data: State;
@@ -69,14 +72,14 @@ export default function MostViewed() {
       console.log(authorsArray);
       setUsers(authorsArray);
 
-      setLoading(false);
+      props.setLoader(false);
     }
     fetchData();
-  }, []);
+  }, [props]);
   return (
     <section className="mb-20 mt-10">
       <h2 className="mb-5 mt-7 text-2xl font-semibold sm:text-5xl">
-        Top Posts
+        {mostViewed && "Top Posts"}
       </h2>
       <div className={quicksand.className}>
         <div className="text-lg">
@@ -87,17 +90,6 @@ export default function MostViewed() {
             modules={[Navigation]}
             className="w-full [&>*:first-child]:ml-10 [&>*:last-child]:mr-10"
           >
-            {loading && (
-              <SwiperSlide>
-                <Skeleton
-                  height={200}
-                  width={width - 150}
-                  baseColor="#333344"
-                  highlightColor="#aaa"
-                  duration={0.7}
-                />
-              </SwiperSlide>
-            )}
             {mostViewed?.map((post) => {
               return (
                 <SwiperSlide key={post.id}>

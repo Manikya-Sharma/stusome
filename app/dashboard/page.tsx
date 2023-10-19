@@ -16,6 +16,7 @@ import { Navigation } from "swiper/modules";
 import Skeleton from "react-loading-skeleton";
 import "swiper/css";
 import "swiper/css/navigation";
+import { BarLoader } from "react-spinners";
 
 export default function Dashboard() {
   const { data: session } = useSession();
@@ -49,9 +50,9 @@ export default function Dashboard() {
         responses.map((response) => response.json()),
       )) as Post[];
       setPosts(data.filter((post) => post != null));
+      setLoading(false);
     }
     fetchPosts();
-    setLoading(false);
   }, [session]);
 
   async function newPost() {
@@ -83,6 +84,16 @@ export default function Dashboard() {
   }
   return (
     <main className="relative">
+      {loading && (
+        <div className="absolute left-0 top-0 z-[300]">
+          <BarLoader
+            height={3}
+            width={width}
+            color="#55fff6"
+            cssOverride={{ backgroundColor: "#11aaaa" }}
+          />
+        </div>
+      )}
       <IconContext.Provider value={{ className: "shared-class", size: "23" }}>
         <div className="absolute left-2 top-2 z-[100]">
           <button
@@ -121,18 +132,6 @@ export default function Dashboard() {
                 modules={[Navigation]}
                 className="w-full [&>*:first-child]:ml-10 [&>*:last-child]:mr-10"
               >
-                {loading && (
-                  <SwiperSlide>
-                    <Skeleton
-                      height={200}
-                      width={width - 150}
-                      baseColor="#333344"
-                      highlightColor="#aaa"
-                      duration={0.7}
-                    />
-                  </SwiperSlide>
-                )}
-
                 {posts &&
                   posts.map((post) => {
                     return (
@@ -141,8 +140,8 @@ export default function Dashboard() {
                           className="mx-3 my-5 cursor-pointer overflow-hidden rounded-lg bg-slate-200 p-4 py-5 transition-transform hover:scale-105"
                           onClick={() => router.push(`/posts/${post.id}`)}
                         >
-                          <h3 className="text-xl font-semibold">
-                            Post {posts.indexOf(post) + 1}
+                          <h3 className="mb-2 text-xl font-semibold">
+                            {post.title}
                             {post.published == false && " - draft"}
                           </h3>
                           <p>{post.content.slice(0, 150)} ...</p>
