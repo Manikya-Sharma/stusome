@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Should I Make Notes?</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+
+    <nav class="bg-black text-white p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold">Hello, User</h1>
+        </div>
+    </nav>
+    
+    <section class="container mx-auto mt-6">
+        <div class="bg-white p-4 rounded-lg shadow-md relative overflow-hidden">
+            <h2 class="text-xl font-semibold mb-4">Notes in Action</h2>
+            <div class="flex flex-col md:flex-row space-y-4 md:space-y-0">
+                <div class="md:w-1/2">
+                    <img src="https://edugage.com/wp-content/uploads/2018/12/10-benefits-of-writing-notes-by-hand.jpg" alt="Notes in Action" class="w-full h-auto rounded-lg hover:opacity-90 transition-opacity duration-300">
+                </div>
+                <div class="md:w-1/2 mt-4 md:mt-0"> <!-- Added margin to the text container -->
+                    <p class="text-gray-700 font-bold ml-4 mt-4 px-3 py-5justify-center items-center ">
+                        Here, you can see how effective note-taking can be in real-life situations. Whether it's in a classroom, a meeting, or during self-study, notes can help you organize your thoughts and key information for better understanding and retention.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+
+    <section class="container mx-auto mt-6">
+        <div class="bg-white p-4 rounded-lg shadow-md">
+            <h2 class="text-xl font-semibold mb-4">Why Notes Are Important</h2>
+            <div class="flex flex-col space-y-4">
+                <p class="bg-indigo-100 p-4 text-gray-700 font-bold hover:text-indigo-600 transition-colors duration-300 rounded-lg">
+                    Enhanced Retention: Taking notes during lectures, meetings, or while studying helps reinforce your memory and understanding of the material.
+                </p>
+                <p class="bg-blue-200 p-4 text-gray-700 font-bold hover:text-red-600 transition-colors duration-300 rounded-lg">
+                    Organization and Reference: Notes serve as an organized record of important information, making it easier to review and reference later.
+                </p>
+                <p class="bg-green-100 p-4 text-gray-700 font-bold hover:text-green-600 transition-colors duration-300 rounded-lg">
+                    Active Learning: Actively engaging with the material by summarizing, paraphrasing, or asking questions in your notes promotes a deeper understanding of the subject matter.
+                </p>
+            </div>
+        </div>
+    </section>
+    
+    
+
+
+    <!-- Doubts Section -->
+    <section class="container mx-auto mt-6">
+        <div class="bg-white p-4 rounded-lg shadow-md">
+            <h2 class="text-xl font-semibold mb-4">Post Your Doubts</h2>
+            <form>
+                <div class="mb-4">
+                    <label for="doubts" class="block text-gray-600">Your Doubts:</label>
+                    <textarea id="doubts" name="doubts" class="w-full px-3 py-2 border rounded-lg" rows = "5"></textarea>
+                </div>
+                <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg">
+                    Submit
+                </button>
+            </form>
+        </div>
+    </section>
+</body>
+</html>
