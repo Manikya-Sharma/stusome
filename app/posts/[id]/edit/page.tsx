@@ -1,12 +1,9 @@
 "use client";
 
-import ShowMarkdown from "@/app/components/Markdown/ShowMarkdown";
 import { DarkModeSwitch } from "react-toggle-dark-mode";
-import Textarea from "react-textarea-autosize";
 
 import { useState, useEffect, useRef } from "react";
 
-import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { Post } from "@/types/post";
 
@@ -15,14 +12,16 @@ import { useSession } from "next-auth/react";
 import { State } from "@/types/user";
 import { notFound, useRouter } from "next/navigation";
 import { inter } from "@/custom-fonts/fonts";
+import LoadingSkeleton from "@/app/components/Posts/LoadingSkeleton";
+import MkdnInput from "@/app/components/Posts/Edit/MkdnInput";
+import TagsInput from "@/app/components/Posts/Edit/TagsInput";
 
 type Params = {
   params: { id: string };
 };
 
 export default function Post({ params }: Params) {
-  const router = useRouter();
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
 
   const tagRef = useRef<HTMLInputElement>(null);
 
@@ -30,8 +29,6 @@ export default function Post({ params }: Params) {
   const [markdown, setMarkdown] = useState<string | null>(null);
   const [coverImg, setCoverImg] = useState<string | null>(null);
   const [heading, setHeading] = useState<string | null>(null);
-
-  const [typing, setTyping] = useState<boolean>(false);
 
   // theme
   const [theme, setTheme] = useState<"dark" | "light" | null>(null);
@@ -100,36 +97,6 @@ export default function Post({ params }: Params) {
       setTags(postData.tags);
     }
   }, [postData]);
-
-  function addTag() {
-    if (!tagRef.current) {
-      return;
-    }
-    const value = tagRef.current.value;
-    if (value.trim() == "") {
-      return;
-    }
-    if (tags == null) {
-      setTags([value]);
-    } else {
-      if (tags.map((tag) => tag.toLowerCase()).includes(value.toLowerCase())) {
-        return;
-      }
-      setTags([...tags, value.toLowerCase()]);
-      tagRef.current.value = "";
-    }
-  }
-
-  function removeTag(tag: string) {
-    if (!tags) {
-      return;
-    }
-    setTags(
-      tags?.filter((currentTag) => {
-        return tag != currentTag;
-      }),
-    );
-  }
 
   const [currentTab, setCurrentTab] = useState<1 | 2>(1);
 
@@ -216,50 +183,7 @@ export default function Post({ params }: Params) {
   }
 
   return loading ? (
-    <div className="h-screen bg-slate-200 dark:bg-slate-800">
-      <SkeletonTheme
-        baseColor={theme == "dark" ? "#333344" : "#aeaeae"}
-        highlightColor={theme == "dark" ? "#aaa" : "#999"}
-        duration={0.7}
-      >
-        <div className="mx-auto mb-3 w-[95%] pt-5">
-          <Skeleton height={100} />
-        </div>
-        <div className="sm:flex">
-          <div className="h-0 w-0 md:h-fit md:w-[30vw] md:pl-3">
-            <div className="mb-1 w-[80%]">
-              <Skeleton height={40} />
-            </div>
-            <div className="mb-1 w-[70%]">
-              <Skeleton height={40} />
-            </div>
-            <div className="mb-1 w-[90%]">
-              <Skeleton height={40} />
-            </div>
-            <div className="mb-1 w-[65%]">
-              <Skeleton height={40} />
-            </div>
-          </div>
-          <div className="sm:w-[80vw] sm:pr-3 md:w-[50vw]">
-            <div className="mb-2 ml-3 mt-5 w-[90%]">
-              <Skeleton height={80} />
-            </div>
-            <div className="ml-3 w-[88%]">
-              <Skeleton height={170} />
-            </div>
-            <div className="mb-2 ml-3 mt-5 w-[70%]">
-              <Skeleton height={80} />
-            </div>
-            <div className="ml-3 w-[88%]">
-              <Skeleton height={130} />
-            </div>
-          </div>
-          <div className="w-0 sm:w-[20vw] sm:pr-3">
-            <Skeleton height={300} />
-          </div>
-        </div>
-      </SkeletonTheme>
-    </div>
+    <LoadingSkeleton />
   ) : (
     <div className="dark:bg-slate-900 dark:text-slate-100">
       <Toaster position="top-center" />
@@ -307,107 +231,14 @@ export default function Post({ params }: Params) {
             defaultValue={coverImg ? coverImg : ""}
           />
         </div>
-        <div>
-          <div className="py-3">
-            <div className="flex h-full flex-col items-center justify-center gap-2">
-              <div className="flex w-[80%] items-center justify-center gap-2">
-                <button
-                  className={
-                    "block w-fit rounded-md px-4 py-2 transition-colors duration-200 " +
-                    (currentTab == 1
-                      ? "bg-slate-800 text-slate-200 dark:bg-slate-200 dark:text-slate-700"
-                      : "bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-200")
-                  }
-                  onClick={() => setCurrentTab(1)}
-                >
-                  Input
-                </button>
-                <button
-                  className={
-                    "block w-fit rounded-md px-4 py-2 transition-colors duration-200 " +
-                    (currentTab == 2
-                      ? "bg-slate-800 text-slate-200 dark:bg-slate-200 dark:text-slate-700"
-                      : "bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-200")
-                  }
-                  onClick={() => setCurrentTab(2)}
-                >
-                  Preview
-                </button>
-              </div>
-              <div className="min-w-[70vw]">
-                <div className={currentTab == 2 ? "hidden" : "block"}>
-                  <Textarea
-                    name="markdown"
-                    cols={20}
-                    placeholder="Enter the content here"
-                    className="mx-auto mb-3 block max-h-[50vh] w-fit max-w-full rounded-md border border-slate-300 bg-[rgba(250,250,250,0.8)] px-3 py-2 dark:border-slate-600 dark:bg-slate-700 sm:w-[70%]"
-                    onChange={(e) => setMarkdown(e.target.value)}
-                    defaultValue={markdown ? markdown : ""}
-                  ></Textarea>
-                </div>
-                <div className={currentTab == 1 ? "hidden" : "block"}>
-                  <div
-                    className={
-                      "markdown-wrapper mx-5 max-h-[40vh] min-h-[30vh] w-full max-w-fit overflow-y-auto rounded-lg border border-slate-300 bg-slate-300 px-3 py-2 dark:bg-slate-800 " +
-                      inter.className
-                    }
-                  >
-                    <ShowMarkdown data={markdown ? markdown : "preview"} />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <MkdnInput
+          currentTab={currentTab}
+          markdown={markdown}
+          setCurrentTab={setCurrentTab}
+          setMarkdown={setMarkdown}
+        />
         <div className="mx-auto sm:max-w-[80%] md:max-w-[70%]">
-          <h2 className="my-5 text-xl">Tags</h2>
-          <div className="flex flex-wrap items-center gap-2 space-y-1">
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                addTag();
-              }}
-              className="group my-2 flex cursor-pointer items-center justify-start gap-2 rounded-3xl border border-slate-300 bg-slate-200 px-2 py-1 text-slate-800 dark:border-black/30 dark:bg-slate-700 dark:text-slate-100"
-              onClick={() => tagRef.current?.focus()}
-            >
-              <input
-                type="text"
-                placeholder="+New Tag"
-                ref={tagRef}
-                className="block h-fit max-w-[80px] cursor-pointer rounded-lg bg-inherit focus-visible:outline-none group-hover:placeholder:text-black/40 dark:group-hover:placeholder:text-slate-50"
-                onChange={(e) => {
-                  e.currentTarget.value.trim() == ""
-                    ? setTyping(false)
-                    : setTyping(true);
-                }}
-              />
-
-              <button
-                type="submit"
-                className={typing ? "opacity-100" : "opacity-0"}
-              >
-                +
-              </button>
-            </form>
-            {tags &&
-              tags.map((tag) => {
-                return (
-                  <div
-                    key={tag}
-                    className={
-                      "group w-fit cursor-pointer rounded-3xl bg-slate-300 px-3 py-1 text-slate-800 transition-all duration-300 hover:bg-slate-500 hover:text-white dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 " +
-                      inter.className
-                    }
-                    onClick={() => removeTag(tag)}
-                  >
-                    {tag}
-                    <button className="ml-2 inline-block rounded-full border-[1px] border-red-400 bg-rose-200 px-2 text-red-800 transition-opacity duration-300 dark:text-rose-400 md:opacity-0 md:group-hover:opacity-100">
-                      x
-                    </button>
-                  </div>
-                );
-              })}
-          </div>
+          <TagsInput setTags={setTags} tagRef={tagRef} tags={tags} />
         </div>
         <div
           className={

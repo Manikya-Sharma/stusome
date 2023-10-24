@@ -4,7 +4,7 @@ import SyncTile from "@/app/components/Settings/SyncTile";
 
 export default function AccountSettings() {
   return (
-    <div className="pt-10">
+    <div className="px-8 pt-10">
       <Link href={`/settings/account/changePicture`}>
         <Tile
           description="Change Profile Picture"
@@ -15,9 +15,6 @@ export default function AccountSettings() {
       <Link href={`/settings/account/changeUsername`}>
         <Tile description="Change Display Name" type="normal" logo="rename" />
       </Link>
-      {/* <Link href={`/settings/account/changePassword`}>
-        <Tile description="Change Password" type="normal" logo="password" />
-      </Link> */}
       <SyncTile />
     </div>
   );

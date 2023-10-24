@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { LuArrowLeft, LuFlashlight, LuFlashlightOff } from "react-icons/lu";
+import { LuFlashlight, LuFlashlightOff } from "react-icons/lu";
 import { DarkModeSwitch } from "react-toggle-dark-mode";
 
 export default function AppSettings() {
