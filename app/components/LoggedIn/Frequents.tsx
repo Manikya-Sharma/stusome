@@ -8,7 +8,7 @@ import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 
-import popularDoubts from "@/public/popular-doubts.json";
+import popularDoubts from "@/public/doubts.json";
 
 export default function PopularDoubts() {
   const [width, setWidth] = useState<number>(0);

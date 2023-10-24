@@ -44,7 +44,7 @@ export default function LoggedIn() {
               height={3}
               width={width}
               color="#55fff6"
-              cssOverride={{ backgroundColor: "#11aaaa" }}
+              cssOverride={{ backgroundColor: "#11aaaa", overflow: "hidden" }}
             />
           </div>
         )}

@@ -3,6 +3,7 @@ import { Reply } from "@/types/post";
 import { useState, useEffect } from "react";
 import ShowMarkdown from "../Markdown/ShowMarkdown";
 import { State } from "@/types/user";
+import ShowProfileImage from "../Doubts/ShowProfileImage";
 
 type Props = {
   replyIds: string[];
@@ -60,8 +61,14 @@ export default function Replies(props: Props) {
         className="markdown-wrapper min-w-fit max-w-[80%] border-2 border-transparent border-l-emerald-400 pl-3"
       >
         {reply && <ShowMarkdown data={reply.content} />}
-        <cite className="mr-auto block w-fit text-sm text-slate-400">
-          -{" "}
+        <cite className="mr-auto flex w-fit items-center gap-2 text-sm text-slate-400">
+          <ShowProfileImage
+            data={
+              authors?.filter((author) => author.email == reply?.author)[0].data
+            }
+            small={true}
+          />
+
           {authors &&
             authors
               .filter((author) => author.email == reply?.author)[0]

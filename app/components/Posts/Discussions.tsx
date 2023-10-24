@@ -7,6 +7,7 @@ import { Discussion } from "@/types/post";
 import { useEffect, useState } from "react";
 import Replies from "./Replies";
 import { State } from "@/types/user";
+import ShowProfileImage from "../Doubts/ShowProfileImage";
 
 type Props = {
   discussionIds: string[];
@@ -59,8 +60,15 @@ export default function Discussions(props: Props) {
             key={elem.id}
             className="mx-auto my-2 w-full rounded-md border border-slate-400 p-3 sm:max-w-[80%]"
           >
-            <cite className="mr-auto block w-fit text-sm text-slate-400">
-              --{" "}
+            <cite className="mb-2 mr-auto flex w-fit items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
+              <ShowProfileImage
+                data={
+                  authors?.filter((author) => author.email == elem.author)[0]
+                    .data
+                }
+                small={true}
+              />
+
               {authors &&
                 authors
                   .filter((author) => author.email == elem.author)[0]
