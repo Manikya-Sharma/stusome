@@ -1,9 +1,10 @@
 "use client";
-import { signIn, signOut } from "next-auth/react";
-import { useSession } from "next-auth/react";
-import { PropagateLoader, MoonLoader } from "react-spinners";
+
 import LoginTile from "../components/Login/LoginTile";
-import { useEffect, useState } from "react";
+
+import { useSession } from "next-auth/react";
+import { PropagateLoader } from "react-spinners";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 export default function Login() {

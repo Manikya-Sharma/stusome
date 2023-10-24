@@ -29,7 +29,7 @@ export default function Navbar() {
               >
                 <div className="inline-flex items-center justify-start gap-1 pr-2">
                   <LuLayoutDashboard />
-                  Dashboard
+                  <span className="hidden sm:inline">Dashboard</span>
                 </div>
               </Link>
               <Link
@@ -39,7 +39,7 @@ export default function Navbar() {
                 <div className="mr-2 inline-flex items-center justify-start gap-1">
                   <MdOutlineMarkUnreadChatAlt />
                   {/* <MdOutlineChat /> */}
-                  Chats
+                  <span className="hidden sm:inline">Chats</span>
                 </div>
               </Link>
             </IconContext.Provider>

@@ -6,8 +6,8 @@ import Navbar from "@/app/components/LoggedIn/Navbar";
 import Welcome from "@/app/components/LoggedIn/Welcome";
 import MostViewed from "@/app/components/LoggedIn/MostVeiwed";
 import Frequents from "@/app/components/LoggedIn/Frequents";
-
 import CustomPropLayout from "../components/LoggedIn/CustomPropLayout";
+
 import { BarLoader } from "react-spinners";
 
 export default function LoggedIn() {
@@ -20,10 +20,8 @@ export default function LoggedIn() {
         window.matchMedia &&
         window.matchMedia("(prefers-color-scheme: dark)").matches
       ) {
-        localStorage.setItem("theme", "dark");
         document.documentElement.classList.add("dark");
       } else {
-        localStorage.setItem("theme", "light");
         document.documentElement.classList.add("light");
       }
     } else {
@@ -47,7 +45,7 @@ export default function LoggedIn() {
               width={width}
               color="#55fff6"
               cssOverride={{ backgroundColor: "#11aaaa" }}
-            />{" "}
+            />
           </div>
         )}
         <Navbar />

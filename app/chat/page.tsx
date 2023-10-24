@@ -2,7 +2,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useSession } from "next-auth/react";
-import Sidebar from "@/app/components/Chat/Sidebar";
+import FriendsSection from "@/app/components/Chat/FriendsSection";
 
 export default function LoggedIn() {
   const { data: session, status } = useSession();
@@ -42,7 +42,7 @@ export default function LoggedIn() {
   return (
     <main>
       {session && session.user && session.user.email && (
-        <Sidebar userEmail={session.user.email} />
+        <FriendsSection userEmail={session.user.email} />
       )}
     </main>
   );

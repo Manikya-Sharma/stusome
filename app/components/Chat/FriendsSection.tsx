@@ -10,11 +10,11 @@ import Image from "next/image";
 import { quicksand } from "@/custom-fonts/fonts";
 // TODO: user photo might be stored as 3rd party link instead of BASE64
 
-interface SidebarProps {
+interface Props {
   userEmail: string;
 }
 
-const Sidebar: FC<SidebarProps> = ({ userEmail }) => {
+const FriendsSection: FC<Props> = ({ userEmail }) => {
   const pathName = usePathname();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [loadingData, setLoadingData] = useState<boolean>(true);
@@ -181,4 +181,4 @@ const Sidebar: FC<SidebarProps> = ({ userEmail }) => {
   );
 };
 
-export default Sidebar;
+export default FriendsSection;

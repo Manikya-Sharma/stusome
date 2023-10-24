@@ -1,7 +1,7 @@
 "use client";
-import { useState } from "react";
+
+import { useState, PropsWithChildren } from "react";
 import { signIn } from "next-auth/react";
-import { ReactNode, PropsWithChildren } from "react";
 import { MoonLoader } from "react-spinners";
 import { LiaGithub } from "react-icons/lia";
 import { IconContext } from "react-icons";

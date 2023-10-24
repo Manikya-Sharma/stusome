@@ -54,7 +54,7 @@ export default function Markdown(props: Props) {
             ></Textarea>
           </div>
           <div className={currentTab == 1 ? "hidden" : "block"}>
-            <p className="markdown-wrapper mx-5 max-h-[40vh] min-h-[30vh] w-full overflow-y-auto rounded-lg border border-slate-300 bg-slate-300 px-3 py-2 dark:bg-slate-800">
+            <p className="markdown-wrapper mx-5 max-h-[40vh] min-h-[30vh] w-full max-w-[90vw] overflow-y-auto rounded-lg border border-slate-300 bg-slate-300 px-3 py-2 dark:bg-slate-800">
               <ShowMarkdown data={text != undefined ? text : "preview"} />
             </p>
           </div>

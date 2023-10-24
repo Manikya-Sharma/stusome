@@ -1,9 +1,9 @@
 "use client";
 
-import Link from "next/link";
-
 import Tile from "@/app/components/Settings/Tile";
 import UserInfoContainer from "@/app/components/Settings/UserInfoContainer";
+
+import Link from "next/link";
 import { signOut } from "next-auth/react";
 
 export default function Settings() {
