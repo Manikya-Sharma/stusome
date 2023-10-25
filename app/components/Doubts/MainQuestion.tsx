@@ -17,9 +17,10 @@ export default function MainQuestion({ author, content }: Props) {
           </div>
           <h2 className="text-xl dark:text-slate-300">{author?.name}</h2>
         </div>
-        <div className="mt-4 md:mt-0">
+        <div className="mt-4 flex items-center gap-2 md:mt-0">
+          <div className="h-16 w-3 bg-emerald-600"></div>
           {/*  <!-- Added margin to the text container --> */}
-          <div className="markdown-wrapper ml-4 mt-2 items-center justify-center px-3 text-gray-700 ">
+          <div className="markdown-wrapper ml-4 mt-2 flex min-h-[6rem] flex-col items-center justify-center px-3 font-semibold leading-relaxed text-gray-700">
             <ShowMarkdown data={content} />
           </div>
         </div>

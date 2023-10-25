@@ -69,7 +69,6 @@ export default function MostViewed(props: Props) {
       for (let i = 0; i < authorEmails.length; i += 1) {
         authorsArray.push({ email: authorEmails[i], data: authors[i] });
       }
-      console.log(authorsArray);
       setUsers(authorsArray);
 
       props.setLoader(false);

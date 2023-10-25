@@ -4,6 +4,7 @@ export type State = {
   image: string;
   image_third_party: boolean;
   posts: Array<string>;
+  doubts: Array<string>;
 };
 
 export type Message = {

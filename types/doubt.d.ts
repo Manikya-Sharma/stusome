@@ -3,11 +3,12 @@ type DoubtReply = {
   author: string;
   content: string;
 };
+
 type DoubtAnswer = {
   id: string;
   content: string;
   author: string;
-  replies: Array<DoubtReply>;
+  replies: Array<string>;
 };
 
 type Doubt = {
@@ -15,6 +16,6 @@ type Doubt = {
   title: string;
   author: string;
   content: string;
-  answers: Array<DoubtAnswer>;
+  answers: Array<string>;
   tags: Array<string>;
 };
