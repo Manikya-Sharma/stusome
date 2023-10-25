@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 import ShowMarkdown from "../Markdown/ShowMarkdown";
 import TextArea from "react-textarea-autosize";
+import toast from "react-hot-toast";
 
-export default function Answer() {
+export default function Answer({ onPost }: { onPost: Function }) {
   const [currentTab, setCurrentTab] = useState<number>(0);
   const [data, setData] = useState<string>("");
 
@@ -65,7 +66,16 @@ export default function Answer() {
           <ShowMarkdown data={data} />
         </div>
       </div>
-      <button className="rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">
+      <button
+        className="rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+        onClick={() => {
+          toast.promise(onPost(data), {
+            error: "Could not post your answer",
+            loading: "Posting your answer",
+            success: "Answer posted successfully",
+          });
+        }}
+      >
         Post
       </button>
     </section>

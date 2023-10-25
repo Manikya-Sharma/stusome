@@ -38,6 +38,7 @@ export default function CustomPropLayout({
             image: session.user.image,
             image_third_party: true,
             posts: [],
+            doubts: [],
           }),
         });
         displayAccount = {
@@ -46,6 +47,7 @@ export default function CustomPropLayout({
           image: session.user.image,
           image_third_party: true,
           posts: [],
+          doubts: [],
         };
       }
 
