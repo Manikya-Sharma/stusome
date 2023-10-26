@@ -1,9 +1,6 @@
 export default function Tags(props: { tags?: Array<string> }) {
   return (
     <div className="my-3 flex flex-[1] flex-wrap items-center justify-center text-center text-slate-200 sm:flex-col sm:justify-start">
-      <p className="mb-2 hidden text-lg text-slate-800 dark:text-slate-200 sm:block">
-        Tags
-      </p>
       {props.tags?.map((tag) => {
         return (
           <div

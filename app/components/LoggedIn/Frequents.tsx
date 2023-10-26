@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import { quicksand } from "@/custom-fonts/fonts";
 
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -8,6 +7,7 @@ import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import { State } from "@/types/user";
+import DoubtTile from "./DoubtTile";
 
 export default function PopularDoubts() {
   const [width, setWidth] = useState<number>(0);
@@ -80,15 +80,18 @@ export default function PopularDoubts() {
             className="w-full [&>*:first-child]:ml-10 [&>*:last-child]:mr-10"
           >
             {doubts &&
+              users &&
               doubts.map((doubt) => {
                 return (
                   <SwiperSlide key={doubt.id}>
-                    <Link
-                      href={`/doubts/${doubt.id}`}
-                      className="mx-3 block h-[30vh] rounded-md border border-rose-300 px-2 py-2 text-center transition-all duration-150 hover:bg-rose-300 hover:text-pink-800 dark:border-rose-300 dark:bg-zinc-700 dark:text-rose-100 dark:hover:bg-rose-200 dark:hover:text-rose-950"
-                    >
-                      <p>{doubt.title}</p>
-                    </Link>
+                    <DoubtTile
+                      doubt={doubt}
+                      authorName={
+                        users
+                          .filter((user) => user.email == doubt.author)[0]
+                          .data.name.split(" ")[0]
+                      }
+                    />
                   </SwiperSlide>
                 );
               })}

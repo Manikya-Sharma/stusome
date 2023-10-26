@@ -259,12 +259,7 @@ export default function Dashboard() {
             <button
               className="hover: my-5 scale-105 rounded border-2 border-green-400 bg-blue-500 px-4 py-2 font-bold text-slate-200 transition-all duration-200 hover:scale-105 hover:bg-blue-700 dark:bg-black dark:hover:bg-green-400 dark:hover:text-black/80"
               onClick={() => {
-                /* toast.promise(newDoubt(), {
-                  loading: "Creating new doubt",
-                  error: "Error occurred, Please try again later",
-                  success:
-                    "Created doubt successfully, please wait while we redirect",
-                }); */
+                router.push("/newdoubt");
               }}
             >
               Create New Doubt
