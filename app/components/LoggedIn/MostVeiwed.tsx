@@ -8,12 +8,11 @@ import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 
-import Skeleton from "react-loading-skeleton";
-
 import Image from "next/image";
 import { randomColor } from "@/lib/utils";
 import { Post } from "@/types/post";
 import { State } from "@/types/user";
+import LoadingSkeleton from "../LoggedIn/LoadingSkeleton";
 
 type Props = {
   setLoader: Function;
@@ -22,6 +21,7 @@ type Props = {
 export default function MostViewed(props: Props) {
   const [width, setWidth] = useState<number>(0);
   const [mostViewed, setMostViewed] = useState<Post[] | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
   const [users, setUsers] = useState<Array<{
     email: string;
     data: State;
@@ -49,6 +49,7 @@ export default function MostViewed(props: Props) {
 
       data = data.filter((post) => post != null && post.published == true);
       setMostViewed(data);
+      setLoading(false);
 
       // authors
       const authorEmails = data.map((post) => post.author);
@@ -78,66 +79,74 @@ export default function MostViewed(props: Props) {
   return (
     <section className="mb-20 mt-10">
       <h2 className="mb-5 mt-7 text-2xl font-semibold sm:text-5xl">
-        {mostViewed && "Top Posts"}
+        Top Posts
       </h2>
-      <div className={quicksand.className}>
-        <div className="text-lg">
-          <Swiper
-            allowTouchMove={true}
-            slidesPerView={width < 600 ? 1 : 3}
-            navigation={true}
-            modules={[Navigation]}
-            className="w-full [&>*:first-child]:ml-10 [&>*:last-child]:mr-10"
-          >
-            {mostViewed?.map((post) => {
-              return (
-                <SwiperSlide key={post.id}>
-                  <Link
-                    href={`/posts/${post.id}`}
-                    className="mx-3 block rounded-md border border-teal-300 px-2 py-2 transition-all duration-150 hover:bg-teal-300 hover:text-blue-800 dark:bg-zinc-700 dark:text-teal-100 dark:hover:bg-teal-300 dark:hover:text-teal-950"
-                  >
-                    <div className="flex flex-col justify-start">
-                      <div
-                        className={"relative h-[30vh] w-full rounded-md "}
-                        style={{
-                          backgroundColor: !post.coverImgFull
-                            ? randomColor(0.4)
-                            : "",
-                        }}
+      {loading ? (
+        <LoadingSkeleton />
+      ) : (
+        <>
+          <div className={quicksand.className}>
+            <div className="text-lg">
+              <Swiper
+                allowTouchMove={true}
+                slidesPerView={width < 600 ? 1 : 3}
+                navigation={true}
+                modules={[Navigation]}
+                className="w-full [&>*:first-child]:ml-10 [&>*:last-child]:mr-10"
+              >
+                {mostViewed?.map((post) => {
+                  return (
+                    <SwiperSlide key={post.id}>
+                      <Link
+                        href={`/posts/${post.id}`}
+                        className="mx-3 block rounded-md border border-teal-300 px-2 py-2 transition-all duration-150 hover:bg-teal-300 hover:text-blue-800 dark:bg-zinc-700 dark:text-teal-100 dark:hover:bg-teal-300 dark:hover:text-teal-950"
                       >
-                        {post.coverImgFull ? (
-                          <Image
-                            src={post.coverImgFull}
-                            alt=""
-                            fill
-                            className="rounded-md"
-                          />
-                        ) : (
-                          ""
-                        )}
-                      </div>
-                      <div className="pb-3 pt-5 text-center text-xl">
-                        {post.title}
-                      </div>
-                      {users && (
-                        <div className="text-right text-sm">
-                          -
-                          {
-                            users
-                              .filter((user) => user.email == post.author)[0]
-                              .data.name.split(" ")[0]
-                          }
+                        <div className="flex flex-col justify-start">
+                          <div
+                            className={"relative h-[30vh] w-full rounded-md "}
+                            style={{
+                              backgroundColor: !post.coverImgFull
+                                ? randomColor(0.4)
+                                : "",
+                            }}
+                          >
+                            {post.coverImgFull ? (
+                              <Image
+                                src={post.coverImgFull}
+                                alt=""
+                                fill
+                                className="rounded-md"
+                              />
+                            ) : (
+                              ""
+                            )}
+                          </div>
+                          <div className="pb-3 pt-5 text-center text-xl">
+                            {post.title}
+                          </div>
+                          {users && (
+                            <div className="text-right text-sm">
+                              -
+                              {
+                                users
+                                  .filter(
+                                    (user) => user.email == post.author,
+                                  )[0]
+                                  .data.name.split(" ")[0]
+                              }
+                            </div>
+                          )}
                         </div>
-                      )}
-                    </div>
-                  </Link>
-                </SwiperSlide>
-              );
-            })}
-            <SwiperSlide></SwiperSlide>
-          </Swiper>
-        </div>
-      </div>
+                      </Link>
+                    </SwiperSlide>
+                  );
+                })}
+                <SwiperSlide></SwiperSlide>
+              </Swiper>
+            </div>
+          </div>
+        </>
+      )}
     </section>
   );
 }
