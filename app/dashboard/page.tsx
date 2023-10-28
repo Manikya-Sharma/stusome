@@ -15,13 +15,14 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
-import { BarLoader } from "react-spinners";
+import LoadingSkeleton from "../components/LoggedIn/LoadingSkeleton";
 
 export default function Dashboard() {
   const { data: session } = useSession();
   const router = useRouter();
 
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loadingPosts, setLoadingPosts] = useState<boolean>(true);
+  const [loadingDoubts, setLoadingDoubts] = useState<boolean>(true);
   const [posts, setPosts] = useState<Array<Post> | null>(null);
   const [doubts, setDoubts] = useState<Array<Doubt> | null>(null);
 
@@ -76,7 +77,8 @@ export default function Dashboard() {
 
     async function getData() {
       await Promise.all([fetchPosts(), fetchDoubts()]);
-      setLoading(false);
+      setLoadingPosts(false);
+      setLoadingDoubts(false);
     }
     getData();
   }, [session]);
@@ -137,16 +139,6 @@ export default function Dashboard() {
 
   return (
     <main className="relative">
-      {loading && (
-        <div className="absolute left-0 top-0 z-[300]">
-          <BarLoader
-            height={3}
-            width={width}
-            color="#55fff6"
-            cssOverride={{ backgroundColor: "#11aaaa" }}
-          />
-        </div>
-      )}
       <IconContext.Provider value={{ className: "shared-class", size: "23" }}>
         <div className="absolute left-2 top-2 z-[100]">
           <button
@@ -177,33 +169,36 @@ export default function Dashboard() {
                 My Posts
               </h2>
               {/* <!-- Blog-style posts with responsive widths --> */}
-
-              <Swiper
-                allowTouchMove={true}
-                slidesPerView={width < 600 ? 1 : 3}
-                navigation={true}
-                modules={[Navigation]}
-                className="w-full [&>*:first-child]:ml-10 [&>*:last-child]:mr-10"
-              >
-                {posts &&
-                  posts.map((post) => {
-                    return (
-                      <SwiperSlide key={post.title}>
-                        <div
-                          className="mx-3 my-5 cursor-pointer overflow-hidden rounded-lg bg-slate-200 p-4 py-5 transition-transform hover:scale-105"
-                          onClick={() => router.push(`/posts/${post.id}`)}
-                        >
-                          <h3 className="mb-2 text-xl font-semibold">
-                            {post.title}
-                            {post.published == false && " - draft"}
-                          </h3>
-                          <p>{post.content.slice(0, 150)} ...</p>
-                        </div>
-                      </SwiperSlide>
-                    );
-                  })}
-                <SwiperSlide></SwiperSlide>
-              </Swiper>
+              {loadingPosts ? (
+                <LoadingSkeleton />
+              ) : (
+                <Swiper
+                  allowTouchMove={true}
+                  slidesPerView={width < 600 ? 1 : 3}
+                  navigation={true}
+                  modules={[Navigation]}
+                  className="w-full [&>*:first-child]:ml-10 [&>*:last-child]:mr-10"
+                >
+                  {posts &&
+                    posts.map((post) => {
+                      return (
+                        <SwiperSlide key={post.title}>
+                          <div
+                            className="mx-3 my-5 cursor-pointer overflow-hidden rounded-lg bg-slate-200 p-4 py-5 transition-transform hover:scale-105"
+                            onClick={() => router.push(`/posts/${post.id}`)}
+                          >
+                            <h3 className="mb-2 text-xl font-semibold">
+                              {post.title}
+                              {post.published == false && " - draft"}
+                            </h3>
+                            <p>{post.content.slice(0, 150)} ...</p>
+                          </div>
+                        </SwiperSlide>
+                      );
+                    })}
+                  <SwiperSlide></SwiperSlide>
+                </Swiper>
+              )}
             </section>
 
             {/* <!-- Create New Post button --> */}
@@ -229,32 +224,35 @@ export default function Dashboard() {
                 My Doubts
               </h2>
               {/* <!-- Blog-style posts with responsive widths --> */}
-
-              <Swiper
-                allowTouchMove={true}
-                slidesPerView={width < 600 ? 1 : 3}
-                navigation={true}
-                modules={[Navigation]}
-                className="w-full [&>*:first-child]:ml-10 [&>*:last-child]:mr-10"
-              >
-                {doubts &&
-                  doubts.map((doubt) => {
-                    return (
-                      <SwiperSlide key={doubt.title}>
-                        <div
-                          className="mx-3 my-5 cursor-pointer overflow-hidden rounded-lg bg-slate-200 p-4 py-5 transition-transform hover:scale-105"
-                          onClick={() => router.push(`/doubts/${doubt.id}`)}
-                        >
-                          <h3 className="mb-2 text-xl font-semibold">
-                            {doubt.title}
-                          </h3>
-                          <p>{doubt.content.slice(0, 150)} ...</p>
-                        </div>
-                      </SwiperSlide>
-                    );
-                  })}
-                <SwiperSlide></SwiperSlide>
-              </Swiper>
+              {loadingDoubts ? (
+                <LoadingSkeleton />
+              ) : (
+                <Swiper
+                  allowTouchMove={true}
+                  slidesPerView={width < 600 ? 1 : 3}
+                  navigation={true}
+                  modules={[Navigation]}
+                  className="w-full [&>*:first-child]:ml-10 [&>*:last-child]:mr-10"
+                >
+                  {doubts &&
+                    doubts.map((doubt) => {
+                      return (
+                        <SwiperSlide key={doubt.title}>
+                          <div
+                            className="mx-3 my-5 cursor-pointer overflow-hidden rounded-lg bg-slate-200 p-4 py-5 transition-transform hover:scale-105"
+                            onClick={() => router.push(`/doubts/${doubt.id}`)}
+                          >
+                            <h3 className="mb-2 text-xl font-semibold">
+                              {doubt.title}
+                            </h3>
+                            <p>{doubt.content.slice(0, 150)} ...</p>
+                          </div>
+                        </SwiperSlide>
+                      );
+                    })}
+                  <SwiperSlide></SwiperSlide>
+                </Swiper>
+              )}
             </section>
             <button
               className="hover: my-5 scale-105 rounded border-2 border-green-400 bg-blue-500 px-4 py-2 font-bold text-slate-200 transition-all duration-200 hover:scale-105 hover:bg-blue-700 dark:bg-black dark:hover:bg-green-400 dark:hover:text-black/80"

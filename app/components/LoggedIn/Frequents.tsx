@@ -8,10 +8,12 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { State } from "@/types/user";
 import DoubtTile from "./DoubtTile";
+import LoadingSkeleton from "./LoadingSkeleton";
 
 export default function PopularDoubts() {
   const [width, setWidth] = useState<number>(0);
   const [doubts, setDoubts] = useState<Array<Doubt> | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
   const [users, setUsers] = useState<Array<{
     email: string;
     data: State;
@@ -37,6 +39,7 @@ export default function PopularDoubts() {
 
       data = data.filter((doubt) => doubt != null);
       setDoubts(data);
+      setLoading(false);
 
       // authors
       const authorEmails = data.map((doubt) => doubt.author);
@@ -70,35 +73,39 @@ export default function PopularDoubts() {
       <h2 className="mb-5 mt-7 text-2xl font-semibold sm:text-5xl">
         Common Doubts
       </h2>
-      <div className={quicksand.className}>
-        <div className="text-lg">
-          <Swiper
-            allowTouchMove={true}
-            slidesPerView={width < 600 ? 1 : 3}
-            navigation={true}
-            modules={[Navigation]}
-            className="w-full [&>*:first-child]:ml-10 [&>*:last-child]:mr-10"
-          >
-            {doubts &&
-              users &&
-              doubts.map((doubt) => {
-                return (
-                  <SwiperSlide key={doubt.id}>
-                    <DoubtTile
-                      doubt={doubt}
-                      authorName={
-                        users
-                          .filter((user) => user.email == doubt.author)[0]
-                          .data.name.split(" ")[0]
-                      }
-                    />
-                  </SwiperSlide>
-                );
-              })}
-            <SwiperSlide></SwiperSlide>
-          </Swiper>
+      {loading ? (
+        <LoadingSkeleton />
+      ) : (
+        <div className={quicksand.className}>
+          <div className="text-lg">
+            <Swiper
+              allowTouchMove={true}
+              slidesPerView={width < 600 ? 1 : 3}
+              navigation={true}
+              modules={[Navigation]}
+              className="w-full [&>*:first-child]:ml-10 [&>*:last-child]:mr-10"
+            >
+              {doubts &&
+                users &&
+                doubts.map((doubt) => {
+                  return (
+                    <SwiperSlide key={doubt.id}>
+                      <DoubtTile
+                        doubt={doubt}
+                        authorName={
+                          users
+                            .filter((user) => user.email == doubt.author)[0]
+                            .data.name.split(" ")[0]
+                        }
+                      />
+                    </SwiperSlide>
+                  );
+                })}
+              <SwiperSlide></SwiperSlide>
+            </Swiper>
+          </div>
         </div>
-      </div>
+      )}
     </section>
   );
 }
