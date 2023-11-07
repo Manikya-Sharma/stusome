@@ -33,11 +33,6 @@ export default function Settings() {
                   />
                 </Link>
               </div>
-              <div>
-                <Link href={`/settings/privacy`}>
-                  <Tile description="Privacy" type="normal" logo="lock" />
-                </Link>
-              </div>
             </div>
             <div
               onClick={() => {

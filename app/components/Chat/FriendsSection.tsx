@@ -8,6 +8,7 @@ import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import Image from "next/image";
 import { quicksand } from "@/custom-fonts/fonts";
+import toast, { Toaster } from "react-hot-toast";
 // TODO: user photo might be stored as 3rd party link instead of BASE64
 
 interface Props {
@@ -57,7 +58,7 @@ const FriendsSection: FC<Props> = ({ userEmail }) => {
           setFriends(existingFriends.filter((elem) => elem != null));
           setLoadingData(false);
         })
-        .catch((error) => console.log(`Error occured: ${error}`));
+        .catch((error) => console.log(`Error occurred: ${error}`));
     }
     fetchData();
   }, [userEmail]);
@@ -65,10 +66,26 @@ const FriendsSection: FC<Props> = ({ userEmail }) => {
   async function handleSubmit() {
     if (inputRef.current != null) {
       const emailValue = inputRef.current.value;
+      if (!emailValue.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)) {
+        toast.error("Invalid email");
+        return;
+      }
+      if (friends.filter((friend) => friend.email == emailValue).length != 0) {
+        toast.error(
+          `${
+            friends.filter((friend) => friend.email == emailValue)[0].name
+          } is already a friend`,
+        );
+        return;
+      }
       const rawFriendAccount = await fetch(
         `/api/getAccountByEmail/${emailValue}`,
       );
       const friendAccount = (await rawFriendAccount.json()) as State;
+      if (friendAccount == null) {
+        toast.error("No such user found!");
+        return;
+      }
       await fetch("/api/addFriend", {
         method: "POST",
         headers: {
@@ -98,6 +115,7 @@ const FriendsSection: FC<Props> = ({ userEmail }) => {
       highlightColor={theme == "dark" ? "#aaa" : "#999"}
       duration={0.7}
     >
+      <Toaster position="top-center" />
       <div className="min-h-screen dark:bg-slate-900 dark:text-slate-200">
         <h1 className="py-5 text-center text-7xl">Your Chats</h1>
 
